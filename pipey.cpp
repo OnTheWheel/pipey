@@ -1,8 +1,6 @@
 // pipey.cpp : 콘솔 응용 프로그램에 대한 진입점을 정의합니다.
 //
 
-#include "stdafx.h"
-
 
 #include "src/common/common.h"
 #include "src/thread/DefaultThread.h"
@@ -40,7 +38,7 @@ int main(int argc, char* argv[])
 		thread[i].Init(init);
 	}
 
-	for(unsigned int i=0; i<5; i++)
+	for(int i=4; i>=0; i--)
 	{
 		thread[i].Wait();
 	}

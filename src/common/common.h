@@ -6,7 +6,7 @@
 
 using namespace pipey::common;
 
-#ifdef WINDOWS_SUPPORT
+#ifdef PIPEY_WINDOWS_SUPPORT
 
 #include <windows.h>
 

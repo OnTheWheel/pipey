@@ -1,7 +1,7 @@
 #ifndef PIPEY_DEFAULT_THREAD_H
 #define PIPEY_DEFAULT_THREAD_H
 
-#ifdef WINDOWS_SUPPORT
+#ifdef PIPEY_WINDOWS_SUPPORT
 
 #include "WindowsThread.h"
 

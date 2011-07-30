@@ -40,7 +40,7 @@ void CPosixThread::Init(const THREAD_INIT & rInit)
 	else throw EInvalidParameter("EInvalidParameter => CPosixThread::Init - THREAD_INIT::pExec is NULL.");
 }
 
-void CWindowsThread::Detach()
+void CPosixThread::Detach()
 {
 	if( m_bInited && !m_bDetached) {
 		if( pthread_detach(m_hThread ) == 0 ) {
@@ -57,7 +57,10 @@ SYNC_RESULT CPosixThread::Wait(unsigned long nMilliSeconds) {
 	if( m_bInited && !m_bDetached)	{
 		int err = pthread_join(m_hThread, NULL);
 
-		if( err == 0 ) return SYNC_SUCCESS;
+		if( err == 0 ) {
+		    m_bDetached = true;
+		    return SYNC_SUCCESS;
+		}
 		//else if( res == WAIT_TIMEOUT ) return SYNC_TIMEOUT;
 		else throw ESync("ESync => CPosixThread::Wait - unknown exception");
 	}

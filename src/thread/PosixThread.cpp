@@ -1,5 +1,7 @@
 #include "PosixThread.h"
 
+using namespace pipey::common;
+using namespace pipey::common::exception;
 using namespace pipey::thread;
 
 void *PosixThreadFunc(void *pParam)

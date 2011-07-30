@@ -22,7 +22,7 @@ namespace pipey {
 		  public:
 			virtual void Init(const THREAD_INIT & rInit);
 
-			virtual SYNC_RESULT Wait(unsigned long nMilliSeconds = TIME_INFINITE);
+			virtual ::pipey::common::SYNC_RESULT Wait(unsigned long nMilliSeconds = pipey::common::TIME_INFINITE);
 
 			virtual void Close();
 

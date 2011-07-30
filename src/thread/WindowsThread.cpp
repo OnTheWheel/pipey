@@ -1,5 +1,7 @@
 #include "WindowsThread.h"
 
+using namespace pipey::common;
+using namespace pipey::common::exception;
 using namespace pipey::thread;
 
 DWORD WINAPI WindowsThreadFunc(LPVOID lpParam)

@@ -2,6 +2,7 @@
 #define PIPEY_EXCEPTION_H
 
 #include <stdexcept>
+#include <stdlib.h>
 
 #define SAFE_TRY(X) try{ (X); } catch(...) { }
 
@@ -22,12 +23,12 @@ namespace pipey {
 				  m_bAllocatedMemory(bAllocatedMemory) 
 			  { };
 
-			  virtual ~EPipeyExecption() {
+			  virtual ~EPipeyExecption() throw() {
 				  if( m_pMsg && m_bAllocatedMemory )
 					  free(static_cast<void *>(const_cast<char *>(m_pMsg)));
 			  };
 
-			  virtual const char * what() const {
+			  virtual const char * what() const throw() {
 				  return m_pMsg;
 			  };
 
@@ -48,7 +49,7 @@ namespace pipey {
 			  EPipeyExecption(pMsg, bAllocatedMemory)
 			  { };
 
-			  virtual ~ELogical() { };
+			  virtual ~ELogical() throw() { };
 		};
 
 		static const char * _OutOfBoundMsg = "EOutOfBound : specified index is out of bound";
@@ -63,7 +64,7 @@ namespace pipey {
 			  ELogical(pMsg, bAllocatedMemory)
 			  { };
 
-			  virtual ~EOutOfBound() { };
+			  virtual ~EOutOfBound() throw() { };
 		};
 
 		static const char * _InvalidParameterMsg = "EInvalidParameter : specified parameter is invalid";
@@ -82,7 +83,7 @@ namespace pipey {
 			  ELogical(e.what())
 			  { };
 
-			  virtual ~EInvalidParameter() { };
+			  virtual ~EInvalidParameter() throw() { };
 		};
 
 		static const char * _DivideByZeroMsg = "EDivideByZero : cannot divide by zero";
@@ -97,7 +98,7 @@ namespace pipey {
 			  ELogical(pMsg, bAllocatedMemory)
 			  { };
 
-			  virtual ~EDivideByZero() { };
+			  virtual ~EDivideByZero() throw() { };
 		};
 
 		static const char * _RuntimeMsg = "ERuntime : runtime exception";
@@ -112,7 +113,7 @@ namespace pipey {
 			  EPipeyExecption(pMsg, bAllocatedMemory)
 			  { };
 
-			  virtual ~ERuntime() { };
+			  virtual ~ERuntime() throw() { };
 		};
 
 		static const char * _MemoryAllocationMsg = "EMemoryAllocation : cannot allocate memory";
@@ -127,7 +128,7 @@ namespace pipey {
 			  ERuntime(pMsg, bAllocatedMemory)
 			  { };
 
-			  virtual ~EMemoryAllocation() { };
+			  virtual ~EMemoryAllocation() throw() { };
 		};
 
 		static const char * _MemoryCorruptionMsg = "EMemoryCorruption : memory corrupted";
@@ -142,7 +143,7 @@ namespace pipey {
 			  ERuntime(pMsg, bAllocatedMemory)
 			  { };
 
-			  virtual ~EMemoryCorruption() { };
+			  virtual ~EMemoryCorruption() throw() { };
 		};
 
 		static const char * _InvalidStateMsg = "EInvalidState : some resources(objects) are in invalid state";
@@ -157,7 +158,7 @@ namespace pipey {
 			  ERuntime(pMsg, bAllocatedMemory)
 			  { };
 
-			  virtual ~EInvalidState() { };
+			  virtual ~EInvalidState() throw() { };
 		};
 
 		static const char * _SyncMsg = "ESync : thread or synchronization related exception";
@@ -172,7 +173,7 @@ namespace pipey {
 			  ERuntime(pMsg, bAllocatedMemory)
 			  { };
 
-			  virtual ~ESync() { };
+			  virtual ~ESync() throw() { };
 		};
 	}
 }

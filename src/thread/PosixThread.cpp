@@ -13,19 +13,20 @@ void *PosixThreadFunc(void *pParam)
 }
 
 CPosixThread::CPosixThread(void ) :
-m_bInited(false)
+m_bInited(false),
+m_bDetached(false)
 {
 
 }
 
-CPosixThread::~CPosixThread(void ){
-
-	SAFE_TRY( Close() );
+CPosixThread::~CPosixThread(void )
+{
+	SAFE_TRY( Detach() );
 }
 
-void CPosixThread::Init(const THREAD_INIT & rInit) {
-
-	if( m_bInited  ) throw EInvalidState("EInvalidState => CPosixThread::Init - This thread is already initiated.");
+void CPosixThread::Init(const THREAD_INIT & rInit) 
+{
+	if( m_bInited ) throw EInvalidState("EInvalidState => CPosixThread::Init - This thread is already initiated.");
 
 	if( rInit.pExec ) {
 		m_param = rInit;
@@ -39,9 +40,21 @@ void CPosixThread::Init(const THREAD_INIT & rInit) {
 	else throw EInvalidParameter("EInvalidParameter => CPosixThread::Init - THREAD_INIT::pExec is NULL.");
 }
 
+void CWindowsThread::Detach()
+{
+	if( m_bInited && !m_bDetached) {
+		if( pthread_detach(m_hThread ) == 0 ) {
+			m_bDetached = true;
+			return;
+		}
+		else throw ESync("ESync => CPosixThread::Detach - unknown exception");
+    }
+    else throw EInvalidState("EInvalidState => CPosixThread::Detach - This thread is not properly initiated.");
+}
+
 SYNC_RESULT CPosixThread::Wait(unsigned long nMilliSeconds) {
 
-	if( m_bInited )	{
+	if( m_bInited && !m_bDetached)	{
 		int err = pthread_join(m_hThread, NULL);
 
 		if( err == 0 ) return SYNC_SUCCESS;
@@ -49,17 +62,5 @@ SYNC_RESULT CPosixThread::Wait(unsigned long nMilliSeconds) {
 		else throw ESync("ESync => CPosixThread::Wait - unknown exception");
 	}
 	else throw EInvalidState("EInvalidState => CPosixThread::Wait - This thread is not properly initiated.");
-}
-
-void CPosixThread::Close() {
-
-    if( m_bInited ) {
-	if( pthread_detach(m_hThread ) == 0 ) {
-		m_bInited = false;
-		return;
-	}
-	else throw ESync("ESync => CPosixThread::Close - unknown exception");
-    }
-    else throw EInvalidState("EInvalidState => CPosixThread::Close - This thread is not properly initiated.");
 }
 

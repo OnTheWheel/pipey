@@ -19,10 +19,9 @@ namespace pipey {
 
 			virtual void Init(const THREAD_INIT & rInit) = 0;
 
+			virtual void Detach() = 0;
+
 			virtual pipey::common::SYNC_RESULT Wait(unsigned long nTimeout = pipey::common::TIME_INFINITE) = 0;
-
-			virtual void Close() = 0;
-
 		};
 	}
 }

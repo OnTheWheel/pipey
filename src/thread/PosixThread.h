@@ -17,15 +17,16 @@ namespace pipey {
 		  private:
 			pthread_t m_hThread;
 			bool m_bInited;
+			bool m_bDetached;
 			THREAD_INIT m_param;
 
 
 		  public:
 			virtual void Init(const THREAD_INIT & rInit);
 
-			virtual pipey::common::SYNC_RESULT Wait(unsigned long nMilliSeconds = pipey::common::TIME_INFINITE);
+			virtual void Detach();
 
-			virtual void Close();
+			virtual pipey::common::SYNC_RESULT Wait(unsigned long nMilliSeconds = pipey::common::TIME_INFINITE);
 
 		};
 

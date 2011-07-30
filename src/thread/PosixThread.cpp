@@ -29,7 +29,7 @@ void CPosixThread::Init(const THREAD_INIT & rInit) {
 
 	if( rInit.pExec ) {
 		m_param = rInit;
-		int err = pthread_create(&m_hThread, NULL, PosixThreadFunc, NULL);
+		int err = pthread_create(&m_hThread, NULL, PosixThreadFunc, &m_param);
 		if( err == 0 ) {
 		    m_bInited = true;
 		    return;
@@ -53,7 +53,7 @@ SYNC_RESULT CPosixThread::Wait(unsigned long nMilliSeconds) {
 
 void CPosixThread::Close() {
 
-    if( m_hThread ) {
+    if( m_bInited ) {
 	if( pthread_detach(m_hThread ) == 0 ) {
 		m_bInited = false;
 		return;

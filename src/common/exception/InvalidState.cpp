@@ -13,6 +13,6 @@ ERuntime(pMsg, bAllocatedMemory)
 {
 }
 
-EInvalidState::~EInvalidState(void)
+EInvalidState::~EInvalidState(void) throw()
 {
 }

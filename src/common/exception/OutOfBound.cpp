@@ -14,6 +14,6 @@ ELogical(pMsg, bAllocatedMemory)
 {
 }
 
-EOutOfBound::~EOutOfBound(void)
+EOutOfBound::~EOutOfBound(void) throw()
 {
 }

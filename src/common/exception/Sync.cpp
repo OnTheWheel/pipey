@@ -14,6 +14,6 @@ ERuntime(pMsg, bAllocatedMemory)
 {
 }
 
-ESync::~ESync(void)
+ESync::~ESync(void) throw()
 {
 }

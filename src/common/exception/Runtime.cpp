@@ -14,6 +14,6 @@ EPipeyException(pMsg, bAllocatedMemory)
 {
 }
 
-ERuntime::~ERuntime(void)
+ERuntime::~ERuntime(void) throw()
 {
 }

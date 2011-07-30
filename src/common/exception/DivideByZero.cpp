@@ -14,6 +14,6 @@ ELogical(pMsg, bAllocatedMemory)
 {
 }
 
-EDivideByZero::~EDivideByZero(void)
+EDivideByZero::~EDivideByZero(void) throw()
 {
 }

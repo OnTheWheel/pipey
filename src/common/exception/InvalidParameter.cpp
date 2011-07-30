@@ -14,6 +14,6 @@ ELogical(pMsg, bAllocatedMemory)
 {
 }
 
-EInvalidParameter::~EInvalidParameter(void)
+EInvalidParameter::~EInvalidParameter(void) throw()
 {
 }

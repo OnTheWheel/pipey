@@ -14,6 +14,6 @@ ERuntime(pMsg, bAllocatedMemory)
 {
 }
 
-EMemoryAllocation::~EMemoryAllocation(void)
+EMemoryAllocation::~EMemoryAllocation(void) throw()
 {
 }

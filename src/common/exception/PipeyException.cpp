@@ -18,13 +18,13 @@ m_bAllocatedMemory(bAllocatedMemory)
 {
 }
 
-EPipeyException::~EPipeyException(void)
+EPipeyException::~EPipeyException(void) throw()
 {
 	if( m_pMsg && m_bAllocatedMemory )
 		free(static_cast<void *>(const_cast<char *>(m_pMsg)));
 }
 
-const char *EPipeyException::what() const
+const char *EPipeyException::what() const throw()
 {
 	return m_pMsg;
 }

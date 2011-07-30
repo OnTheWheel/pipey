@@ -14,6 +14,6 @@ EPipeyException(pMsg, bAllocatedMemory)
 {
 }
 
-ELogical::~ELogical(void)
+ELogical::~ELogical(void) throw()
 {
 }

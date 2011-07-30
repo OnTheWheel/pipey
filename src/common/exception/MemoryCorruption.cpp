@@ -14,6 +14,6 @@ ERuntime(pMsg, bAllocatedMemory)
 {
 }
 
-EMemoryCorruption::~EMemoryCorruption(void)
+EMemoryCorruption::~EMemoryCorruption(void) throw()
 {
 }

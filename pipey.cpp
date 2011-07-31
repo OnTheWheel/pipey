@@ -5,7 +5,8 @@
 #include "src/common/common.h"
 #include "src/thread/DefaultThread.h"
 #include "src/thread/sync/DefaultLock.h"
-#include "src/thread/sync/WindowsCritricalSection.h"
+//#include "src/thread/sync/WindowsCritricalSection.h"
+#include "src/util/PosixTimeHelper.h"
 #include <stdio.h>
 
 using namespace pipey::common;
@@ -14,6 +15,8 @@ using namespace pipey::common;
 #include <unistd.h>
 #endif
 
+using namespace pipey::util;
+/*
 struct THREAD_TEST
 {
 	unsigned int id;
@@ -38,9 +41,9 @@ class CThreadTest : public pipey::thread::IExecutable
 		}
 	}
 };
-
+*/
 int main(int argc, char* argv[])
-{
+{/*
 	pipey::thread::sync::CWindowsCritricalSection lock;
 	lock.Init();
 
@@ -59,18 +62,23 @@ int main(int argc, char* argv[])
 
 		thread[i].Init(init);
 	}
-/*
+
 #if defined(WIN32) || defined(WIN64)
 		::Sleep(20*1000);
 #elif defined(__linux__) || defined(__unix__)
 		sleep(20);
 #endif
-*/
+
 	for(int i=4; i>=0; i--)
 	{
 		thread[i].Wait();
 	}
-
+*/
+	timespec t, t2;
+	RelativeToAbsolute(0, &t);
+	RelativeToAbsolute(3247, &t2);
+	printf("%ld   %ld\n", t.tv_sec, t.tv_nsec);
+	printf("%ld   %ld\n", t2.tv_sec, t2.tv_nsec);
 	return 0;
 }
 

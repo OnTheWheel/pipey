@@ -8,7 +8,7 @@ namespace pipey {
 		namespace sync {
 
 			class CWindowsCritricalSection : 
-#if _WIN32_WINNT >= 0x0400
+#if defined(_WIN32_WINNT) && (_WIN32_WINNT >= 0x0400)
 				public ITriableLock 
 #else
 				public ILock 
@@ -35,7 +35,7 @@ namespace pipey {
 
 				virtual void Close();
 
-#if _WIN32_WINNT >= 0x0400
+#if defined(_WIN32_WINNT) && (_WIN32_WINNT >= 0x0400)
 				virtual pipey::common::SYNC_RESULT TryLock();
 #endif
 

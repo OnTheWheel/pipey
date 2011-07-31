@@ -70,7 +70,7 @@ void CWindowsCritricalSection::Close() {
 	else throw EInvalidState("EInvalidState => CWindowsCritricalSection::Close - This CritricalSection is not properly initiated.");
 }
 
-#if _WIN32_WINNT >= 0x0400
+#if defined(_WIN32_WINNT) && (_WIN32_WINNT >= 0x0400)
 SYNC_RESULT CWindowsCritricalSection::TryLock() 
 {
 	if( m_bInited ) {

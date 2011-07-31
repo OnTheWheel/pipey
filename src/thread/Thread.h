@@ -14,8 +14,8 @@ namespace pipey {
 
 		class IThread {
 		  public:
-			IThread(void ) { };
-			virtual ~IThread(void ) { };
+			IThread() { };
+			virtual ~IThread() { };
 
 			virtual void Init(const THREAD_INIT & rInit) = 0;
 

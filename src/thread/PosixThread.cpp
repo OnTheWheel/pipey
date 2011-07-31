@@ -52,8 +52,8 @@ void CPosixThread::Detach()
     else throw EInvalidState("EInvalidState => CPosixThread::Detach - This thread is not properly initiated.");
 }
 
-SYNC_RESULT CPosixThread::Wait(unsigned long nMilliSeconds) {
-
+SYNC_RESULT CPosixThread::Wait(unsigned long nMilliSeconds) 
+{
 	if( m_bInited && !m_bDetached)	{
 		int err = pthread_join(m_hThread, NULL);
 

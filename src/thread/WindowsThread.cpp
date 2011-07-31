@@ -12,7 +12,7 @@ DWORD WINAPI WindowsThreadFunc(LPVOID lpParam)
 	return 0;
 }
 
-CWindowsThread::CWindowsThread(void ) :
+CWindowsThread::CWindowsThread() :
 m_hThread(NULL),
 m_bDetached(false),
 m_bInited(false)
@@ -20,13 +20,13 @@ m_bInited(false)
 
 }
 
-CWindowsThread::~CWindowsThread(void ){
-
+CWindowsThread::~CWindowsThread()
+{
 	SAFE_TRY( Detach() );
 }
 
-void CWindowsThread::Init(const THREAD_INIT & rInit) {
-
+void CWindowsThread::Init(const THREAD_INIT & rInit) 
+{
 	if( m_bInited ) throw EInvalidState("EInvalidState => CWindowsThread::Init - This thread is already initiated.");
 
 	if( rInit.pExec ) {
@@ -65,7 +65,8 @@ void CWindowsThread::Detach()
 	else throw EInvalidState("EInvalidState => CWindowsThread::Detach - This thread is already detached or not properly initiated.");
 }
 
-SYNC_RESULT CWindowsThread::Wait(unsigned long nMilliSeconds) {
+SYNC_RESULT CWindowsThread::Wait(unsigned long nMilliSeconds) 
+{
 
 	if( m_bInited && !m_bDetached) {
 		__try {

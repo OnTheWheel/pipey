@@ -1,19 +1,20 @@
-#ifndef PIPEY_DEFAULTTHREAD_H
-#define PIPEY_DEFAULTTHREAD_H
-
+#ifndef PIPEY_DEFAULTLOCK_H
+#define PIPEY_DEFAULTLOCK_H
 #if defined(WIN32) || defined(WIN64)
-#include "WindowsThread.h"
+#include "WindowsMutex.h"
 #elif defined(__linux__) || defined(__unix__)
-#include "PosixThread.h"
+#include "PosixMutex.h"
 #endif
 
 namespace pipey {
 	namespace thread {
+		namespace sync {
 #if defined(WIN32) || defined(WIN64)
-		typedef CWindowsThread CDefaultThread;
+			typedef CWindowsMutex CDefaultLock;
 #elif defined(__linux__) || defined(__unix__)
-		typedef CPosixThread CDefaultThread;
+			typedef CPosixMutex CDefaultLock;
 #endif
+		}
 	}
 }
 

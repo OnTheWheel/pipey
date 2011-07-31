@@ -4,14 +4,14 @@ using namespace pipey::common;
 using namespace pipey::common::exception;
 using namespace pipey::thread::sync;
 
-CWindowsMutex::CWindowsMutex(void ) :
+CWindowsMutex::CWindowsMutex() :
 m_hMutex(NULL),
 m_bInited(false)
 {
 
 }
 
-CWindowsMutex::~CWindowsMutex(void )
+CWindowsMutex::~CWindowsMutex()
 {
 	SAFE_TRY( Close() );
 }

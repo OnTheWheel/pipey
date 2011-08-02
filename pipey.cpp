@@ -16,11 +16,11 @@ using namespace pipey::common;
 #endif
 
 using namespace pipey::util;
-/*
+
 struct THREAD_TEST
 {
 	unsigned int id;
-	pipey::thread::sync::CWindowsCritricalSection *pLock;
+	pipey::thread::sync::CDefaultLock *pLock;
 };
 
 class CThreadTest : public pipey::thread::IExecutable
@@ -41,10 +41,10 @@ class CThreadTest : public pipey::thread::IExecutable
 		}
 	}
 };
-*/
+
 int main(int argc, char* argv[])
-{/*
-	pipey::thread::sync::CWindowsCritricalSection lock;
+{
+	pipey::thread::sync::CDefaultLock lock;
 	lock.Init();
 
 	THREAD_TEST ids[5];
@@ -73,10 +73,10 @@ int main(int argc, char* argv[])
 	{
 		thread[i].Wait();
 	}
-*/
+
 	timespec t, t2;
-	RelativeToAbsolute(0, &t);
-	RelativeToAbsolute(3247, &t2);
+	RelativeToAbsolute(0, t);
+	RelativeToAbsolute(3247, t2);
 	printf("%ld   %ld\n", t.tv_sec, t.tv_nsec);
 	printf("%ld   %ld\n", t2.tv_sec, t2.tv_nsec);
 	return 0;

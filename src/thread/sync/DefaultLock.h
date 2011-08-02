@@ -3,7 +3,7 @@
 #if defined(WIN32) || defined(WIN64)
 #include "WindowsMutex.h"
 #elif defined(__linux__) || defined(__unix__)
-//#include "PosixMutex.h"
+#include "PosixMutex.h"
 #endif
 
 namespace pipey {
@@ -12,7 +12,7 @@ namespace pipey {
 #if defined(WIN32) || defined(WIN64)
 			typedef CWindowsMutex CDefaultLock;
 #elif defined(__linux__) || defined(__unix__)
-//			typedef CPosixMutex CDefaultLock;
+			typedef CPosixMutex CDefaultLock;
 #endif
 		}
 	}

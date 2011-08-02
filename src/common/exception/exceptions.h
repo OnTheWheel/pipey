@@ -1,5 +1,5 @@
-#ifndef PIPEY_EXCEPTION_H
-#define PIPEY_EXCEPTION_H
+#ifndef PIPEY_EXCEPTIONS_H
+#define PIPEY_EXCEPTIONS_H
 
 #include "OutOfBound.h"
 #include "InvalidParameter.h"

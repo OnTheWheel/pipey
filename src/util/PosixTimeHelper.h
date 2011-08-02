@@ -5,7 +5,7 @@
 
 namespace pipey {
 	namespace util {
-		void RelativeToAbsolute(unsigned long nMilliseconds, timespec *pAbsolute);
+		void RelativeToAbsolute(unsigned long nMilliseconds, timespec &rAbsolute);
 	}
 }
 

@@ -10,6 +10,8 @@ namespace pipey {
 			SYNC_SUCCESS,
 			SYNC_FAIL,
 			SYNC_TIMEOUT,
+			SYNC_BUSY,
+			SYNC_DEADLOCK,
 			SYNC_ABANDONED
 		};
 

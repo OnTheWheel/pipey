@@ -14,9 +14,9 @@ namespace pipey {
 				bInitialOwner(false)
 				{ };
 
-				WIN_MUTEX_INIT(LPCTSTR name, bool bnitialOwner) :
+				WIN_MUTEX_INIT(LPCTSTR name, bool initialOwner) :
 				lpName(name),
-				bInitialOwner(bnitialOwner)
+				bInitialOwner(intialOwner)
 				{ };
 
 				LPCTSTR lpName;

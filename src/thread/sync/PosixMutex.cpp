@@ -19,17 +19,29 @@ void CPosixMutex::Init(const LOCK_INIT * pParam)
 {
 	if( m_bInited ) throw EInvalidState("EInvalidState => CPosixMutex::Init - This mutex is already initiated.");
 
+	pthread_mutexattr_t attr, *pAttr = NULL;
 	if( pParam ) {
 		const POSIX_MUTEX_INIT *pInit = dynamic_cast<const POSIX_MUTEX_INIT *>(pParam);
 
-		if( pInit )	{
-			//lpName = pInit->lpName;
-			//bInitialOwner = pInit->bInitialOwner;
+		if( pInit ) {
+			if( pthread_mutexattr_init(&attr) == 0 ) {
+#ifdef _POSIX_THREAD_PROCESS_SHARED
+				int shared = pInit->bProcessShared ? PTHREAD_PROCESS_SHARED : PTHREAD_PROCESS_PRIVATE;
+				pthread_mutexattr_setpshared(&attr, shared);
+#endif
+				pthread_mutexattr_settype(&attr, pInit->nType);
+
+				pAttr = &attr;
+			}
+			else throw ESync("ESync => CPosixMutex::Init - pthread_mutexattr_init failed.");
 		}
 		else throw EInvalidParameter("EInvalidParameter => CPosixMutex::Init - pParam should be type of (POSIX_MUTEX_INIT *).");
 	}
 
-	if( pthread_mutex_init(&m_hMutex, NULL) == 0 )
+	int err = pthread_mutex_init(&m_hMutex, pAttr);
+	if( pAttr ) pthread_mutexattr_destroy(pAttr);
+
+	if( err == 0 )
 		m_bInited = true;
 	else throw ESync("ESync => CPosixMutex::Init - unknown exception");
 }

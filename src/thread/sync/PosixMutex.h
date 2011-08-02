@@ -10,11 +10,29 @@ namespace pipey {
 
 			class POSIX_MUTEX_INIT : public LOCK_INIT {
 			public:
-				POSIX_MUTEX_INIT() 
+				POSIX_MUTEX_INIT() :
+#ifdef _POSIX_THREAD_PROCESS_SHARED
+				bProcessShared(false),
+#endif					
+				nType(PTHREAD_MUTEX_DEFAULT)
 				{ };
 
-				//WIN_MUTEX_INIT(LPCTSTR name, bool bnitialOwner)
-				//{ };
+				
+#ifdef _POSIX_THREAD_PROCESS_SHARED
+				POSIX_MUTEX_INIT(bool processShared, int type) :
+				bProcessShared(processShared),
+				nType(type)
+				{ };
+#endif
+
+				POSIX_MUTEX_INIT(int type) :
+				nType(type)
+				{ };
+
+#ifdef _POSIX_THREAD_PROCESS_SHARED
+				bool bProcessShared;
+#endif
+				int nType;
 			};
 
 			class CPosixMutex : public ITriableTimerableLock {

@@ -28,9 +28,14 @@ class CThreadTest : public pipey::thread::IExecutable
 	void Execute(void *pParam)
 	{
 		THREAD_TEST *pId = (THREAD_TEST*) pParam;
-		for(int i=0; i<5;i++) {
-			SYNC_RESULT res = pId->pLock->AcquireLock();
-			
+		for(int i=0; i<5;) {
+			SYNC_RESULT res = pId->pLock->AcquireTimedLock(2345);
+			if( res == pipey::common::SYNC_TIMEOUT ) 
+			{
+				puts("timed out");
+				continue;
+			}
+			i++;
 			printf("thread %d acquired lock.\n", pId->id);
 #if defined(WIN32) || defined(WIN64)
 			::Sleep(1000);

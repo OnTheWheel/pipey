@@ -81,7 +81,7 @@ void CWindowsMutex::Close() {
 SYNC_RESULT CWindowsMutex::TryLock() 
 {
 	SYNC_RESULT res = AcquireTimedLock(0);
-	if( res == SYNC_TIMEOUT ) return SYNC_FAIL;
+	if( res == SYNC_TIMEOUT ) return SYNC_BUSY;
 	else return res;
 }
 

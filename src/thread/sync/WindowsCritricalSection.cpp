@@ -76,7 +76,7 @@ SYNC_RESULT CWindowsCritricalSection::TryLock()
 	if( m_bInited ) {
 		__try {
 			BOOL bRes = TryEnterCriticalSection(&m_cs);
-			if( bRes == FALSE ) return SYNC_FAIL;
+			if( bRes == FALSE ) return SYNC_BUSY;
 			else return SYNC_SUCCESS;
 		}
 		__except(EXCEPTION_EXECUTE_HANDLER ) {

@@ -72,6 +72,11 @@ void CPosixCondition::Init(const CONDITION_INIT * pParam)
 SYNC_RESULT CPosixCondition::Wait(unsigned long nMilliSeconds) 
 {
 	if( m_bInited )	{
+		if( m_bOwnMutex ) {
+			if( m_pMutex->AcquireLock() != SYNC_SUCCESS )
+				throw ESync("ESync => CPosixCondition::Wait - Cannot acquire the lock to protect the condition variable.");
+		}
+		
 		int err;
 
 		if ( nMilliSeconds == TIME_INFINITE )

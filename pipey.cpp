@@ -52,7 +52,7 @@ int main()
 	lock.Init();
 
 	pipey::thread::sync::CDefaultCondition condition;
-	condition.Init(&pipey::thread::sync::POSIX_COND_INIT(false, &lock));
+	condition.Init(&pipey::thread::sync::POSIX_COND_INIT(false, 0));
 
 	THREAD_TEST ids[5];
 	pipey::thread::CDefaultThread thread[5];
@@ -80,7 +80,7 @@ int main()
 #endif
 
 		condition.Awake();
-		lock.ReleaseLock();
+	//	lock.ReleaseLock();
 	}
 
 	for(i=4; i>=0; i--)

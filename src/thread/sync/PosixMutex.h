@@ -60,6 +60,8 @@ namespace pipey {
 
 				virtual pipey::common::SYNC_RESULT AcquireTimedLock(unsigned long nMilliSeconds = pipey::common::TIME_INFINITE);
 
+				virtual pthread_mutex_t *GetHandle();
+
 			};
 
 		}

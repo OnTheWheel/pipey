@@ -48,8 +48,11 @@ class CThreadTest : public pipey::thread::IExecutable
 
 int main()
 {
+	pipey::thread::sync::CDefaultLock lock;
+	lock.Init();
+
 	pipey::thread::sync::CDefaultCondition condition;
-	condition.Init();
+	condition.Init(&pipey::thread::sync::POSIX_COND_INIT(false, &lock));
 
 	THREAD_TEST ids[5];
 	pipey::thread::CDefaultThread thread[5];
@@ -77,6 +80,7 @@ int main()
 #endif
 
 		condition.Awake();
+		lock.ReleaseLock();
 	}
 
 	for(i=4; i>=0; i--)

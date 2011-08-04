@@ -72,7 +72,7 @@ void CPosixMutex::ReleaseLock()
 		else if( err == EINVAL )
 			throw EInvalidState("EInvalidState => CPosixMutex::ReleaseLock - This mutex is not properly initiated.");
 		else if( err == EPERM )
-			throw ESync("ESync => CPosixMutex::ReleaseLock - The calling thread does not own the mutex (''error checking'' mutexes only).");
+			throw ESync("ESync => CPosixMutex::ReleaseLock - The calling thread does not own the mutex.");
 		else throw ESync("ESync => CPosixMutex::AcquireLock - unknown exception");
 	}
 	else throw EInvalidState("EInvalidState => CPosixMutex::ReleaseLock - This mutex is not properly initiated.");
@@ -128,3 +128,10 @@ SYNC_RESULT CPosixMutex::AcquireTimedLock(unsigned long nMilliSeconds)
 	else throw EInvalidState("EInvalidState => CPosixMutex::AcquireTimedLock - This mutex is not properly initiated.");
 }
 
+pthread_mutex_t *CPosixMutex::GetHandle()
+{	if( m_bInited )	{
+		return &m_hMutex;
+	}
+	else throw EInvalidState("EInvalidState => CPosixMutex::GetHandle - This mutex is not properly initiated.");
+
+}

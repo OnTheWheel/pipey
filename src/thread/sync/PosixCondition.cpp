@@ -29,6 +29,7 @@ void CPosixCondition::Init(const CONDITION_INIT * pParam)
 		else {
 			const POSIX_COND_INIT *pInit = dynamic_cast<const POSIX_COND_INIT *>(pParam);
 			if( pInit ) {
+#ifdef _POSIX_THREAD_PROCESS_SHARED
 				if( pthread_condattr_init(&attr) == 0) {
 					if( pInit->bProcessShared )
 						pthread_condattr_setpshared(&attr, PTHREAD_PROCESS_SHARED);
@@ -37,7 +38,7 @@ void CPosixCondition::Init(const CONDITION_INIT * pParam)
 					pAttr = &attr;
 				}
 				else throw ESync("ESync => CPosixCondition::Init - pthread_condattr_init failed."); 
-
+#endif
 				if( pInit->pMutex ) {
 					m_bOwnMutex = false;
 					m_pMutex = pInit->pMutex;

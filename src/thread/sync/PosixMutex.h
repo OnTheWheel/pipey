@@ -23,11 +23,11 @@ namespace pipey {
 				bProcessShared(processShared),
 				nType(type)
 				{ };
-#endif
-
+#else
 				POSIX_MUTEX_INIT(int type) :
 				nType(type)
 				{ };
+#endif
 
 #ifdef _POSIX_THREAD_PROCESS_SHARED
 				bool bProcessShared;

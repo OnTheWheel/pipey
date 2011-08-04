@@ -13,16 +13,26 @@ namespace pipey {
 			class POSIX_COND_INIT : public CONDITION_INIT {
 			public:
 				POSIX_COND_INIT(void ) :
+#ifdef _POSIX_THREAD_PROCESS_SHARED
 				bProcessShared(true),
+#endif
 				pMutex(NULL)
 				{};
 
+#ifdef _POSIX_THREAD_PROCESS_SHARED
 				POSIX_COND_INIT(bool processShared, CPosixMutex *mutex) :
 				bProcessShared(processShared),
 				pMutex(mutex)
 				{};
+#else
+				POSIX_COND_INIT(CPosixMutex *mutex) :                         
+				pMutex(mutex)
+                                {};                
+#endif
 
+#ifdef _POSIX_THREAD_PROCESS_SHARED
 				bool bProcessShared;
+#endif
 				CPosixMutex *pMutex;
 			};
 

@@ -27,22 +27,23 @@ class CThreadTest : public pipey::thread::IExecutable
 	void Execute(void *pParam)
 	{
 		THREAD_TEST *pId = (THREAD_TEST*) pParam;
-
-		pId->pCondition->Wait();
-		/*SYNC_RESULT res = pId->pLock->AcquireTimedLock(2345);
+		for( int i=0; i<5; ){
+		SYNC_RESULT res = pId->pCondition->Wait(2500);
+		//SYNC_RESULT res = pId->pLock->AcquireTimedLock(2345);
 		if( res == pipey::common::SYNC_TIMEOUT ) 
 		{
 			puts("timed out");
 			continue;
-		}*/
-	
+		}
+		i++;	
 		printf("thread %d is awakened.\n", pId->id);
 #if defined(WIN32) || defined(WIN64)
 		::Sleep(1000);
 #elif defined(__linux__) || defined(__unix__)
 		sleep(1);
 #endif
-
+		}
+		printf("thread %d is terminated.\n", pId->id);
 	}
 };
 
@@ -71,7 +72,7 @@ int main()
 	}
 
 	int i;
-	for(i=4; i>=0; i--)
+	for(i=24; i>=0; i--)
 	{
 #if defined(WIN32) || defined(WIN64)
 		::Sleep(2*1000);

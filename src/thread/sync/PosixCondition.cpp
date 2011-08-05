@@ -59,6 +59,7 @@ void CPosixCondition::Init(const CONDITION_INIT * pParam)
 			else throw ESync("ESync => CPosixCondition::Init - unknown exception");
 		}
 		catch(...) {
+			if( pAttr ) pthread_condattr_destroy(pAttr);
 			if( m_bOwnMutex && m_pMutex ) delete m_pMutex;
 			throw;
 		}

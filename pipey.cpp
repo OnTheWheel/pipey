@@ -34,9 +34,14 @@ class CThreadTest : public pipey::thread::IExecutable
 		THREAD_TEST *pId = (THREAD_TEST*) pParam;
 		for(int i=0; i<5;) {
 			pipey::thread::sync::CTriableTimerableLockPtr ptr(pId->pLock);
-			SYNC_RESULT res = ptr.AcquireLock();
-			if( res == pipey::common::SYNC_TIMEOUT ) 
+			SYNC_RESULT res = ptr.TryLock();
+			if( res == pipey::common::SYNC_BUSY ) 
 			{
+#if defined(WIN32) || defined(WIN64)
+			::Sleep(1000);
+#elif defined(__linux__) || defined(__unix__)
+			sleep(1);
+#endif
 
 				puts("timed out");
 				continue;

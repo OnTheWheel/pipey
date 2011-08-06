@@ -54,7 +54,7 @@ SYNC_RESULT CPosixMutex::AcquireLock()
 		if( err == 0 )
 			return SYNC_SUCCESS;
 		else if( err == EDEADLK )
-			return SYNC_DEADLOCK;
+			throw ESync("ESync => CPosixMutex::AcquireLock - deadlock");
 		else if (err ==  EINVAL )
 			throw EInvalidState("EInvalidState => CPosixMutex::AcquireLock - This mutex is not properly initiated.");
 		else throw ESync("ESync => CPosixMutex::AcquireLock - unknown exception");
@@ -122,7 +122,7 @@ SYNC_RESULT CPosixMutex::AcquireTimedLock(unsigned long nMilliSeconds)
 		else if( err== ETIMEDOUT )
 			return SYNC_TIMEOUT;
 		else if( err == EDEADLK )
-			return SYNC_DEADLOCK;
+			throw ESync("ESync => CPosixMutex::AcquireLock - deadlock");
 		else throw ESync("ESync => CPosixMutex::AcquireTimedLock - unknown exception");
 	}
 	else throw EInvalidState("EInvalidState => CPosixMutex::AcquireTimedLock - This mutex is not properly initiated.");

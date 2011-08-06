@@ -12,7 +12,7 @@
 #include "src/thread/sync/TriableLockPtr.h"
 #include "src/thread/sync/TriableTimerableLockPtr.h"
 //#include "src/thread/sync/WindowsCritricalSection.h"
-//#include "src/util/PosixTimeHelper.h"
+#include "src/util/DefaultTimer.h"
 #include <stdio.h>
 
 using namespace pipey::common;
@@ -34,21 +34,25 @@ class CThreadTest : public pipey::thread::IExecutable
 		THREAD_TEST *pId = (THREAD_TEST*) pParam;
 		for(int i=0; i<5;) {
 			pipey::thread::sync::CTriableTimerableLockPtr ptr(pId->pLock);
-			SYNC_RESULT res = ptr.TryLock();
-			if( res == pipey::common::SYNC_BUSY ) 
+			pipey::util::CDefaultTimer timer;
+			timer.Start();
+			SYNC_RESULT res = ptr.AcquireLock();
+			if( res == pipey::common::SYNC_TIMEOUT ) 
 			{
 #if defined(WIN32) || defined(WIN64)
-			::Sleep(1000);
+			//::Sleep(1000);
 #elif defined(__linux__) || defined(__unix__)
-			sleep(1);
+			//sleep(1);
 #endif
 
-				puts("timed out");
+				unsigned long elapsed;
+				timer.CheckTotal(&elapsed);
+				printf("timed out : %u\n", elapsed);
 				continue;
 			}
 			i++;
 			//printf("thread %d acquired lock.\n", pId->id);
-			printf("there are %d threads in the room.\n", pId->pLock->GetCurrentValue());
+			printf("there are %d threads in the room.\n", pId->pLock->GetCurrentOwner());
 #if defined(WIN32) || defined(WIN64)
 			::Sleep(1000);
 #elif defined(__linux__) || defined(__unix__)
@@ -61,7 +65,7 @@ class CThreadTest : public pipey::thread::IExecutable
 int main(int argc, char* argv[])
 {
 	pipey::thread::sync::CMutableSemaphore lock;
-	lock.Init(&pipey::thread::sync::MUT_SEM_INIT(2,0));
+	lock.Init(&pipey::thread::sync::MUT_SEM_INIT(4,1));
 
 	THREAD_TEST ids[5];
 	pipey::thread::CDefaultThread thread[5];

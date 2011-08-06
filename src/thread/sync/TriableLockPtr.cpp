@@ -21,11 +21,10 @@ SYNC_RESULT CTriableLockPtr::TryLock()
 	if( IsValid() )	{
 		if( !IsLocked() ) {
 			SYNC_RESULT result = m_pLock->TryLock();
-			if( result == SYNC_SUCCESS ) {
+			if( result == SYNC_SUCCESS || result == SYNC_ABANDONED ) 
 				SetLocked();
-				return result;
-			}
-			else return result;
+			
+			return result;
 		}
 		else throw EInvalidState("EInvalidState => CTriableLockPtr::TryLock - This lock pointer is already locked.");
 	}

@@ -6,6 +6,7 @@
 #include "src/thread/DefaultThread.h"
 #include "src/thread/sync/DefaultLock.h"
 #include "src/thread/sync/DefaultCondition.h"
+#include "src/thread/sync/MutableSemaphore.h"
 #include "src/thread/sync/LockPtr.h"
 #include "src/thread/sync/TimerableLockPtr.h"
 #include "src/thread/sync/TriableLockPtr.h"
@@ -20,7 +21,79 @@ using namespace pipey::common;
 #include <unistd.h>
 #endif
 
+struct THREAD_TEST
+{
+	unsigned int id;
+	pipey::thread::sync::CMutableSemaphore *pLock;
+};
 
+class CThreadTest : public pipey::thread::IExecutable
+{
+	void Execute(void *pParam)
+	{
+		THREAD_TEST *pId = (THREAD_TEST*) pParam;
+		for(int i=0; i<5;) {
+			pipey::thread::sync::CTriableTimerableLockPtr ptr(pId->pLock);
+			SYNC_RESULT res = ptr.TryLock();
+			if( res == pipey::common::SYNC_BUSY ) 
+			{
+#if defined(WIN32) || defined(WIN64)
+			::Sleep(1000);
+#elif defined(__linux__) || defined(__unix__)
+			sleep(1);
+#endif
+
+				puts("timed out");
+				continue;
+			}
+			i++;
+			//printf("thread %d acquired lock.\n", pId->id);
+			printf("there are %d threads in the room.\n", pId->pLock->GetCurrentValue());
+#if defined(WIN32) || defined(WIN64)
+			::Sleep(1000);
+#elif defined(__linux__) || defined(__unix__)
+			sleep(1);
+#endif
+		}
+	}
+};
+
+int main(int argc, char* argv[])
+{
+	pipey::thread::sync::CMutableSemaphore lock;
+	lock.Init(&pipey::thread::sync::MUT_SEM_INIT(2,0));
+
+	THREAD_TEST ids[5];
+	pipey::thread::CDefaultThread thread[5];
+	CThreadTest routine;
+
+	for(unsigned int i=0; i<5; i++)
+	{
+		ids[i].id = i+1;
+		ids[i].pLock = &lock;
+
+		pipey::thread::THREAD_INIT init;
+		init.pExec = &routine;
+		init.pParam = &ids[i];
+
+		thread[i].Init(init);
+	}
+
+#if defined(WIN32) || defined(WIN64)
+		::Sleep(20*1000);
+#elif defined(__linux__) || defined(__unix__)
+		sleep(20);
+#endif
+
+	for(int i=4; i>=0; i--)
+	{
+		thread[i].Wait();
+	}
+
+	return 0;
+}
+
+/*
 struct THREAD_TEST
 {
 	unsigned int id;
@@ -68,7 +141,7 @@ int main(int argc, char* argv[])
 
 	for(unsigned int i=0; i<5; i++)
 	{
-		ids[i].id = i+1;
+			ids[i].id = i+1;
 		ids[i].pLock = &lock;
 
 		pipey::thread::THREAD_INIT init;
@@ -90,7 +163,7 @@ int main(int argc, char* argv[])
 	}
 
 	return 0;
-}
+}*/
 
 /*
 struct THREAD_TEST

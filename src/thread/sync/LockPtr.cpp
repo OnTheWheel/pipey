@@ -22,7 +22,8 @@ SYNC_RESULT CLockPtr::AcquireLock()
 	if( IsValid() )	{
 		if( !IsLocked() ) {
 			SYNC_RESULT result = m_pLock->AcquireLock();
-			m_bLocked = true;
+			if( result == SYNC_SUCCESS || result == SYNC_ABANDONED ) 
+				SetLocked();
 				
 			return result;
 		}

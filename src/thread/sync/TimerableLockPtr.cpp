@@ -21,7 +21,7 @@ SYNC_RESULT CTimerableLockPtr::AcquireTimedLock(unsigned long nMilliSeconds)
 	if( IsValid() ) {
 		if( !IsLocked() ) {
 			SYNC_RESULT result = m_pLock->AcquireTimedLock(nMilliSeconds);
-			if( result != SYNC_TIMEOUT ) 
+			if( result == SYNC_SUCCESS || result == SYNC_ABANDONED ) 
 				SetLocked();
 				
 			return result;

@@ -92,7 +92,7 @@ namespace pipey {
 			#include "../../util/SystemInfo.h"
 
 			template <typename T, typename NODE>
-			CDefaultThreadPool<T,NODE>::CDefaultThreadPool(IJobQueue<T> *pQueue) :
+			CDefaultThreadPool<T,NODE>::CDefaultThreadPool<T,NODE>(IJobQueue<T> *pQueue) :
 			m_pQueue(pQueue),
 			m_threads()
 			{

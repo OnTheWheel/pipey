@@ -14,7 +14,7 @@ namespace pipey {
 	namespace thread {
 		namespace pool {
 
-			template <typename T, typename NODE = JOB_NODE<T>>//, template <typename JOB> class JOB_NODE>
+			template <typename T, typename NODE = JOB_NODE<T> >//, template <typename JOB> class JOB_NODE>
 			//template<typename T, typename JOB_NODE<T>>
 			class CDefaultThreadPool : public IThreadPool<T, NODE> {
 			  public:

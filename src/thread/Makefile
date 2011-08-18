@@ -1,4 +1,4 @@
-DIRS = sync
+DIRS = sync pool
 OBJECTS	= $(filter-out Windows%, $(patsubst %.cpp, %.o, $(wildcard *.cpp)))
 
 all : objs sub_dirs

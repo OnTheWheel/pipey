@@ -5,6 +5,8 @@
 
 namespace pipey {
 	namespace common {
+
+		/// includes exception classes defined in the pipey.
 		namespace exception {
 
 			class EPipeyException : public std::exception {

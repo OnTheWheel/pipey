@@ -1,3 +1,10 @@
+/** @file
+ This file includes common components and header files.
+
+ e.g.\ )exception classes, constants, macros and system dependant common header files.
+
+*/
+
 #ifndef PIPEY_COMMON_H
 #define PIPEY_COMMON_H
 

@@ -8,12 +8,14 @@ namespace pipey {
 	namespace thread {
 		namespace sync {
 
+			/// ancestor abstract class of all the semaphore classes.
 			class ISemaphore : virtual public ILock {
 			public:
 				ISemaphore() { };
 
 				virtual ~ISemaphore() { };
 
+				/// release multiple locks at once.
 				virtual void ReleaseMultiple(unsigned long nCount) = 0;
 
 			};

@@ -9,14 +9,17 @@ namespace pipey {
 	namespace thread {
 		namespace sync {
 
+			/// ancestor abstract class of all the timed and triable lock classes.
 			class ITriableTimerableLock : virtual public ITriableLock, virtual public ITimerableLock {
 			public:
 				ITriableTimerableLock() { };
 
 				virtual ~ITriableTimerableLock() { };
 
+				/// acquire a lock, and returns SYNC_TIMEOUT if specified time limit is expired.
 				virtual pipey::common::SYNC_RESULT AcquireTimedLock(unsigned long nMilliSeconds = pipey::common::TIME_INFINITE) = 0;
 
+				/// try to acquire a lock, and returns SYNC_BUSY immediately if the lock is currently dominated by another thread at that moment.
 				virtual pipey::common::SYNC_RESULT TryLock() = 0;
 			};
 

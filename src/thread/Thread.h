@@ -5,6 +5,8 @@
 #include "Executable.h"
 
 namespace pipey {
+
+	/// includes thread related interfaces and classes.
 	namespace thread {
 
 		struct THREAD_INIT {

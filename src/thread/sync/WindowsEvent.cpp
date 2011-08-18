@@ -97,14 +97,14 @@ void CWindowsEvent::Awake() {
 		__try
 		{
 			if( ! SetEvent(m_hEvent) )
-				throw ESync("ESync => CWindowsEvent::Awaken - unknown exception");
+				throw ESync("ESync => CWindowsEvent::Awake - unknown exception");
 		}
 		__except(EXCEPTION_EXECUTE_HANDLER )
 		{
-			throw ESync("ESync => CWindowsEvent::Awaken - unknown exception");
+			throw ESync("ESync => CWindowsEvent::Awake - unknown exception");
 		}
 	}
-	else throw EInvalidState("EInvalidState => CWindowsEvent::Awaken - This event is not properly initiated.");
+	else throw EInvalidState("EInvalidState => CWindowsEvent::Awake - This event is not properly initiated.");
 }
 
 void CWindowsEvent::Close() {

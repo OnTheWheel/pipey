@@ -11,6 +11,7 @@
 #include "src/thread/sync/TimerableLockPtr.h"
 #include "src/thread/sync/TriableLockPtr.h"
 #include "src/thread/sync/TriableTimerableLockPtr.h"
+#include "src/thread/pool/DefaultThreadPool.h"
 //#include "src/thread/sync/WindowsCritricalSection.h"
 #include "src/util/DefaultTimer.h"
 #include <stdio.h>
@@ -190,7 +191,7 @@ class CThreadTest : public pipey::thread::IExecutable
 			continue;
 		}
 		i++;	
-		printf("thread %d is awakened.\n", pId->id);
+		printf("thread %d is Awakeed.\n", pId->id);
 #if defined(WIN32) || defined(WIN64)
 		::Sleep(1000);
 #elif defined(__linux__) || defined(__unix__)

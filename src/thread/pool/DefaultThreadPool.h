@@ -36,8 +36,23 @@ namespace pipey {
 				pipey::thread::sync::CDefaultLock m_lock;
 
 				pipey::thread::sync::CDefaultCondition m_condition;
+				template <typename U, typename N>
+				class CThreadPoolExecutable : public IExecutable
+				{
+				public:
+					virtual void Execute(void *pParam)
+				        {
+						if( pParam )
+				                {
+							IThreadPool<U, N> *pPool = (IThreadPool<U, N> *)pParam;
+							if( ! pPool->IsThreadReady() ) return;
+							while( pPool->PopAndProcess() ) { }
 
-				CThreadPoolExecutable m_executable;
+						}
+					}	
+				};	
+
+				CThreadPoolExecutable<T, NODE> m_executable;
 
 
 			  public:
@@ -81,7 +96,10 @@ namespace pipey {
 
 				virtual bool PopAndProcess();
 
+				virtual void Close();
+
 				virtual void CancelJob(const pipey::memory::CObjectHandle<NODE> & rHandle);
+				virtual JOB_STATE GetJobState(const pipey::memory::CObjectHandle<NODE> &rHandle) const;
 
 				virtual void CloseHandle(pipey::memory::CObjectHandle<NODE> &rHandle);
 
@@ -92,7 +110,7 @@ namespace pipey {
 			#include "../../util/SystemInfo.h"
 
 			template <typename T, typename NODE>
-			CDefaultThreadPool<T,NODE>::CDefaultThreadPool<T,NODE>(IJobQueue<T> *pQueue) :
+			CDefaultThreadPool<T,NODE>::CDefaultThreadPool(IJobQueue<T> *pQueue) :
 			m_pQueue(pQueue),
 			m_threads()
 			{
@@ -138,7 +156,7 @@ namespace pipey {
 				{
 					try
 					{
-						m_semaphore.Init(& MUT_SEM_INIT(nActiveThread, 0));
+						m_semaphore.Init(& pipey::thread::sync::MUT_SEM_INIT(nActiveThread, 0));
 						m_lock.Init();
 						m_condition.Init();
 						
@@ -166,7 +184,7 @@ namespace pipey {
 			{
 				if( m_data.m_bInited  )
 				{
-					CLockPtr lockPtr(&m_lock);
+					pipey::thread::sync::CLockPtr lockPtr(&m_lock);
 					lockPtr.AcquireLock();
 
 					if( pHandle )
@@ -209,10 +227,10 @@ namespace pipey {
 			{
 				if( m_data.m_bInited  )
 				{
-					CLockPtr ptrSem(&m_semaphore);
+					pipey::thread::sync::CLockPtr ptrSem(&m_semaphore);
 					ptrSem.AcquireLock();
 
-					CLockPtr lockPtr(&m_lock);
+					pipey::thread::sync::CLockPtr lockPtr(&m_lock);
 					lockPtr.AcquireLock();
 
 					while( ! m_pQueue->IsPopable() )
@@ -244,7 +262,7 @@ namespace pipey {
 					}
 					catch(...)
 					{
-						pNode->pCallback->OnException(pNode->job, EPipeyExecption());
+						pNode->pCallback->OnException(pNode->job, pipey::common::exception::EPipeyException());
 					}
 					
 					lockPtr.AcquireLock();
@@ -264,7 +282,7 @@ namespace pipey {
 					if( (!rHandle) || !IsMine(rHandle) )
 						throw pipey::common::exception::EInvalidParameter("pipey::common::exception::EInvalidParameter => CDefaultThreadPool<T,NODE>::CancelJob - A job handle specified is not valid.");
 
-					CLockPtr lockPtr(&m_lock);
+					pipey::thread::sync::CLockPtr lockPtr(&m_lock);
 					lockPtr.AcquireLock();
 
 					JOB_NODE<T> *pNode = GetHandleTarget(rHandle);
@@ -297,7 +315,7 @@ namespace pipey {
 			{
 				if( m_data.m_bInited )
 				{
-					CLockPtr lockPtr(&m_lock);
+					pipey::thread::sync::CLockPtr lockPtr(&m_lock);
 					lockPtr.AcquireLock();
 
 					SAFE_TRY( m_pQueue->Cleanup() );
@@ -326,7 +344,7 @@ namespace pipey {
 					{
 						if( IsMine(rHandle) )
 						{
-							CLockPtr lockPtr(&m_lock);
+							pipey::thread::sync::CLockPtr lockPtr(&m_lock);
 							lockPtr.AcquireLock();
 							JOB_NODE<T> *pNode = GetHandleTarget(rHandle);
 							pNode->nHandle--;
@@ -354,7 +372,7 @@ namespace pipey {
 
 						if( IsMine(rSource) )
 						{
-							CLockPtr lockPtr(&m_lock);
+							pipey::thread::sync::CLockPtr lockPtr(&m_lock);
 							lockPtr.AcquireLock();
 							JOB_NODE<T> *pNode = GetHandleTarget(rSource);
 							InitHandle(rTarget, pNode);

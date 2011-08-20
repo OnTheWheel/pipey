@@ -18,20 +18,6 @@ namespace pipey {
 				virtual ~IThreadPool(void) { }
 
 			protected:
-				class CThreadPoolExecutable : public IExecutable
-				{
-				public:
-					virtual void Execute(void *pParam)
-					{
-						if( pParam )
-						{
-							IThreadPool<T, NODE> *pPool = (IThreadPool<T, NODE> *)pParam;
-							if( ! pPool->IsThreadReady() ) return;
-
-							while( pPool->PopAndProcess() ) { }
-						}
-					}
-				};
 				virtual bool IsThreadReady() = 0;
 				virtual IJobQueue<T> *GetJobQueue() const = 0;
 

@@ -1,5 +1,9 @@
 #include "SystemInfo.h"
 
+#if defined(__linux__) || defined(__unix__)
+#include <sys/sysinfo.h>
+#endif
+
 namespace pipey {
 	namespace util {
 
@@ -12,7 +16,14 @@ namespace pipey {
 
 			return tSysInfo.dwNumberOfProcessors ;
 		}
+#elif defined(__linux__) || defined(__unix__)
 
+		unsigned long GetNumberOfProcessors()
+		{
+			struct sysinfo tSysInfo;
+			sysinfo(&tSysInfo);
+			return tSysInfo.procs;
+		}
 #endif
 
 	}

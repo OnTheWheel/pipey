@@ -151,15 +151,16 @@ namespace pipey {
 						m_lock.Init();
 						m_condition.Init();
 						
-						m_threads.AddThread(nMaxThread, IThreadPool<T, INFO>::m_executable, this);
-						
+						m_data.m_bInited = true;
 						m_data.m_nActiveThread = nActiveThread;
 						m_data.m_nMaxThread = nMaxThread;
 						m_data.m_nMinThread = nMinThread;
-						m_data.m_bInited = true;
+						m_threads.AddThread(nMaxThread, IThreadPool<T, INFO>::m_executable, this);
 					}
 					catch(...)
 					{
+						DATA empty;
+						m_data = empty;
 						SAFE_TRY( m_semaphore.Close() );
 						SAFE_TRY( m_lock.Close() );
 						SAFE_TRY( m_condition.Close() );

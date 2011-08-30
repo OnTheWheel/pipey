@@ -65,7 +65,7 @@ namespace pipey {
 			template <typename T>
 			bool CSimpleJobQueue<T>::IsPopable()
 			{
-				return IsEmpty();
+				return !IsEmpty();
 			}
 
 			template <typename T>
@@ -92,8 +92,10 @@ namespace pipey {
 
 					if( m_pHead == m_pTail )
 						m_pHead = m_pTail = NULL;
-					else 
+					else {
 						m_pTail->pPrev->pNext = NULL;
+						m_pTail = m_pTail->pPrev;
+					}
 
 					pPop->pPrev = NULL;
 					return pPop;

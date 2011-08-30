@@ -17,13 +17,48 @@
 //#include "src/thread/sync/WindowsCritricalSection.h"
 #include "src/util/DefaultTimer.h"
 #include <stdio.h>
+#include <iostream>
 
+using namespace std;
 using namespace pipey::common;
+using namespace pipey::thread::pool;
 
 #if defined(__linux__) || defined(__unix__)
 #include <unistd.h>
 #endif
 
+class CTestCallback : public IJobCallback<int>
+{
+	virtual void ProcessJob(int & job)
+	{
+		cout<<job<<endl;
+	}
+
+	virtual void OnCancel(int & job, bool bTimeout = false) {}
+
+	virtual void OnException(int & job, const std::exception & e) {}
+}callback;
+
+int main(int argc, char* argv[])
+{
+	CSimpleThreadPool<int> pool;
+	pool.Init();
+
+	for(int i=0;i<10;i++)
+	{
+		pool.PushJob(i, &callback, NULL);
+	}
+
+#if defined(WIN32) || defined(WIN64)
+			::Sleep(10000);
+#elif defined(__linux__) || defined(__unix__)
+			sleep(10);
+#endif
+
+	return 0;
+}
+
+/*
 struct THREAD_TEST
 {
 	unsigned int id;
@@ -74,7 +109,6 @@ int main(int argc, char* argv[])
 	pipey::thread::CDefaultThread thread[5];
 	CThreadTest routine;
 
-	pipey::thread::pool::CSimpleThreadPool<int> pool;
 
 	for(unsigned int i=0; i<5; i++)
 	{
@@ -101,7 +135,7 @@ int main(int argc, char* argv[])
 
 	return 0;
 }
-
+*/
 /*
 struct THREAD_TEST
 {

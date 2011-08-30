@@ -155,9 +155,9 @@ namespace pipey {
 #elif defined(__linux__) || defined(__unix__)
 
 #ifdef _POSIX_THREAD_PROCESS_SHARED
-						m_condition.Init(&POSIX_COND_INIT(false, &m_lock));	
+						m_condition.Init(& ::pipey::thread::sync::POSIX_COND_INIT(false, &m_lock));	
 #else
-						m_condition.Init(&POSIX_COND_INIT(&m_lock));	
+						m_condition.Init(& ::pipey::thread::sync::POSIX_COND_INIT(&m_lock));	
 #endif
 
 #endif

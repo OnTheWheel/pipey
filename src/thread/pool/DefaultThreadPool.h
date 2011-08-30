@@ -247,6 +247,9 @@ namespace pipey {
 						if(m_data.m_bExit)
 						{
 							m_condition.Awake();
+#if defined(__linux__) || defined(__unix__)
+							lockPtr.ReleaseLock();
+#endif
 							return false;
 						}
 

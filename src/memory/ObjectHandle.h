@@ -11,6 +11,7 @@ namespace pipey {
 
 		template<typename T>
 		class CObjectHandle {
+			friend class IHandleManipulator<T>;
 		public:
 			CObjectHandle(void ) :
 			m_pTarget(NULL),

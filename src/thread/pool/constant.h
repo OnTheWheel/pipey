@@ -16,6 +16,7 @@ namespace pipey {
 			  JOB_READY,
 			  JOB_PROCESSING,
 			  JOB_COMPLETE,
+			  JOB_EXCEPTION,
 			  JOB_CANCEL,
 			  JOB_TIMEOUT,
 			  JOB_INVALID

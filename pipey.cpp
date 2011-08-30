@@ -12,6 +12,8 @@
 #include "src/thread/sync/TriableLockPtr.h"
 #include "src/thread/sync/TriableTimerableLockPtr.h"
 #include "src/thread/pool/DefaultThreadPool.h"
+#include "src/thread/pool/SimpleThreadPool.h"
+#include "src/thread/pool/SimpleJobQueue.h"
 //#include "src/thread/sync/WindowsCritricalSection.h"
 #include "src/util/DefaultTimer.h"
 #include <stdio.h>
@@ -71,6 +73,8 @@ int main(int argc, char* argv[])
 	THREAD_TEST ids[5];
 	pipey::thread::CDefaultThread thread[5];
 	CThreadTest routine;
+
+	pipey::thread::pool::CSimpleThreadPool<int> pool;
 
 	for(unsigned int i=0; i<5; i++)
 	{

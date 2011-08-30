@@ -1,5 +1,5 @@
-#ifndef PIPEY_JOB_NODE_H
-#define PIPEY_JOB_NODE_H
+#ifndef PIPEY_JOB_INFO_H
+#define PIPEY_JOB_INFO_H
 
 #include "constant.h"
 #include "JobCallback.h"
@@ -9,13 +9,13 @@ namespace pipey {
 		namespace pool {
 
 			template<class T>
-			struct JOB_NODE 
+			struct JOB_INFO 
 			{
-				JOB_NODE() :
+				JOB_INFO() :
     				job(), nHandle(0), eState(JOB_INVALID), pCallback(0)
     				{ };
 
-				JOB_NODE(const T & job, IJobCallback<T> * pCallback) :
+				JOB_INFO(const T & job, IJobCallback<T> * pCallback) :
     				job(job), nHandle(0), eState(JOB_INVALID), pCallback(pCallback)
     				{ };
 

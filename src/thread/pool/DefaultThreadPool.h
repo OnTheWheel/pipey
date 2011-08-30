@@ -149,7 +149,18 @@ namespace pipey {
 					{
 						m_semaphore.Init(& ::pipey::thread::sync::MUT_SEM_INIT(nActiveThread, 0));
 						m_lock.Init();
+
+#if defined(WIN32) || defined(WIN64)
 						m_condition.Init();
+#elif defined(__linux__) || defined(__unix__)
+
+#ifdef _POSIX_THREAD_PROCESS_SHARED
+						m_condition.Init(&POSIX_COND_INIT(false, &m_lock));	
+#else
+						m_condition.Init(&POSIX_COND_INIT(&m_lock));	
+#endif
+
+#endif
 						
 						m_data.m_bInited = true;
 						m_data.m_nActiveThread = nActiveThread;
@@ -227,7 +238,10 @@ namespace pipey {
 
 					while( ! m_pQueue->IsPopable() )
 					{
+#if defined(WIN32) || defined(WIN64)
 						lockPtr.ReleaseLock();
+#endif
+
 						m_condition.Wait();
 
 						if(m_data.m_bExit)
@@ -236,7 +250,9 @@ namespace pipey {
 							return false;
 						}
 
+#if defined(WIN32) || defined(WIN64)
 						lockPtr.AcquireLock();
+#endif
 					}
 
 					JOB_INFO<T> *pInfo = m_pQueue->Pop();

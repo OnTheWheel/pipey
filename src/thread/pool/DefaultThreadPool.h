@@ -9,6 +9,7 @@
 #include "../sync/DefaultCondition.h"
 #include "ThreadPool.h"
 #include "../../util/SystemInfo.h"
+#include "job_info.h"
 
 namespace pipey {
 	namespace thread {
@@ -46,7 +47,6 @@ namespace pipey {
 				
 					
 				
-				CThreadPoolExecutable<T, INFO> m_executable;
 
 
 			public:
@@ -151,7 +151,7 @@ namespace pipey {
 						m_lock.Init();
 						m_condition.Init();
 						
-						m_threads.AddThread(nMaxThread, m_executable, this);
+						m_threads.AddThread(nMaxThread, IThreadPool<T, INFO>::m_executable, this);
 						
 						m_data.m_nActiveThread = nActiveThread;
 						m_data.m_nMaxThread = nMaxThread;

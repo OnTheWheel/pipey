@@ -34,6 +34,7 @@ namespace pipey {
 				};
 
 			protected:
+				CThreadPoolExecutable<T, INFO> m_executable;
 				virtual bool IsThreadReady() = 0;
 				virtual IJobQueue<T, INFO> *GetJobQueue() const = 0;
 

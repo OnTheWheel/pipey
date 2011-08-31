@@ -1,11 +1,16 @@
 #include "ThreadVector.h"
+#include "../sync/LockPtr.h"
 
 using namespace pipey::common::exception;
 using namespace pipey::thread;
 using namespace pipey::thread::pool;
-
+#include <iostream>
+using namespace std;
 CThreadVector::CThreadVector(void ) :
 m_bThreadReady(false)
+#if defined(__linux__) || defined(__unix__) 
+,m_nNewThread(0)
+#endif
 {
 
 }
@@ -15,17 +20,22 @@ CThreadVector::~CThreadVector(void )
 	SAFE_TRY( Close() );
 }
 
-void CThreadVector::AddThread(unsigned long nCount, IExecutable & rExecutable, void * pParam) 
+void CThreadVector::AddThread(unsigned long nCount, IExecutable & rExecutable, void *pParam)
 {
 	if( nCount == 0 ) throw EInvalidParameter("EInvalidParameter => CThreadVector::AddThread - nCount cannot be zero.");
 
 	SAFE_TRY( m_threadReady.Close() );
-
+#if defined(__linux__) || defined(__unix__) 
+	SAFE_TRY( m_lock.Close() );
+	m_nNewThread = 0;
+#endif
 	unsigned long nPrev = size();
 
 	try	{
 		m_threadReady.Init();
-
+#if defined(__linux__) || defined(__unix__) 
+		m_lock.Init();
+#endif
 		THREAD_INIT init;
 		init.pParam = pParam;
 		init.pExec = &rExecutable;
@@ -37,19 +47,30 @@ void CThreadVector::AddThread(unsigned long nCount, IExecutable & rExecutable, v
 		for( i=0; i<nCount; i++) {
 			CDefaultThread *pThr = NULL;
 			pThr = new CDefaultThread();
-			try	{
+			try {
 				pThr->Init(init);
-			}
-			catch(...) {
+			} catch(...) {
 				delete pThr;
 				throw;
 			}
 			push_back(pThr);
 		}
+#if defined(__linux__) || defined(__unix__) 
+		while(1)
+		{
+			pipey::thread::sync::CLockPtr ptr(&m_lock);
+
+			ptr.AcquireLock();
+			if( m_nNewThread == nCount ) break;
+			ptr.ReleaseLock();
+			sleep(1);
+		}
+#endif
+
 		m_bThreadReady = true;
 		m_threadReady.Awake();
-	}
-	catch(...) {
+		cout<<"awake"<<endl;
+	} catch(...) {
 		m_bThreadReady = false;
 		SAFE_TRY( m_threadReady.Awake() );
 		unsigned long i;
@@ -64,6 +85,12 @@ void CThreadVector::AddThread(unsigned long nCount, IExecutable & rExecutable, v
 
 bool CThreadVector::IsThreadReady() 
 {
+#if defined(__linux__) || defined(__unix__) 
+	pipey::thread::sync::CLockPtr ptr(&m_lock);
+	ptr.AcquireLock();
+	m_nNewThread++;
+	ptr.ReleaseLock();
+#endif
 	m_threadReady.Wait();
 	m_threadReady.Awake();
 	return m_bThreadReady;
@@ -78,5 +105,8 @@ void CThreadVector::Close()
 	clear();
 
 	SAFE_TRY( m_threadReady.Close() );
+#if defined(__linux__) || defined(__unix__) 
+	SAFE_TRY( m_lock.Close() );
+#endif
 }
 

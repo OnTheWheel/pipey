@@ -5,7 +5,8 @@
 #include "../Executable.h"
 #include "JobQueue.h"
 
-
+#include <iostream>
+using namespace std;
 namespace pipey {
 	namespace thread {
 		namespace pool {
@@ -26,7 +27,9 @@ namespace pipey {
 					{
 						if( pParam ) {
 							IThreadPool<U, N> *pPool = (IThreadPool<U, N> *)pParam;
+							cout<<"wait to ready"<<endl;
 							if( ! pPool->IsThreadReady() ) return;
+							cout<<"thread ready"<<endl;
 							while( pPool->PopAndProcess() ) { }
 
 						}

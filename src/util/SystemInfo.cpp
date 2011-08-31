@@ -22,7 +22,7 @@ namespace pipey {
 		{
 			struct sysinfo tSysInfo;
 			sysinfo(&tSysInfo);
-			return tSysInfo.procs;
+			return (unsigned long)tSysInfo.procs;
 		}
 #endif
 

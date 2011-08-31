@@ -42,7 +42,7 @@ class CTestCallback : public IJobCallback<int>
 int main(int argc, char* argv[])
 {
 	CSimpleThreadPool<int> pool;
-	pool.Init();
+	pool.Init(3,5,4);
 
 	for(int i=0;i<10;i++)
 	{
@@ -55,6 +55,7 @@ int main(int argc, char* argv[])
 			sleep(10);
 #endif
 
+	cout<<"end"<<endl;
 	return 0;
 }
 
@@ -71,7 +72,7 @@ class CThreadTest : public pipey::thread::IExecutable
 	{
 		THREAD_TEST *pId = (THREAD_TEST*) pParam;
 		for(int i=0; i<5;) {
-			pipey::thread::sync::CTriableTimerableLockPtr ptr(pId->pLock);
+			pipey::thread::sync::CLockPtr ptr(pId->pLock);
 			pipey::util::CDefaultTimer timer;
 			timer.Start();
 			SYNC_RESULT res = ptr.AcquireLock();

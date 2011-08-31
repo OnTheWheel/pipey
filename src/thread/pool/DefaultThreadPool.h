@@ -1,7 +1,8 @@
 #ifndef PIPEY_DEFAULTTHREADPOOL_H
 #define PIPEY_DEFAULTTHREADPOOL_H
 
-
+#include <iostream>
+using namespace std;
 #include "JobQueue.h"
 #include "ThreadVector.h"
 #include "../sync/MutableSemaphore.h"
@@ -141,6 +142,7 @@ namespace pipey {
 				{
 					nActiveThread = nMinThread = ::pipey::util::GetNumberOfProcessors();
 					nMaxThread = (unsigned long)(nActiveThread * 2.5);
+					cout<<nMaxThread<<endl;
 				}
 				
 				if( nMinThread <= nMaxThread && nActiveThread <= nMaxThread )
@@ -167,6 +169,8 @@ namespace pipey {
 						m_data.m_nMaxThread = nMaxThread;
 						m_data.m_nMinThread = nMinThread;
 						m_threads.AddThread(nMaxThread, IThreadPool<T, INFO>::m_executable, this);
+
+						cout<<"created"<<endl;
 					}
 					catch(...)
 					{
@@ -210,6 +214,7 @@ namespace pipey {
 						} 
 						
 						m_condition.Awake();
+						cout<<"pushed"<<endl;
 					}
 					catch(...)
 					{
@@ -230,11 +235,14 @@ namespace pipey {
 			{
 				if( m_data.m_bInited  )
 				{
+					cout<<"tryy sem"<<endl;
 					::pipey::thread::sync::CLockPtr ptrSem(&m_semaphore);
 					ptrSem.AcquireLock();
+					cout<<"sem enter"<<endl;
 
 					::pipey::thread::sync::CLockPtr lockPtr(&m_lock);
 					lockPtr.AcquireLock();
+					cout<<"lock enter"<<endl;
 
 					while( ! m_pQueue->IsPopable() )
 					{
@@ -250,6 +258,7 @@ namespace pipey {
 #if defined(__linux__) || defined(__unix__)
 							lockPtr.ReleaseLock();
 #endif
+							cout<<"thread end"<<endl;
 							return false;
 						}
 

@@ -44,6 +44,11 @@ int main(int argc, char* argv[])
 	CSimpleThreadPool<int> pool;
 	pool.Init(3,5,4);
 
+#if defined(WIN32) || defined(WIN64)
+			::Sleep(10000);
+#elif defined(__linux__) || defined(__unix__)
+			sleep(10);
+#endif
 	for(int i=0;i<10;i++)
 	{
 		pool.PushJob(i, &callback, NULL);
@@ -55,7 +60,6 @@ int main(int argc, char* argv[])
 			sleep(10);
 #endif
 
-	cout<<"end"<<endl;
 	return 0;
 }
 

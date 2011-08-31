@@ -69,7 +69,6 @@ void CThreadVector::AddThread(unsigned long nCount, IExecutable & rExecutable, v
 
 		m_bThreadReady = true;
 		m_threadReady.Awake();
-		cout<<"awake"<<endl;
 	} catch(...) {
 		m_bThreadReady = false;
 		SAFE_TRY( m_threadReady.Awake() );

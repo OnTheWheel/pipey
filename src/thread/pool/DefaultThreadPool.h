@@ -223,20 +223,19 @@ namespace pipey {
 					::pipey::thread::sync::CLockPtr lockPtr(&m_lock);
 					lockPtr.AcquireLock();
 
+					if( m_data.m_bExit ) 
+						return false;
+
 					while( ! m_pQueue->IsPopable() )
 					{
 #if defined(WIN32) || defined(WIN64)
 						lockPtr.ReleaseLock();
 #endif
-
+						
 						m_condition.Wait();
 
-						if(m_data.m_bExit)
-						{
+						if(m_data.m_bExit) {
 							m_condition.Awake();
-#if defined(__linux__) || defined(__unix__)
-							lockPtr.ReleaseLock();
-#endif
 							return false;
 						}
 

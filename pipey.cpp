@@ -52,12 +52,40 @@ class CTestCallback : public IJobCallback<int>
 	virtual void OnException(int & job, const std::exception & e) {}
 }callback;
 
+template <typename T>
+class CTest
+{
+	T member;
+public:
+	CTest()
+		:member()
+	{
+	}
+
+	void print()
+	{
+		print(T());
+	}
+
+	void print(T arg)
+	{
+		cout<<arg<<endl;
+	}
+};
+
 int main(int argc, char* argv[])
 {
 	CSimpleThreadPool<int> pool;
 	CObjectHandle< JOB_INFO<int> > handle[10];
 	pool.Init(3,15,4);
 
+	
+	CTest<int> test;
+	test.print();
+	CTest< CSimpleThreadPool<int>* > test2;
+	test2.print();
+
+	//CSimpleThreadPool<int> *ptr = CSimpleThreadPool<int>(*)();
 	int i;
 	for(i=0;i<10;i++)
 	{

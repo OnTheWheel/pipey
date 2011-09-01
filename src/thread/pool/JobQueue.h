@@ -19,7 +19,7 @@ namespace pipey {
 				virtual bool IsEmpty() = 0;
 				virtual bool IsPopable() = 0;
 
-				virtual INFO* Push(const T &job, IJobCallback<T> *pCallback) = 0;
+				virtual INFO* Push(const INFO &rInfo) = 0;
 				virtual INFO* Pop() = 0;
 
 				virtual bool CleanupJob(INFO *pJobInfo, JOB_STATE eState = JOB_COMPLETE) = 0;

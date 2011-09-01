@@ -11,7 +11,6 @@
 #include "src/thread/sync/TimerableLockPtr.h"
 #include "src/thread/sync/TriableLockPtr.h"
 #include "src/thread/sync/TriableTimerableLockPtr.h"
-#include "src/thread/pool/DefaultThreadPool.h"
 #include "src/thread/pool/SimpleThreadPool.h"
 #include "src/thread/pool/SimpleJobQueue.h"
 //#include "src/thread/sync/WindowsCritricalSection.h"

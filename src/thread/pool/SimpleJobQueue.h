@@ -19,7 +19,7 @@ namespace pipey {
 				virtual bool IsEmpty();
 				virtual bool IsPopable();
 
-				virtual JOB_INFO<T>* Push(const T &job, IJobCallback<T> *pCallback);
+				virtual JOB_INFO<T>* Push(const JOB_INFO<T> &rInfo);
 				virtual JOB_INFO<T>* Pop();
 
 				virtual bool CleanupJob(JOB_INFO<T> *pJobInfo, JOB_STATE eState = JOB_COMPLETE);
@@ -31,8 +31,8 @@ namespace pipey {
 				template <typename U>
 				struct JOB_NODE : public JOB_INFO<U>
 				{
-					JOB_NODE(const U &job, IJobCallback<T> * pCallback)
-					:JOB_INFO<U>(job, pCallback), pPrev(NULL), pNext(NULL)
+					JOB_NODE(const JOB_INFO<U> &rInfo)
+					:JOB_INFO<U>(rInfo.job, rInfo.pCallback), pPrev(NULL), pNext(NULL)
 					{
 					}
 
@@ -69,9 +69,9 @@ namespace pipey {
 			}
 
 			template <typename T>
-			JOB_INFO<T> *CSimpleJobQueue<T>::Push(const T &job, IJobCallback<T> *pCallback)
+			JOB_INFO<T> *CSimpleJobQueue<T>::Push(const JOB_INFO<T> &rInfo)
 			{
-				JOB_NODE<T> *pNew = new JOB_NODE<T>(job, pCallback);
+				JOB_NODE<T> *pNew = new JOB_NODE<T>(rInfo);
 
 				if( IsEmpty() )
 					m_pHead = m_pTail = pNew;

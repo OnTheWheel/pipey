@@ -65,7 +65,10 @@ namespace pipey {
 			{
 
 				if( IsValid() )
-					return m_pManipulator->CloseHandle(*this);
+				{
+					m_pManipulator->CloseHandle(*this);
+					return true;
+				}
 				else return false;
 			}
 

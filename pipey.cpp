@@ -21,20 +21,33 @@
 
 using namespace std;
 using namespace pipey::common;
+using namespace pipey::memory;
 using namespace pipey::thread::pool;
 
 #if defined(__linux__) || defined(__unix__)
 #include <unistd.h>
 #endif
 
+bool completed[10];
+
 class CTestCallback : public IJobCallback<int>
 {
 	virtual void ProcessJob(int & job)
 	{
 		cout<<job<<endl;
+		completed[job] = true;
+
+#if defined(WIN32) || defined(WIN64)
+		::Sleep(10000);
+#elif defined(__linux__) || defined(__unix__)
+		sleep(10);
+#endif
 	}
 
-	virtual void OnCancel(int & job, bool bTimeout = false) {}
+	virtual void OnCancel(int & job, bool bTimeout = false) 
+	{
+		cout<<job<<" canceled"<<endl;
+	}
 
 	virtual void OnException(int & job, const std::exception & e) {}
 }callback;
@@ -42,19 +55,36 @@ class CTestCallback : public IJobCallback<int>
 int main(int argc, char* argv[])
 {
 	CSimpleThreadPool<int> pool;
-	pool.Init(3,5,4);
+	CObjectHandle< JOB_INFO<int> > handle[10];
+	pool.Init(3,15,4);
 
-	for(int i=0;i<10;i++)
+	int i;
+	for(i=0;i<10;i++)
 	{
-		pool.PushJob(i, &callback, NULL);
+		pool.PushJob(i, &callback, handle+i);
 	}
 
 #if defined(WIN32) || defined(WIN64)
-			::Sleep(10000);
+	::Sleep(1000);
 #elif defined(__linux__) || defined(__unix__)
-			sleep(10);
+	sleep(1);
 #endif
 
+	
+	for(i=0;i<10;i++)
+	{
+		if(i%2 == 0 && !completed[i])
+			pool.CancelJob(handle[i]);
+		handle[i].CloseHandle();
+	}
+
+#if defined(WIN32) || defined(WIN64)
+	::Sleep(10000);
+#elif defined(__linux__) || defined(__unix__)
+	sleep(10);
+#endif
+
+	pool.Close();
 	return 0;
 }
 

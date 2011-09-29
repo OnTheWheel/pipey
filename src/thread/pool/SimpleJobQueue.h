@@ -8,8 +8,8 @@ namespace pipey {
 	namespace thread {
 		namespace pool {
 
-			template <typename T>
-			class CSimpleJobQueue : public IJobQueue<T, JOB_INFO<T> >
+			template <typename T, typename INFO = JOB_INFO<T> >
+			class CSimpleJobQueue : public IJobQueue<T, INFO >
 			{
 			public:
 				CSimpleJobQueue();
@@ -19,59 +19,59 @@ namespace pipey {
 				virtual bool IsEmpty();
 				virtual bool IsPopable();
 
-				virtual JOB_INFO<T>* Push(const JOB_INFO<T> &rInfo);
-				virtual JOB_INFO<T>* Pop();
+				virtual INFO* Push(const INFO &rInfo);
+				virtual INFO* Pop();
 
-				virtual bool CleanupJob(JOB_INFO<T> *pJobInfo, JOB_STATE eState = JOB_COMPLETE);
+				virtual void CleanupJob(INFO *pJobInfo, JOB_STATE eState = JOB_COMPLETE);
 
 				virtual void CleanupAll();
 
 			private:
 
-				template <typename U>
-				struct JOB_NODE : public JOB_INFO<U>
+				//template <typename U>
+				struct JOB_NODE : public INFO
 				{
-					JOB_NODE(const JOB_INFO<U> &rInfo)
-					:JOB_INFO<U>(rInfo.job, rInfo.pCallback), pPrev(NULL), pNext(NULL)
+					JOB_NODE(const INFO &rInfo)
+					:INFO(rInfo)
 					{
 					}
 
-					JOB_NODE<U> *pPrev;
-					JOB_NODE<U> *pNext;
+					JOB_NODE *pPrev;
+					JOB_NODE *pNext;
 				};
 
-				JOB_NODE<T>* m_pHead;
-				JOB_NODE<T>* m_pTail;
+				JOB_NODE* m_pHead;
+				JOB_NODE* m_pTail;
 			};
 
-			template <typename T>
-			CSimpleJobQueue<T>::CSimpleJobQueue()
+			template <typename T, typename INFO>
+			CSimpleJobQueue<T, INFO>::CSimpleJobQueue()
 			: m_pHead(NULL), m_pTail(NULL)
 			{
 			}
 
-			template <typename T>
-			CSimpleJobQueue<T>::~CSimpleJobQueue()
+			template <typename T, typename INFO>
+			CSimpleJobQueue<T, INFO>::~CSimpleJobQueue()
 			{
 				SAFE_TRY( CleanupAll() );
 			}
 
-			template <typename T>
-			bool CSimpleJobQueue<T>::IsEmpty()
+			template <typename T, typename INFO>
+			bool CSimpleJobQueue<T, INFO>::IsEmpty()
 			{
 				return m_pHead == NULL;
 			}
 
-			template <typename T>
-			bool CSimpleJobQueue<T>::IsPopable()
+			template <typename T, typename INFO>
+			bool CSimpleJobQueue<T, INFO>::IsPopable()
 			{
 				return !IsEmpty();
 			}
 
-			template <typename T>
-			JOB_INFO<T> *CSimpleJobQueue<T>::Push(const JOB_INFO<T> &rInfo)
+			template <typename T, typename INFO>
+			INFO *CSimpleJobQueue<T, INFO>::Push(const INFO &rInfo)
 			{
-				JOB_NODE<T> *pNew = new JOB_NODE<T>(rInfo);
+				JOB_NODE *pNew = new JOB_NODE(rInfo);
 
 				if( IsEmpty() )
 					m_pHead = m_pTail = pNew;
@@ -84,11 +84,11 @@ namespace pipey {
 				return m_pHead;
 			}
 
-			template <typename T>
-			JOB_INFO<T> *CSimpleJobQueue<T>::Pop()
+			template <typename T, typename INFO>
+			INFO *CSimpleJobQueue<T, INFO>::Pop()
 			{
 				if( IsPopable() ) {
-					JOB_NODE<T> *pPop = m_pTail;
+					JOB_NODE *pPop = m_pTail;
 
 					if( m_pHead == m_pTail )
 						m_pHead = m_pTail = NULL;
@@ -99,16 +99,16 @@ namespace pipey {
 
 					pPop->pPrev = NULL;
 					return pPop;
-				} else throw ::pipey::common::exception::EOutOfBound("pipey::common::exception::EOutOfBound => CSimpleJobQueue<T>::Pop() - The queue is empty.");
+				} else throw ::pipey::common::exception::EOutOfBound("pipey::common::exception::EOutOfBound => CSimpleJobQueue<T, INFO>::Pop() - The queue is empty.");
 			}
 
-			template <typename T>
-			bool CSimpleJobQueue<T>::CleanupJob(JOB_INFO<T> *pJobInfo, JOB_STATE eState)
+			template <typename T, typename INFO>
+			void CSimpleJobQueue<T, INFO>::CleanupJob(INFO *pJobInfo, JOB_STATE eState)
 			{
 				if( pJobInfo->nHandle == 0 )
 					delete pJobInfo;
 				else if( eState == JOB_CANCEL || eState == JOB_TIMEOUT ) {
-					JOB_NODE<T> *pNode = (JOB_NODE<T> *)pJobInfo;
+					JOB_NODE *pNode = (JOB_NODE *)pJobInfo;
 					
 					if( pNode->pPrev ) pNode->pPrev->pNext = pNode->pNext;
 					if( pNode->pNext ) pNode->pNext->pPrev = pNode->pPrev;
@@ -120,16 +120,14 @@ namespace pipey {
 
 				} else if( eState == JOB_COMPLETE )
 					pJobInfo->eState = eState;
-
-				return false;
 			}
 
-			template <typename T>
-			void CSimpleJobQueue<T>::CleanupAll()
+			template <typename T, typename INFO>
+			void CSimpleJobQueue<T, INFO>::CleanupAll()
 			{
-				JOB_NODE<T> *pNext = m_pHead;
+				JOB_NODE *pNext = m_pHead;
 				while( pNext ) {
-					JOB_NODE<T> *pNode = pNext;
+					JOB_NODE *pNode = pNext;
 					pNext = pNode->pNext;
 
 					if( pNode->nHandle == 0 )

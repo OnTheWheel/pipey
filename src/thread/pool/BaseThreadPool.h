@@ -263,7 +263,8 @@ namespace pipey {
 					}
 					
 					lockPtr.AcquireLock();
-					if( m_pQueue->CleanupJob(pInfo) )   
+					m_pQueue->CleanupJob(pInfo);
+					if( m_pQueue->IsPopable() )
 						m_condition.Awake();
 
 					return true;

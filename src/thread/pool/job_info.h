@@ -33,22 +33,22 @@ namespace pipey {
 
 			};
 
-			template<typename T, typename C>
+			template<typename T>
 			struct CONTEXT_JOB_INFO : public JOB_INFO<T>
 			{
 				CONTEXT_JOB_INFO() :
     				JOB_INFO<T>(), context()
     			{ }
 
-				CONTEXT_JOB_INFO(const CONTEXT_JOB_INFO<T,C> &info) :
-					JOB_INFO<T>(info.job, info.pCallback), context(info.context)
+				CONTEXT_JOB_INFO(const CONTEXT_JOB_INFO<T> &info) :
+					JOB_INFO<T>(info.job, info.pCallback)
     			{ }
 
-				CONTEXT_JOB_INFO(const T & job, const C &context, IJobCallback<T> * pCallback) :
-    				JOB_INFO<T>(job, pCallback), context(context)
+				CONTEXT_JOB_INFO(const T & job, IJobCallback<T> * pCallback) :
+    				JOB_INFO<T>(job, pCallback)
     			{ }
 
-				C context;
+				
 
 			};
 

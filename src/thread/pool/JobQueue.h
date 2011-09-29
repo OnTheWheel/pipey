@@ -22,7 +22,7 @@ namespace pipey {
 				virtual INFO* Push(const INFO &rInfo) = 0;
 				virtual INFO* Pop() = 0;
 
-				virtual bool CleanupJob(INFO *pJobInfo, JOB_STATE eState = JOB_COMPLETE) = 0;
+				virtual void CleanupJob(INFO *pJobInfo, JOB_STATE eState = JOB_COMPLETE) = 0;
 
 				virtual void CleanupAll() = 0;
 			};

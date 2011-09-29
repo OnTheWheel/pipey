@@ -15,6 +15,7 @@
 #include "src/thread/pool/SimpleJobQueue.h"
 //#include "src/thread/sync/WindowsCritricalSection.h"
 #include "src/util/DefaultTimer.h"
+#include "src/util/RandomPicker.h"
 #include <stdio.h>
 #include <iostream>
 
@@ -51,40 +52,35 @@ class CTestCallback : public IJobCallback<int>
 	virtual void OnException(int & job, const std::exception & e) {}
 }callback;
 
-template <typename T>
-class CTest
-{
-	T member;
-public:
-	CTest()
-		:member()
-	{
-	}
-
-	void print()
-	{
-		print(T());
-	}
-
-	void print(T arg)
-	{
-		cout<<arg<<endl;
-	}
-};
 
 int main(int argc, char* argv[])
 {
+	/*
+	pipey::util::CRandomPicker<int> picker(20);
+
+	unsigned long ref[400];
+
+	int i;
+	for(i=0; i<400;i++)
+		picker.Put(i, ref+i);
+
+
+	int total =0;
+	for(i=0; i<400;i++)
+	{
+		int val = picker.Pick();
+		cout<<val<<endl;
+		picker.Delete(ref[val]);
+		total += val;
+	}
+
+	cout<<total<<endl;
+	return 0;
+	*/
 	CSimpleThreadPool<int> pool;
 	CObjectHandle< JOB_INFO<int> > handle[10];
 	pool.Init(3,15,4);
 
-	
-	CTest<int> test;
-	test.print();
-	CTest< CSimpleThreadPool<int>* > test2;
-	test2.print();
-
-	//CSimpleThreadPool<int> *ptr = CSimpleThreadPool<int>(*)();
 	int i;
 	for(i=0;i<10;i++)
 	{
@@ -104,6 +100,7 @@ int main(int argc, char* argv[])
 			pool.CancelJob(handle[i]);
 		handle[i].CloseHandle();
 	}
+
 
 #if defined(WIN32) || defined(WIN64)
 	::Sleep(10000);

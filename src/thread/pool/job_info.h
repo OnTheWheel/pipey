@@ -37,7 +37,7 @@ namespace pipey {
 			struct CONTEXT_JOB_INFO : public JOB_INFO<T>
 			{
 				CONTEXT_JOB_INFO() :
-    				JOB_INFO<T>(), context()
+    				JOB_INFO<T>()
     			{ }
 
 				CONTEXT_JOB_INFO(const CONTEXT_JOB_INFO<T> &info) :

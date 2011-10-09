@@ -96,7 +96,7 @@ int main(int argc, char* argv[])
 	CContextAwareThreadPool<CTX_JOB> cap;
 	cap.Init(13,15,14);
 
-	CObjectHandle< CONTEXT_INFO<CTX_JOB> > contexts[10];
+	CContextAwareThreadPool<CTX_JOB>::CContextHandle contexts[10];
 
 	int i;
 	for(i=0;i<10;i++)

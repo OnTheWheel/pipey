@@ -18,6 +18,9 @@ namespace pipey {
 				~CContextAwareThreadPool(void);
 
 			public:
+				typedef ::pipey::memory::CObjectHandle< CONTEXT_INFO<T> > CContextHandle;
+
+			public:
 
 				virtual void Init(unsigned long nMinThread = 0, unsigned long nMaxThread = 0, unsigned long nActiveThread = 0);
 				virtual void Close();

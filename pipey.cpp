@@ -94,7 +94,7 @@ int main(int argc, char* argv[])
 	contexts[4]= cq.CreateContext();*/
 
 	CContextAwareThreadPool<CTX_JOB> cap;
-	cap.Init(3,5,4);
+	cap.Init(13,15,14);
 
 	CObjectHandle< CONTEXT_INFO<CTX_JOB> > contexts[10];
 

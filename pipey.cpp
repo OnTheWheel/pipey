@@ -113,7 +113,7 @@ int main(int argc, char* argv[])
 #if defined(WIN32) || defined(WIN64)
 	::Sleep(1000);
 #elif defined(__linux__) || defined(__unix__)
-	sleep(10);
+	sleep(1);
 #endif
 
 	for(i=0;i<100;i++){

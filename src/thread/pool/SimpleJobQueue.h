@@ -8,6 +8,9 @@ namespace pipey {
 	namespace thread {
 		namespace pool {
 
+			template<typename T>
+			struct JOB_INFO;
+
 			template <typename T, typename INFO = JOB_INFO<T> >
 			class CSimpleJobQueue : public IJobQueue<T, INFO >
 			{

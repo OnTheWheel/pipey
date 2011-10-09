@@ -97,6 +97,7 @@ int main(int argc, char* argv[])
 	cap.Init(13,15,14);
 
 	CContextAwareThreadPool<CTX_JOB>::CContextHandle contexts[10];
+	CContextAwareThreadPool<CTX_JOB>::CJobHandle jobs[100];
 
 	int i;
 	for(i=0;i<10;i++)
@@ -106,10 +107,21 @@ int main(int argc, char* argv[])
 		CTX_JOB job;
 		job.ctx = i%10;
 		job.job = i/10;
-		cap.PushJob(contexts[i%10], job, &callback);
+		cap.PushJob(contexts[i%10], job, &callback, jobs+i);
 	}
 
-	#if defined(WIN32) || defined(WIN64)
+#if defined(WIN32) || defined(WIN64)
+	::Sleep(1000);
+#elif defined(__linux__) || defined(__unix__)
+	sleep(10);
+#endif
+
+	for(i=0;i<100;i++){
+		if(i/10 == 5)
+			cap.CancelJob(jobs[i]);
+	}
+
+#if defined(WIN32) || defined(WIN64)
 	::Sleep(20000);
 #elif defined(__linux__) || defined(__unix__)
 	sleep(20);
@@ -117,6 +129,9 @@ int main(int argc, char* argv[])
 
 	for(i=0;i<10;i++)
 		cap.CloseHandle(contexts[i]);
+
+	for(i=0;i<100;i++)
+		cap.CloseHandle(jobs[i]);
 
 	cap.Close();
 

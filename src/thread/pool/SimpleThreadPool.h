@@ -15,7 +15,9 @@ namespace pipey {
 			public:
 				CSimpleThreadPool(void);
 				virtual ~CSimpleThreadPool(void);
-				
+
+			public:
+				typedef ::pipey::memory::CObjectHandle< JOB_INFO<T> > CJobHandle;				
 
 			public:
 				virtual void PushJob(const T &rJob, IJobCallback<T> *pCallback, ::pipey::memory::CObjectHandle< JOB_INFO<T> > * pHandle);

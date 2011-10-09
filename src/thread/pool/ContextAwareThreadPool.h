@@ -19,6 +19,7 @@ namespace pipey {
 
 			public:
 				typedef ::pipey::memory::CObjectHandle< CONTEXT_INFO<T> > CContextHandle;
+				typedef ::pipey::memory::CObjectHandle< CONTEXT_JOB_INFO<T> > CJobHandle;
 
 			public:
 
@@ -33,6 +34,9 @@ namespace pipey {
 
 				virtual void CloseHandle(::pipey::memory::CObjectHandle< CONTEXT_INFO<T> > & rHandle);
 				virtual void DuplicateHandle(const ::pipey::memory::CObjectHandle< CONTEXT_INFO<T> > & rSource, ::pipey::memory::CObjectHandle< CONTEXT_INFO<T> > & rTarget);
+
+				virtual void CloseHandle(::pipey::memory::CObjectHandle< CONTEXT_JOB_INFO<T> > & rHandle);
+				virtual void DuplicateHandle(const ::pipey::memory::CObjectHandle< CONTEXT_JOB_INFO<T> > & rSource, ::pipey::memory::CObjectHandle< CONTEXT_JOB_INFO<T> > & rTarget);
 
 			private:
 				::pipey::memory::CObjectHandle< CONTEXT_INFO<T> > m_hDefaultContext;
@@ -177,6 +181,18 @@ namespace pipey {
 					else throw ::pipey::common::exception::EInvalidParameter("::pipey::common::exception::EInvalidParameter => CContextAwareThreadPool::DuplicateHandle - Specified context handle(rSource) is not properly initiated.");
 				}
 				else throw ::pipey::common::exception::EInvalidState("::pipey::common::exception::EInvalidState => CContextAwareThreadPool::DuplicateHandle - This thread pool is not properly initiated.");
+			}
+
+			template <typename T>
+			void CContextAwareThreadPool<T>::CloseHandle(pipey::memory::CObjectHandle<CONTEXT_JOB_INFO<T> > &rHandle)
+			{
+				IBaseThreadPool<T, CONTEXT_JOB_INFO<T> >::CloseHandle(rHandle);
+			}
+
+			template <typename T>
+			void CContextAwareThreadPool<T>::DuplicateHandle(const pipey::memory::CObjectHandle<CONTEXT_JOB_INFO<T> > &rSource, pipey::memory::CObjectHandle<CONTEXT_JOB_INFO<T> > &rTarget)
+			{
+				IBaseThreadPool<T, CONTEXT_JOB_INFO<T> >::DuplicateHandle(rSource, rTarget);
 			}
 
 		}

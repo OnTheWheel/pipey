@@ -16,8 +16,8 @@ namespace pipey {
 				virtual ~CSimpleJobQueue();
 
 			public:
-				virtual bool IsEmpty();
-				virtual bool IsPopable();
+				virtual bool IsEmpty() const;
+				virtual bool IsPopable() const;
 
 				virtual INFO* Push(const INFO &rInfo);
 				virtual INFO* Pop();
@@ -32,7 +32,7 @@ namespace pipey {
 				struct JOB_NODE : public INFO
 				{
 					JOB_NODE(const INFO &rInfo)
-					:INFO(rInfo)
+					:INFO(rInfo), pPrev(NULL), pNext(NULL)
 					{
 					}
 
@@ -57,13 +57,13 @@ namespace pipey {
 			}
 
 			template <typename T, typename INFO>
-			bool CSimpleJobQueue<T, INFO>::IsEmpty()
+			bool CSimpleJobQueue<T, INFO>::IsEmpty() const
 			{
 				return m_pHead == NULL;
 			}
 
 			template <typename T, typename INFO>
-			bool CSimpleJobQueue<T, INFO>::IsPopable()
+			bool CSimpleJobQueue<T, INFO>::IsPopable() const
 			{
 				return !IsEmpty();
 			}

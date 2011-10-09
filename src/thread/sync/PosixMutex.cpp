@@ -19,27 +19,28 @@ void CPosixMutex::Init(const LOCK_INIT * pParam)
 {
 	if( m_bInited ) throw EInvalidState("EInvalidState => CPosixMutex::Init - This mutex is already initiated.");
 
-	pthread_mutexattr_t attr, *pAttr = NULL;
+	pthread_mutexattr_t attr;
+	if( pthread_mutexattr_init(&attr) != 0 ) 
+		throw ESync("ESync => CPosixMutex::Init - pthread_mutexattr_init failed.");
+
 	if( pParam ) {
 		const POSIX_MUTEX_INIT *pInit = dynamic_cast<const POSIX_MUTEX_INIT *>(pParam);
-
 		if( pInit ) {
-			if( pthread_mutexattr_init(&attr) == 0 ) {
 #ifdef _POSIX_THREAD_PROCESS_SHARED
-				int shared = pInit->bProcessShared ? PTHREAD_PROCESS_SHARED : PTHREAD_PROCESS_PRIVATE;
-				pthread_mutexattr_setpshared(&attr, shared);
+			int shared = pInit->bProcessShared ? PTHREAD_PROCESS_SHARED : PTHREAD_PROCESS_PRIVATE;
+			pthread_mutexattr_setpshared(&attr, shared);
 #endif
-				pthread_mutexattr_settype(&attr, pInit->nType);
-
-				pAttr = &attr;
-			}
-			else throw ESync("ESync => CPosixMutex::Init - pthread_mutexattr_init failed.");
-		}
-		else throw EInvalidParameter("EInvalidParameter => CPosixMutex::Init - pParam should be type of (POSIX_MUTEX_INIT *).");
+			pthread_mutexattr_settype(&attr, pInit->nType);
+		} else throw EInvalidParameter("EInvalidParameter => CPosixMutex::Init - pParam should be type of (POSIX_MUTEX_INIT *).");
+	} else {
+#ifdef _POSIX_THREAD_PROCESS_SHARED
+		pthread_mutexattr_setpshared(&attr, PTHREAD_PROCESS_PRIVATE);
+#endif		
+		pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
 	}
 
-	int err = pthread_mutex_init(&m_hMutex, pAttr);
-	if( pAttr ) pthread_mutexattr_destroy(pAttr);
+	int err = pthread_mutex_init(&m_hMutex, &attr);
+	pthread_mutexattr_destroy(&attr);
 
 	if( err == 0 )
 		m_bInited = true;

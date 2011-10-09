@@ -16,8 +16,8 @@ namespace pipey {
 				virtual ~IJobQueue(void) { }
 
 			public:
-				virtual bool IsEmpty() = 0;
-				virtual bool IsPopable() = 0;
+				virtual bool IsEmpty() const = 0;
+				virtual bool IsPopable() const = 0;
 
 				virtual INFO* Push(const INFO &rInfo) = 0;
 				virtual INFO* Pop() = 0;

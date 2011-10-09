@@ -13,6 +13,7 @@
 #include "src/thread/sync/TriableTimerableLockPtr.h"
 #include "src/thread/pool/SimpleThreadPool.h"
 #include "src/thread/pool/SimpleJobQueue.h"
+#include "src/thread/pool/ContextAwareThreadPool.h"
 //#include "src/thread/sync/WindowsCritricalSection.h"
 #include "src/util/DefaultTimer.h"
 //#include "src/util/RandomPicker.h"
@@ -29,7 +30,7 @@ using namespace pipey::thread::pool;
 #endif
 
 bool completed[10];
-
+/*
 class CTestCallback : public IJobCallback<int>
 {
 	virtual void ProcessJob(int & job)
@@ -51,10 +52,77 @@ class CTestCallback : public IJobCallback<int>
 
 	virtual void OnException(int & job, const std::exception & e) {}
 }callback;
+*/
+struct CTX_JOB
+{
+	int ctx;
+	int job;
+};
+class CTestCallback : public IJobCallback<CTX_JOB>
+{
+	virtual void ProcessJob(CTX_JOB & job)
+	{
+		string ws;
+		for(int i=0;i<job.ctx;i++)
+			ws+="   ";
+		cout<<ws.c_str()<<job.ctx<<"{"<<job.job<<endl;
 
+#if defined(WIN32) || defined(WIN64)
+		::Sleep(1000);
+#elif defined(__linux__) || defined(__unix__)
+		sleep(1);
+#endif
+		cout<<ws.c_str()<<job.ctx<<"}"<<job.job<<endl;
+	}
+
+	virtual void OnCancel(CTX_JOB & job, bool bTimeout = false) 
+	{
+		cout<<job.ctx<<":"<<job.job<<" canceled"<<endl;
+	}
+
+	virtual void OnException(CTX_JOB & job, const std::exception & e) {}
+}callback;
 
 int main(int argc, char* argv[])
 {
+	/*::pipey::thread::pool::CContextAwareJobQueue<int > cq;
+	::pipey::thread::pool::CONTEXT_INFO<int> *contexts[5];
+	contexts[0]= cq.CreateContext();
+	contexts[1]= cq.CreateContext();
+	contexts[2]= cq.CreateContext();
+	contexts[3]= cq.CreateContext();
+	contexts[4]= cq.CreateContext();*/
+
+	CContextAwareThreadPool<CTX_JOB> cap;
+	cap.Init(3,5,4);
+
+	CObjectHandle< CONTEXT_INFO<CTX_JOB> > contexts[10];
+
+	int i;
+	for(i=0;i<10;i++)
+		cap.CreateContext(contexts[i]);
+
+	for(i=0;i<100;i++){
+		CTX_JOB job;
+		job.ctx = i%10;
+		job.job = i/10;
+		cap.PushJob(contexts[i%10], job, &callback);
+	}
+
+	#if defined(WIN32) || defined(WIN64)
+	::Sleep(20000);
+#elif defined(__linux__) || defined(__unix__)
+	sleep(20);
+#endif
+
+	for(i=0;i<10;i++)
+		cap.CloseHandle(contexts[i]);
+
+	cap.Close();
+
+	return 0;
+
+
 	/*
 	pipey::util::CRandomPicker<int> picker(20);
 
@@ -77,6 +145,7 @@ int main(int argc, char* argv[])
 	cout<<total<<endl;
 	return 0;
 	*/
+	/*
 	CSimpleThreadPool<int> pool;
 	CObjectHandle< JOB_INFO<int> > handle[10];
 	pool.Init(3,15,4);
@@ -109,7 +178,7 @@ int main(int argc, char* argv[])
 #endif
 
 	pool.Close();
-	return 0;
+	return 0;*/
 }
 
 /*

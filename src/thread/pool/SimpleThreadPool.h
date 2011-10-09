@@ -13,14 +13,24 @@ namespace pipey {
 			class CSimpleThreadPool : public IBaseThreadPool<T, JOB_INFO<T> >
 			{
 			public:
-				CSimpleThreadPool(void)
-				:IBaseThreadPool<T, JOB_INFO<T> >( new CSimpleJobQueue<T>() )
-				{
-				}
+				CSimpleThreadPool(void);
+				virtual ~CSimpleThreadPool(void);
+				
 
 			public:
 				virtual void PushJob(const T &rJob, IJobCallback<T> *pCallback, ::pipey::memory::CObjectHandle< JOB_INFO<T> > * pHandle);
 			};
+			
+			template <typename T>
+			CSimpleThreadPool<T>::CSimpleThreadPool()
+				:IBaseThreadPool<T, JOB_INFO<T> >( new CSimpleJobQueue<T>() )
+			{
+			}
+
+			template <typename T>
+			CSimpleThreadPool<T>::~CSimpleThreadPool()
+			{
+			}
 
 			template <typename T>
 			void CSimpleThreadPool<T>::PushJob(const T &rJob, IJobCallback<T> *pCallback, ::pipey::memory::CObjectHandle< JOB_INFO<T> > * pHandle)

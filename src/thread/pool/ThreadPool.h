@@ -42,6 +42,8 @@ namespace pipey {
 			public:
 				virtual void Init(unsigned long nMinThread = 0, unsigned long nMaxThread = 0, unsigned long nActiveThread = 0) = 0;
 
+				virtual bool IsInited() const = 0;
+
 				//virtual bool AdjustThreadParam(unsigned long nMinThread = 0, unsigned long nMaxThread = 0, unsigned long nActiveThread = 0) = 0;
 
 				virtual void PushJob(const T &rJob, IJobCallback<T> *pCallback, ::pipey::memory::CObjectHandle<INFO> *pHandle = NULL) = 0;

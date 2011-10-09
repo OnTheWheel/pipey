@@ -14,7 +14,7 @@ namespace pipey {
 #ifdef _POSIX_THREAD_PROCESS_SHARED
 				bProcessShared(false),
 #endif					
-				nType(PTHREAD_MUTEX_DEFAULT)
+				nType(PTHREAD_MUTEX_RECURSIVE)
 				{ };
 
 				

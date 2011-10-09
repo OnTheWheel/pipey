@@ -58,7 +58,7 @@ namespace pipey {
 			template <typename T>
 			void CContextAwareThreadPool<T>::Close()
 			{
-				if(IsInited()) {
+				if( IBaseThreadPool<T, CONTEXT_JOB_INFO<T> >::IsInited() ) {
 					CloseContext(m_hDefaultContext);
 					CloseHandle(m_hDefaultContext);
 
@@ -75,7 +75,7 @@ namespace pipey {
 			template <typename T>
 			void CContextAwareThreadPool<T>::PushJob(pipey::memory::CObjectHandle<CONTEXT_INFO<T> > &rContext, const T &rJob, pipey::thread::pool::IJobCallback<T> *pCallback, pipey::memory::CObjectHandle<CONTEXT_JOB_INFO<T> > *pHandle)
 			{
-				if(IsInited()) {
+				if( IBaseThreadPool<T, CONTEXT_JOB_INFO<T> >::IsInited() ) {
 					::pipey::thread::sync::CLockPtr lockPtr(IBaseThreadPool<T, CONTEXT_JOB_INFO<T> >::GetInternalLock());
 					lockPtr.AcquireLock();
 
@@ -95,7 +95,7 @@ namespace pipey {
 			template <typename T>
 			void CContextAwareThreadPool<T>::CreateContext(pipey::memory::CObjectHandle<CONTEXT_INFO<T> > &rHandle)
 			{
-				if( IsInited() ) {
+				if( IBaseThreadPool<T, CONTEXT_JOB_INFO<T> >::IsInited() ) {
 					if( rHandle )
 						throw ::pipey::common::exception::EInvalidParameter("::pipey::common::exception::EInvalidParameter => CContextAwareThreadPool<T>::CreateContext - A context handle specified is already initiated.");
 					::pipey::thread::sync::CLockPtr lockPtr(IBaseThreadPool<T, CONTEXT_JOB_INFO<T> >::GetInternalLock());
@@ -112,7 +112,7 @@ namespace pipey {
 			template <typename T>
 			void CContextAwareThreadPool<T>::CloseContext(::pipey::memory::CObjectHandle< CONTEXT_INFO<T> > &rHandle)
 			{
-				if( IsInited() ) {
+				if( IBaseThreadPool<T, CONTEXT_JOB_INFO<T> >::IsInited() ) {
 					::pipey::thread::sync::CLockPtr lockPtr(IBaseThreadPool<T, CONTEXT_JOB_INFO<T> >::GetInternalLock());
 					lockPtr.AcquireLock();
 
@@ -132,7 +132,7 @@ namespace pipey {
 			template <typename T>
 			void CContextAwareThreadPool<T>::CloseHandle(::pipey::memory::CObjectHandle< CONTEXT_INFO<T> > &rHandle)
 			{
-				if( IsInited() ) {
+				if( IBaseThreadPool<T, CONTEXT_JOB_INFO<T> >::IsInited() ) {
 					::pipey::thread::sync::CLockPtr lockPtr(IBaseThreadPool<T, CONTEXT_JOB_INFO<T> >::GetInternalLock());
 					lockPtr.AcquireLock();
 
@@ -157,7 +157,7 @@ namespace pipey {
 			template <typename T>
 			void CContextAwareThreadPool<T>::DuplicateHandle(::pipey::memory::CObjectHandle< CONTEXT_INFO<T> > const &rSource, ::pipey::memory::CObjectHandle< CONTEXT_INFO<T> > &rTarget)
 			{
-				if( IsInited() ) {
+				if( IBaseThreadPool<T, CONTEXT_JOB_INFO<T> >::IsInited() ) {
 					if( rSource ) {
 						if( rTarget ) throw ::pipey::common::exception::EInvalidParameter("::pipey::common::exception::EInvalidParameter => CContextAwareThreadPool::CloseHandle - Specified context handle(rTarget) is already initiated.");
 

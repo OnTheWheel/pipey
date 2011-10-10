@@ -15,7 +15,8 @@ namespace pipey {
 		namespace pool {
 
 			template <typename T, typename INFO >
-			class IBaseThreadPool : public IThreadPool<T, INFO> {
+			class IBaseThreadPool : public IThreadPool<T, INFO> 
+			{
 			public:
 				virtual ~IBaseThreadPool(void );
 
@@ -37,12 +38,12 @@ namespace pipey {
 			private:
 				struct DATA {
 					DATA() :
-        					m_bInited(false),
-        					m_bExit(false),
-        					m_nActiveThread(0),
-        					m_nMaxThread(0),
-        					m_nMinThread(0)
-        					{ };
+        				m_bInited(false),
+        				m_bExit(false),
+        				m_nActiveThread(0),
+        				m_nMaxThread(0),
+        				m_nMinThread(0)
+        			{ };
 
 					bool m_bInited;
 
@@ -91,8 +92,8 @@ namespace pipey {
 
 			template <typename T, typename INFO>
 			IBaseThreadPool<T,INFO>::IBaseThreadPool(IJobQueue<T, INFO> *pQueue) :
-			m_pQueue(pQueue),
-			m_threads()
+				m_pQueue(pQueue),
+				m_threads()
 			{
 				if( pQueue == NULL )
 					throw ::pipey::common::exception::EInvalidParameter("::pipey::common::exception::EInvalidParameter => IBaseThreadPool<T,INFO>::IBaseThreadPool - pQueue cannot be NULL.");
@@ -114,10 +115,8 @@ namespace pipey {
 			template <typename T, typename INFO>
 			IJobQueue<T, INFO> *IBaseThreadPool<T,INFO>::GetJobQueue() const
 			{
-				if( m_data.m_bInited  )
-				{
+				if( m_data.m_bInited ) 
 					return m_pQueue;
-				}
 				else throw ::pipey::common::exception::EInvalidState("::pipey::common::exception::EInvalidState => IBaseThreadPool<T,INFO>::GetJobQueue - This thread pool is not properly initiated.");
 			}
 
@@ -127,17 +126,14 @@ namespace pipey {
 				if( m_data.m_bInited ) 
 					throw ::pipey::common::exception::EInvalidState("::pipey::common::exception::EInvalidState => IBaseThreadPool<T,INFO>::Init - This thread pool is not already initiated.");
 
-				if( nMinThread == 0 || nMaxThread == 0 || nActiveThread == 0 )
-				{
+				if( nMinThread == 0 || nMaxThread == 0 || nActiveThread == 0 ) {
 					nActiveThread = nMinThread = ::pipey::util::GetNumberOfProcessors();
 					nMaxThread = (unsigned long)(nActiveThread * 2.5);
 					cout<<nMaxThread<<endl;
 				}
 				
-				if( nMinThread <= nMaxThread && nActiveThread <= nMaxThread )
-				{
-					try
-					{
+				if( nMinThread <= nMaxThread && nActiveThread <= nMaxThread ) {
+					try {
 						m_semaphore.Init(& ::pipey::thread::sync::MUT_SEM_INIT(nActiveThread, 0));
 						m_lock.Init();
 
@@ -159,9 +155,7 @@ namespace pipey {
 						m_data.m_nMinThread = nMinThread;
 						m_threads.AddThread(nMaxThread, IThreadPool<T, INFO>::m_executable, this);
 
-					}
-					catch(...)
-					{
+					} catch(...) {
 						DATA empty;
 						m_data = empty;
 						SAFE_TRY( m_semaphore.Close() );
@@ -170,8 +164,7 @@ namespace pipey {
 						SAFE_TRY( m_threads.Close() );
 						throw;
 					}
-				}
-				else throw ::pipey::common::exception::EInvalidParameter("::pipey::common::exception::EInvalidParameter => IBaseThreadPool<T,INFO>::Init - You should meet the following condition ( nMinThread <= nMaxThread && nActiveThread <= nMaxThread ).");
+				} else throw ::pipey::common::exception::EInvalidParameter("::pipey::common::exception::EInvalidParameter => IBaseThreadPool<T,INFO>::Init - You should meet the following condition ( nMinThread <= nMaxThread && nActiveThread <= nMaxThread ).");
 			}
 
 			template <typename T, typename INFO>
@@ -183,51 +176,42 @@ namespace pipey {
 			template <typename T, typename INFO>
 			void IBaseThreadPool<T,INFO>::PushJob(const INFO &rInfo, ::pipey::memory::CObjectHandle<INFO> * pHandle)
 			{
-				if( m_data.m_bInited  )
-				{
+				if( m_data.m_bInited ) {
 					::pipey::thread::sync::CLockPtr lockPtr(&m_lock);
 					lockPtr.AcquireLock();
 
-					if( pHandle )
-					{
+					if( pHandle ) {
 						if( pHandle->IsValid() )
 							throw ::pipey::common::exception::EInvalidParameter("::pipey::common::exception::EInvalidParameter => IBaseThreadPool<T,INFO>::PushJob - A job handle specified is already initiated.");
 					}
 
 					INFO *pInfo = NULL;
 
-					try
-					{
+					try {
 						pInfo = m_pQueue->Push(rInfo);
 						pInfo->eState = JOB_WAIT;
 
-						if( pHandle )
-						{
+						if( pHandle ) {
 							InitHandle(*pHandle, pInfo);
 							pInfo->nHandle = 1;
 						} 
 						
 						m_condition.Awake();
-					}
-					catch(...)
-					{
-						if( pInfo )
-						{
+					} catch(...) {
+						if( pInfo ) {
 							SAFE_TRY( NullifyHandle(*pHandle) );
 							pInfo->nHandle = 0;
 							SAFE_TRY( m_pQueue->CleanupJob(pInfo) );	
 						}
 						throw;
 					}
-				}
-				else throw ::pipey::common::exception::EInvalidState("::pipey::common::exception::EInvalidState => IBaseThreadPool<T,INFO>::PushJob - This thread pool is not properly initiated.");
+				} else throw ::pipey::common::exception::EInvalidState("::pipey::common::exception::EInvalidState => IBaseThreadPool<T,INFO>::PushJob - This thread pool is not properly initiated.");
 			}
 
 			template <typename T, typename INFO>
 			bool IBaseThreadPool<T,INFO>::PopAndProcess()
 			{
-				if( m_data.m_bInited  )
-				{
+				if( m_data.m_bInited  ) {
 					::pipey::thread::sync::CLockPtr ptrSem(&m_semaphore);
 					ptrSem.AcquireLock();
 
@@ -237,8 +221,7 @@ namespace pipey {
 					if( m_data.m_bExit ) 
 						return false;
 
-					while( ! m_pQueue->IsPopable() )
-					{
+					while( ! m_pQueue->IsPopable() ) {
 #if defined(WIN32) || defined(WIN64)
 						lockPtr.ReleaseLock();
 #endif
@@ -259,17 +242,12 @@ namespace pipey {
 					pInfo->eState = JOB_READY;
 					lockPtr.ReleaseLock();
 
-					try
-					{
+					try {
 						pInfo->eState = JOB_PROCESSING;
 						pInfo->pCallback->ProcessJob(pInfo->job);
-					}
-					catch(std::exception &e)
-					{
+					} catch(std::exception &e) {
 						pInfo->pCallback->OnException(pInfo->job, e);
-					}
-					catch(...)
-					{
+					} catch(...) {
 						pInfo->pCallback->OnException(pInfo->job, ::pipey::common::exception::EPipeyException());
 					}
 					
@@ -279,8 +257,7 @@ namespace pipey {
 						m_condition.Awake();
 
 					return true;
-				}
-				else throw ::pipey::common::exception::EInvalidState("::pipey::common::exception::EInvalidState => IBaseThreadPool<T,INFO>::PopAndProcess - This thread pool is not properly initiated.");
+				} else throw ::pipey::common::exception::EInvalidState("::pipey::common::exception::EInvalidState => IBaseThreadPool<T,INFO>::PopAndProcess - This thread pool is not properly initiated.");
 			}
 
 			template <typename T, typename INFO>
@@ -298,15 +275,12 @@ namespace pipey {
 					if( pInfo->eState != JOB_WAIT )
 						throw ::pipey::common::exception::EInvalidState("::pipey::common::exception::EInvalidState => IBaseThreadPool<T,INFO>::CancelJob - A job handle specified is not in JOB_WAIT state.");
 
-					try
-					{
+					try {
 						IJobCallback<T> *pCallback = pInfo->pCallback;
 						pCallback->OnCancel(pInfo->job);
 						m_pQueue->CleanupJob(pInfo, JOB_CANCEL);
 						lockPtr.ReleaseLock();
-					}
-					catch(...)
-					{
+					} catch(...) {
 						throw;
 					}
 				}
@@ -324,8 +298,7 @@ namespace pipey {
 			template <typename T, typename INFO>
 			void IBaseThreadPool<T,INFO>::Close()
 			{
-				if( m_data.m_bInited )
-				{
+				if( m_data.m_bInited ) {
 					::pipey::thread::sync::CLockPtr lockPtr(&m_lock);
 					lockPtr.AcquireLock();
 

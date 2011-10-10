@@ -155,7 +155,6 @@ namespace pipey {
 			void CContextAwareJobQueue<T>::CleanupAll()
 			{
 				typename ::std::list< CONTEXT_INFO<T>* >::iterator iter = m_contexts.begin();
-
 				while( iter != m_contexts.end() ) {
 				
 					CleanupContext(*iter);

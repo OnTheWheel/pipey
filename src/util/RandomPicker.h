@@ -134,13 +134,13 @@ namespace pipey {
 			if( nGrow == 0 )
 				throw ::pipey::common::exception::EInvalidParameter("::pipey::common::exception::EInvalidParameter => CRandomPicker<T>::GrowCapacity() - nGrow cannot be zero.");
 
-			T *pValues = (T *)malloc(sizeof(T)*(m_nCapacity+nGrow));
+			T *pValues = (T *)malloc( sizeof(T)*(m_nCapacity+nGrow) );
 			if( pValues == NULL )
 				throw ::pipey::common::exception::EMemoryAllocation("::pipey::common::exception::EMemoryAllocation => CRandomPicker<T>::GrowCapacity() - cannot allocate memory space for value array.");
 
-			unsigned long **pReferences = (unsigned long * *)malloc(sizeof(unsigned long *)*(m_nCapacity+nGrow));
+			unsigned long **pReferences = (unsigned long * *)malloc( sizeof(unsigned long *)*(m_nCapacity+nGrow) );
 			if( pReferences == NULL ) {
-				free( pReferences );
+				free( pValues );
 				throw ::pipey::common::exception::EMemoryAllocation("::pipey::common::exception::EMemoryAllocation => CRandomPicker<T>::GrowCapacity() - cannot allocate memory space for reference array.");
 			}
 

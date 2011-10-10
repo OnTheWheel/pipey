@@ -52,8 +52,9 @@ namespace pipey {
 			template <typename T>
 			bool CContextAwareJobQueue<T>::IsEmpty() const
 			{
-				typename ::std::list< CONTEXT_INFO<T>* >::const_iterator iter = m_contexts.begin();
+				if( !m_runnableContexts.IsEmpty() ) return false;
 
+				typename ::std::list< CONTEXT_INFO<T>* >::const_iterator iter = m_contexts.begin();
 				while( iter != m_contexts.end() ) {
 					
 					if( !(*iter)->queue.IsEmpty() ) return false;

@@ -87,6 +87,14 @@ class CTestCallback : public IJobCallback<CTX_JOB>
 
 int main(int argc, char* argv[])
 {
+	int b = 0x11223344;
+	int a = REVERSE_ORDER32(b);
+	printf("%x %x\n", a, b);
+	
+	long long c = 0x1122334455667788;
+	long long d = REVERSE_ORDER64(c);
+
+
 	if(GetSystemByteOrder() == BYTE_LITTLE_ENDIAN)
 		puts("little");
 	else if(GetSystemByteOrder() == BYTE_BIG_ENDIAN)

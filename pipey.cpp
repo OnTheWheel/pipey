@@ -87,9 +87,9 @@ class CTestCallback : public IJobCallback<CTX_JOB>
 
 int main(int argc, char* argv[])
 {
-	if(GetSystemByteOrder() == LITTLE_ENDIAN)
+	if(GetSystemByteOrder() == BYTE_LITTLE_ENDIAN)
 		puts("little");
-	else if(GetSystemByteOrder() == BIG_ENDIAN)
+	else if(GetSystemByteOrder() == BYTE_BIG_ENDIAN)
 		puts("big");
 
 	CContextAwareThreadPool<CTX_JOB> cap;

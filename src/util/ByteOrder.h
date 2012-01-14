@@ -4,12 +4,12 @@
 namespace pipey {
 	namespace util {
 
-		enum BYTE_ORDER {
-			LITTLE_ENDIAN,
-			BIG_ENDIAN
+		enum BYTE_ENDIAN {
+			BYTE_LITTLE_ENDIAN,
+			BYTE_BIG_ENDIAN
 		};
 		
-		BYTE_ORDER GetSystemByteOrder();
+		BYTE_ENDIAN GetSystemByteOrder();
 	}
 }
 

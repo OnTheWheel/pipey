@@ -4,7 +4,7 @@
 namespace pipey {
 	namespace util {
 	
-		BYTE_ORDER GetSystemByteOrder()
+		BYTE_ENDIAN GetSystemByteOrder()
 		{
 			if(sizeof(short) != 2)
 				throw ::pipey::common::exception::ERuntime("ERuntime => GetSystemByteOrder - sizeof(short) is not 2");
@@ -18,9 +18,9 @@ namespace pipey {
 			un.s = 0x0102;
 
 			if(un.c[0] == 1 && un.c[1] == 2)
-				return BIG_ENDIAN;
+				return BYTE_BIG_ENDIAN;
 			else if(un.c[0] == 2 && un.c[1] == 1)
-				return LITTLE_ENDIAN;
+				return BYTE_LITTLE_ENDIAN;
 			else throw ::pipey::common::exception::ERuntime("ERuntime => GetSystemByteOrder - unknown exception");
 		}
 	}

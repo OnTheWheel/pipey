@@ -21,20 +21,30 @@ namespace pipey {
 
 			};
 
-			/// ancestor abstract class of all the condition variable classes.
+			/// interface of all the condition variable classes.
 			class ICondition {
 			public:
 				ICondition(void ) { };
 
 				virtual ~ICondition(void ) { };
 
-				/// initiate a condition variable.
+				/// initiate a condition variable with specified attributes.
+				/// if you don't specify pParam, it initiates a condition variable with default attributes.
+				/// @param pParam a pointer to subclass of CONDITION_INIT. Default is NULL.
 				virtual void Init(const CONDITION_INIT * pParam) = 0;
 
 				/// wait until a condition variable is signaled.
+				/// if you don't specify nMilliSeconds, it blocks until a condition variable become signaled.
+				/// @param nMilliSeconds time to wait in ms. Default is TIME_INFINITE.
+				/// @return 
+				///			- SYNC_SUCCESS	: the condition variable is signaled-state and return successfully.\n
+				///			- SYNC_TIMEOUT	: operation failed due to time-out.
 				virtual pipey::common::SYNC_RESULT Wait(unsigned long nMilliSeconds = pipey::common::TIME_INFINITE) = 0;
 
 				/// try to wait for a condition variable, and returns SYNC_BUSY immediately if the condition variable is not signaled at that moment.
+				/// @return 
+				///			- SYNC_SUCCESS	: the condition variable is signaled-state at that moment. \n
+				///			- SYNC_BUSY		: the condition variable is not signaled at that moment.
 				virtual pipey::common::SYNC_RESULT Test() = 0;
 
 				/// send a signal to the condition variable.

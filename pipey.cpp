@@ -16,12 +16,14 @@
 #include "src/thread/pool/ContextAwareThreadPool.h"
 //#include "src/thread/sync/WindowsCritricalSection.h"
 #include "src/util/DefaultTimer.h"
+#include "src/util/ByteOrder.h"
 //#include "src/util/RandomPicker.h"
 #include <stdio.h>
 #include <iostream>
 
 using namespace std;
 using namespace pipey::common;
+using namespace pipey::util;
 using namespace pipey::memory;
 using namespace pipey::thread::pool;
 
@@ -85,13 +87,10 @@ class CTestCallback : public IJobCallback<CTX_JOB>
 
 int main(int argc, char* argv[])
 {
-	/*::pipey::thread::pool::CContextAwareJobQueue<int > cq;
-	::pipey::thread::pool::CONTEXT_INFO<int> *contexts[5];
-	contexts[0]= cq.CreateContext();
-	contexts[1]= cq.CreateContext();
-	contexts[2]= cq.CreateContext();
-	contexts[3]= cq.CreateContext();
-	contexts[4]= cq.CreateContext();*/
+	if(GetSystemByteOrder() == LITTLE_ENDIAN)
+		puts("little");
+	else if(GetSystemByteOrder() == BIG_ENDIAN)
+		puts("big");
 
 	CContextAwareThreadPool<CTX_JOB> cap;
 	cap.Init();

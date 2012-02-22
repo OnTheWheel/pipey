@@ -5,7 +5,7 @@
 #include <time.h>
 #include <stdlib.h>
 
-#define RP_INVALID_REFERENCE	0xFFFFFFFF
+//#define RP_INVALID_REFERENCE	0xFFFFFFFF
 #define RP_DEFAULT_CAPACITY		100
 
 namespace pipey {
@@ -103,7 +103,7 @@ namespace pipey {
 				*m_pReferences[m_nSize-1] = reference;
 
 			if( m_pReferences[reference] )
-				*m_pReferences[reference] = RP_INVALID_REFERENCE;
+				*m_pReferences[reference] = ::pipey::common::INVALID;
 
 			m_pValues[reference] = m_pValues[m_nSize-1];
 			m_pReferences[reference] = m_pReferences[m_nSize-1];

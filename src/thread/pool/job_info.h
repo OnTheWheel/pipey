@@ -64,7 +64,7 @@ namespace pipey {
 			struct CONTEXT_INFO
 			{
 				CONTEXT_INFO():
-					queue(), nHandle(0), nPickerReference(RP_INVALID_REFERENCE), pRunningJob(NULL), bValid(true)
+			queue(), nHandle(0), nPickerReference(::pipey::common::INVALID), pRunningJob(NULL), bValid(true)
 				{ }
 
 				CSimpleJobQueue< T, CONTEXT_JOB_INFO<T> > queue;

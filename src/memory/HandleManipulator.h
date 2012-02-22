@@ -42,8 +42,8 @@ namespace pipey {
 			virtual bool NullifyHandle(CObjectHandle<T> & rHandle) 
 			{
 				if( IsMine(rHandle) ) {
-					rHandle.m_pManipulator = NULL;
-					rHandle.m_pTarget = NULL;
+					rHandle.m_pManipulator = 0;
+					rHandle.m_pTarget = 0;
 					return true;
 				}
 				return false;

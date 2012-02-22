@@ -77,7 +77,7 @@ namespace pipey {
 				if( pContext ) {
 					CONTEXT_JOB_INFO<T>* pResult = pContext->queue.Push(rInfo);
 
-					if( pContext->nPickerReference == RP_INVALID_REFERENCE && !pContext->pRunningJob )
+					if( pContext->nPickerReference == ::pipey::common::INVALID && !pContext->pRunningJob )
 						m_runnableContexts.Put(pContext, &pContext->nPickerReference);
 
 					return pResult;
@@ -107,7 +107,7 @@ namespace pipey {
 						pContext->pRunningJob = NULL;
 						if( pContext->queue.IsPopable() )
 							m_runnableContexts.Put(pContext, &pContext->nPickerReference);
-					} else if( eState == JOB_CANCEL && pContext->nPickerReference != RP_INVALID_REFERENCE && !pContext->queue.IsPopable() )
+					} else if( eState == JOB_CANCEL && pContext->nPickerReference != ::pipey::common::INVALID && !pContext->queue.IsPopable() )
 						m_runnableContexts.Delete(pContext->nPickerReference);
 				} else {
 					if( pJobInfo->nHandle == 0 )
@@ -140,7 +140,7 @@ namespace pipey {
 					}
 					if( pContext->bValid )
 						m_contexts.erase(pContext->iter);
-					if( pContext->nPickerReference != RP_INVALID_REFERENCE )
+					if( pContext->nPickerReference != ::pipey::common::INVALID )
 						m_runnableContexts.Delete(pContext->nPickerReference);
 
 					pContext->bValid = false;

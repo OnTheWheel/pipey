@@ -1,7 +1,7 @@
 #ifndef PIPEY_OBJECTHANDLE_H
 #define PIPEY_OBJECTHANDLE_H
 
-//#include "HandleManipulator.h"
+#include "../common/common.h"
 
 namespace pipey {
 	namespace memory {
@@ -26,8 +26,10 @@ namespace pipey {
 					m_pManipulator->DuplicateHandle(rhs, *this);
 			}
 
-
-			virtual ~CObjectHandle(void ) { }
+			virtual ~CObjectHandle(void) 
+			{
+				SAFE_TRY(CloseHandle());
+			}
 
 		private:
 			CObjectHandle(T * pTarget, IHandleManipulator<T> * pManipulator):
@@ -49,7 +51,6 @@ namespace pipey {
 
 			operator bool() const
 			{
-
 				return IsValid();
 			}
 

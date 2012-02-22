@@ -17,6 +17,8 @@
 //#include "src/thread/sync/WindowsCritricalSection.h"
 #include "src/util/DefaultTimer.h"
 #include "src/util/ByteOrder.h"
+#include "src/memory/pool/BasicMemoryPool.h"
+#include "src/memory/buffer/FixedBuffer.h"
 //#include "src/util/RandomPicker.h"
 #include <stdio.h>
 #include <iostream>
@@ -93,7 +95,6 @@ int main(int argc, char* argv[])
 	
 	long long c = 0x1122334455667788;
 	long long d = REVERSE_ORDER64(c);
-
 
 	if(GetSystemByteOrder() == BYTE_LITTLE_ENDIAN)
 		puts("little");

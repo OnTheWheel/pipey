@@ -35,8 +35,8 @@ namespace pipey {
 
 				virtual bool EnsureWritable(const unsigned long &nLength) = 0;
 
-				virtual unsigned long Find(const char &value) = 0;
-				virtual unsigned long Find(const unsigned long &nStartIndex, const unsigned long &nLength, const char &value) = 0;
+				virtual unsigned long Find(const char &value) const = 0;
+				virtual unsigned long Find(const unsigned long &nStartIndex, const unsigned long &nLength, const char &value) const = 0;
 
 				virtual char ReadChar() = 0;
 				virtual unsigned char ReadUnsignedChar() = 0;
@@ -60,7 +60,7 @@ namespace pipey {
 				virtual void ReadBytes(char *pBuffer, const unsigned long &nLength) = 0;
 				virtual void ReadBytes(IBuffer *pBuffer, const unsigned long &nLength) = 0;
 
-				virtual void ReadString(char *pBuffer) = 0;
+				virtual void ReadString(char *pBuffer, const unsigned long &nSize) = 0;
 				virtual void ReadString(IBuffer *pBuffer) = 0;
 
 				virtual char GetChar(const unsigned long &nIndex) const = 0;
@@ -73,7 +73,7 @@ namespace pipey {
 				virtual unsigned int GetUnsignedInt(const unsigned long &nIndex) const = 0;
 
 				virtual long GetLong(const unsigned long &nIndex) const = 0;
-				virtual const unsigned long &GetUnsignedLong(const unsigned long &nIndex) const = 0;
+				virtual unsigned long GetUnsignedLong(const unsigned long &nIndex) const = 0;
 
 				virtual ::pipey::common::_integer64 GetInteger64(const unsigned long &nIndex) const = 0;
 				virtual ::pipey::common::_uinteger64 GetUnsignedInteger64(const unsigned long &nIndex) const = 0;
@@ -85,7 +85,7 @@ namespace pipey {
 				virtual void GetBytes(const unsigned long &nIndex, char *pBuffer, const unsigned long &nLength) const = 0;
 				virtual void GetBytes(const unsigned long &nIndex, IBuffer *pBuffer, const unsigned long &nLength) const = 0;
 
-				virtual void GetString(const unsigned long &nIndex, char *pBuffe) const = 0;
+				virtual void GetString(const unsigned long &nIndex, char *pBuffer, const unsigned long &nSize) const = 0;
 				virtual void GetString(const unsigned long &nIndex, IBuffer *pBuffer) const = 0;
 
 				virtual void WriteChar(const char &value) = 0;
@@ -107,10 +107,10 @@ namespace pipey {
 
 				virtual void WriteDouble(const double &value) = 0;
 
-				virtual void WriteBytes(char *pBuffer, const unsigned long &nLength) = 0;
+				virtual void WriteBytes(const char *pBuffer, const unsigned long &nLength) = 0;
 				virtual void WriteBytes(IBuffer *pBuffer, const unsigned long &nLength) = 0;
 
-				virtual void WriteString(char *pBuffer) = 0;
+				virtual void WriteString(const char *pBuffer) = 0;
 				virtual void WriteString(IBuffer *pBuffer) = 0;
 
 				virtual void WriteZero(const unsigned long &nLength) = 0;
@@ -135,15 +135,16 @@ namespace pipey {
 				virtual void SetDouble(const unsigned long &nIndex, const double &value) = 0;
 
 				virtual void SetBytes(const unsigned long &nIndex, const char *pBuffer, const unsigned long &nLength) = 0;
-				virtual void SetBytes(const unsigned long &nIndex, const IBuffer *pBuffer, const unsigned long &nLength) = 0;
+				virtual void SetBytes(const unsigned long &nIndex, IBuffer *pBuffer, const unsigned long &nLength) = 0;
 
 				virtual void SetString(const unsigned long &nIndex, const char *pBuffer) = 0;
-				virtual void SetString(const unsigned long &nIndex, const IBuffer *pBuffer) = 0;
+				virtual void SetString(const unsigned long &nIndex, IBuffer *pBuffer) = 0;
 
 				virtual void SetZero(const unsigned long &nIndex, const unsigned long &nLength) = 0;
+				virtual void SetZero() = 0;
 
-				virtual unsigned long Skip(const unsigned long &nLength, const bool &bCheckBound = true) = 0;
-				virtual unsigned long SkipTo(const char &target, const bool &bSkipTarget = true) = 0;
+				virtual unsigned long Skip(const unsigned long &nLength) = 0;
+				virtual unsigned long SkipTo(const char &target) = 0;
 				virtual unsigned long SkipAll() = 0;
 			};
 		}

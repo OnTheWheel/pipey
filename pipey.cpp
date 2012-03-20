@@ -25,8 +25,11 @@
 
 using namespace std;
 using namespace pipey::common;
+using namespace pipey::common::exception;
 using namespace pipey::util;
 using namespace pipey::memory;
+using namespace pipey::memory::buffer;
+using namespace pipey::memory::pool;
 using namespace pipey::thread::pool;
 
 #if defined(__linux__) || defined(__unix__)
@@ -89,6 +92,45 @@ class CTestCallback : public IJobCallback<CTX_JOB>
 
 int main(int argc, char* argv[])
 {
+	char c='c';
+	short sh = -12;
+	int a = -1234;
+	unsigned long ul=3456;
+	char *str = "buffer test";
+	_uinteger64 i64 = 11233546;
+	float f = -1242.15f;
+	double d = -45624.453532;
+	CBasicMemoryPool pool;
+	CFixedBuffer buf(400, BYTE_BIG_ENDIAN, &pool);
+
+	try {
+		buf.WriteChar(c);
+		buf.WriteShort(sh);
+		buf.WriteInt(a);
+		buf.WriteUnsignedLong(ul);
+		buf.WriteString(str);
+		buf.WriteUnsignedInteger64(i64);
+		buf.WriteFloat(f);
+		buf.WriteDouble(d);
+
+		cout << buf.ReadChar() <<endl;
+		cout << buf.ReadShort() <<endl;
+		cout << buf.ReadInt() <<endl;
+		cout << buf.ReadUnsignedLong() <<endl;
+
+		char strbuf[100];
+		buf.ReadString(strbuf, 100);
+		cout << strbuf << endl;
+
+		cout << buf.ReadUnsignedInteger64() <<endl;
+		cout << buf.ReadFloat() <<endl;
+		cout << buf.ReadDouble() <<endl;
+	} catch(EPipeyException e) {
+		cout << e.what();
+	}
+
+	return 0;
+	/*
 	int b = 0x11223344;
 	int a = REVERSE_ORDER32(b);
 	printf("%x %x\n", a, b);
@@ -100,7 +142,9 @@ int main(int argc, char* argv[])
 		puts("little");
 	else if(GetSystemByteOrder() == BYTE_BIG_ENDIAN)
 		puts("big");
+		*/
 
+	/*
 	CContextAwareThreadPool<CTX_JOB> cap;
 	cap.Init();
 
@@ -143,7 +187,8 @@ int main(int argc, char* argv[])
 
 	cap.Close();
 
-	return 0;
+	*/
+	
 
 
 	/*

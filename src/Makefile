@@ -1,4 +1,4 @@
-DIRS	= common thread util 
+DIRS	= common memory thread util 
 all : objs
 
 objs :

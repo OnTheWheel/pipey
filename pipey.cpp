@@ -94,8 +94,8 @@ int main(int argc, char* argv[])
 {
 	char c='c';
 	short sh = -12;
-	int a = -1234;
-	unsigned long ul=3456;
+	int a = 1234;
+	long ul=3456;
 	char *str = "buffer test";
 	_uinteger64 i64 = 11233546;
 	float f = -1242.15f;
@@ -103,6 +103,7 @@ int main(int argc, char* argv[])
 	CBasicMemoryPool pool;
 	CFixedBuffer buf(400, BYTE_BIG_ENDIAN, &pool);
 
+	cout<< sizeof(ul) <<endl;
 	try {
 		buf.WriteChar(c);
 		buf.WriteShort(sh);

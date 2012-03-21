@@ -12,6 +12,10 @@
 #include "constant.h"
 #include "macro.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #if defined(WIN32) || defined(WIN64)
 #include <windows.h>
 #endif

@@ -5,7 +5,7 @@
 using namespace pipey::common::exception;
 using namespace pipey::memory::pool;
 
-void CBasicMemoryPool::Allocate(unsigned long nSize, CMemoryHandle &rHandle)
+void CBasicMemoryPool::Allocate(uint32_t nSize, CMemoryHandle &rHandle)
 {
 	if( rHandle ) 
 		throw EInvalidParameter("EInvalidParameter => CBasicMemoryPool::Allocate - A memory handle specified is already initiated.");

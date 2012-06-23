@@ -49,11 +49,11 @@ namespace pipey {
 
 					bool m_bExit;
 
-					unsigned long m_nMinThread;
+					uint32_t m_nMinThread;
 
-					unsigned long m_nMaxThread;
+					uint32_t m_nMaxThread;
 
-					unsigned long m_nActiveThread;
+					uint32_t m_nActiveThread;
 
 				};
 
@@ -70,11 +70,11 @@ namespace pipey {
 				virtual ::pipey::thread::sync::CDefaultLock *GetInternalLock();
 
 			public:
-				virtual void Init(unsigned long nMinThread = 0, unsigned long nMaxThread = 0, unsigned long nActiveThread = 0);
+				virtual void Init(uint32_t nMinThread = 0, uint32_t nMaxThread = 0, uint32_t nActiveThread = 0);
 
 				virtual bool IsInited() const;
 
-				//virtual bool AdjustThreadParam(unsigned long nMinThread = 0, unsigned long nMaxThread = 0, unsigned long nActiveThread = 0) = 0;
+				//virtual bool AdjustThreadParam(uint32_t nMinThread = 0, uint32_t nMaxThread = 0, uint32_t nActiveThread = 0) = 0;
 				virtual void PushJob(const T &rJob, IJobCallback<T> *pCallback, ::pipey::memory::CObjectHandle<INFO> * pHandle = NULL) = 0;
 
 				virtual bool PopAndProcess();
@@ -121,14 +121,14 @@ namespace pipey {
 			}
 
 			template <typename T, typename INFO>
-			void IBaseThreadPool<T,INFO>::Init(unsigned long nMinThread, unsigned long nMaxThread, unsigned long nActiveThread)
+			void IBaseThreadPool<T,INFO>::Init(uint32_t nMinThread, uint32_t nMaxThread, uint32_t nActiveThread)
 			{
 				if( m_data.m_bInited ) 
 					throw ::pipey::common::exception::EInvalidState("::pipey::common::exception::EInvalidState => IBaseThreadPool<T,INFO>::Init - This thread pool is not already initiated.");
 
 				if( nMinThread == 0 || nMaxThread == 0 || nActiveThread == 0 ) {
 					nActiveThread = nMinThread = ::pipey::util::GetNumberOfProcessors();
-					nMaxThread = (unsigned long)(nActiveThread * 2.5);
+					nMaxThread = (uint32_t)(nActiveThread * 2.5);
 					cout<<nMaxThread<<endl;
 				}
 				

@@ -5,25 +5,18 @@
 #ifndef PIPEY_COMMON_CONSTANT_H
 #define PIPEY_COMMON_CONSTANT_H
 
+#include "type.h"
 /// root name space of the pipey.
 namespace pipey {
 
 	/// includes common components referenced by other modules.
 	namespace common {
 
-		#if defined(WIN32) || defined(WIN64)
-			typedef __int64 _integer64;
-			typedef unsigned __int64 _uinteger64;
-		#elif defined(__linux__) || defined(__unix__)
-			typedef long long _integer64;
-			typedef unsigned long long _uinteger64;
-		#endif
-
 		/// indicates infinite time.
-		static const unsigned long TIME_INFINITE = 0xFFFFFFFF;
+		static const uint32_t TIME_INFINITE = 0xFFFFFFFF;
 
 		/// indicates invalid value.
-		static const unsigned long INVALID = 0xFFFFFFFF;
+		static const uint32_t INVALID = 0xFFFFFFFF;
 
 		/// represents return values of thread or synchronization related functions.
 		enum SYNC_RESULT {

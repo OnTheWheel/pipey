@@ -8,6 +8,7 @@
 #ifndef PIPEY_COMMON_H
 #define PIPEY_COMMON_H
 
+#include "type.h"
 #include "./exception/exceptions.h"
 #include "constant.h"
 #include "macro.h"

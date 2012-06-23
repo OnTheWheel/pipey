@@ -60,7 +60,7 @@ void CWindowsEvent::Init(const CONDITION_INIT * pParam) {
 	else throw EInvalidState("EInvalidState => CWindowsEvent::Init - This event is already initiated.");
 }
 
-SYNC_RESULT CWindowsEvent::Wait(unsigned long nMilliSeconds) {
+SYNC_RESULT CWindowsEvent::Wait(uint32_t nMilliSeconds) {
 
 	if( m_bInited )
 	{

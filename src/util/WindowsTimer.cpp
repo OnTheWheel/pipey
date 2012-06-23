@@ -14,13 +14,13 @@ CWindowsTimer::~CWindowsTimer()
 
 }
 
-bool CWindowsTimer::Start(unsigned long * pCurrentMilliseconds) 
+bool CWindowsTimer::Start(uint32_t * pCurrentMilliseconds) 
 {
 	if( m_bSupportHighFreq ) {
 		if( pCurrentMilliseconds ) {
 			LARGE_INTEGER current;
 			if( StartHighFrequency(&current) ) {
-				*pCurrentMilliseconds = (unsigned long) ( ( (double)current.QuadPart / (double)m_liFreq.QuadPart ) * 1000 );
+				*pCurrentMilliseconds = (uint32_t) ( ( (double)current.QuadPart / (double)m_liFreq.QuadPart ) * 1000 );
 				return ( m_bStarted = true );
 			}
 			else return false;
@@ -37,13 +37,13 @@ bool CWindowsTimer::Start(unsigned long * pCurrentMilliseconds)
 	return false;
 }
 
-bool CWindowsTimer::Check(unsigned long * pElapsedMilliseconds) 
+bool CWindowsTimer::Check(uint32_t * pElapsedMilliseconds) 
 {
 	if( m_bSupportHighFreq ) {
 		if( pElapsedMilliseconds ) {
 			LARGE_INTEGER elapsed;
 			if( CheckHighFrequency(&elapsed) ) {
-				*pElapsedMilliseconds = (unsigned long) ( ( (double)elapsed.QuadPart / (double)m_liFreq.QuadPart ) * 1000 );
+				*pElapsedMilliseconds = (uint32_t) ( ( (double)elapsed.QuadPart / (double)m_liFreq.QuadPart ) * 1000 );
 				return true;
 			}
 			else return false;
@@ -51,7 +51,7 @@ bool CWindowsTimer::Check(unsigned long * pElapsedMilliseconds)
 		else return CheckHighFrequency();
 	}
 	else if( m_bStarted ) {
-		unsigned long current = GetTickCount();
+		uint32_t current = GetTickCount();
 		if( pElapsedMilliseconds ) {
 			if( current < m_nPrev )
 				*pElapsedMilliseconds = 0xFFFFFFFF - m_nPrev + current;
@@ -105,20 +105,20 @@ bool CWindowsTimer::CheckTotalHighFrequency(LARGE_INTEGER * pTotal)
 	return false;
 }
 
-bool CWindowsTimer::CheckTotal(unsigned long * pTotalElapsedMilliseconds) 
+bool CWindowsTimer::CheckTotal(uint32_t * pTotalElapsedMilliseconds) 
 {
 	if( ! pTotalElapsedMilliseconds ) return false;
 
 	if( m_bSupportHighFreq ) {
 		LARGE_INTEGER total;
 		if( CheckTotalHighFrequency(&total) ) {
-			*pTotalElapsedMilliseconds = (unsigned long) ( ( (double)total.QuadPart / (double)m_liFreq.QuadPart ) * 1000 );
+			*pTotalElapsedMilliseconds = (uint32_t) ( ( (double)total.QuadPart / (double)m_liFreq.QuadPart ) * 1000 );
 			return true;
 		}
 		else return false;
 	}
 	else if( m_bStarted ) {
-		unsigned long current = GetTickCount();
+		uint32_t current = GetTickCount();
 		
 		if( current < m_nStart )
 			*pTotalElapsedMilliseconds = 0xFFFFFFFF - m_nStart + current;

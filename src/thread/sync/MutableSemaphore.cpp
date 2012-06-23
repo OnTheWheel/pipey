@@ -174,7 +174,7 @@ SYNC_RESULT CMutableSemaphore::TryLock() {
 #include "../../util/DefaultTimer.h"
 using namespace pipey::util;
 
-SYNC_RESULT CMutableSemaphore::AcquireTimedLock(unsigned long nMilliSeconds) {
+SYNC_RESULT CMutableSemaphore::AcquireTimedLock(uint32_t nMilliSeconds) {
 
 	bool bChanged = false;
 	try
@@ -186,7 +186,7 @@ SYNC_RESULT CMutableSemaphore::AcquireTimedLock(unsigned long nMilliSeconds) {
 
 		if( ! m_bInited ) throw EInvalidState("EInvalidState => CMutableSemaphore::AcquireTimedLock - This semaphore is not properly initiated.");
 
-		unsigned long totalElapsed = 0;
+		uint32_t totalElapsed = 0;
 
 		SYNC_RESULT res;
 
@@ -235,13 +235,13 @@ SYNC_RESULT CMutableSemaphore::AcquireTimedLock(unsigned long nMilliSeconds) {
 
 }
 
-void CMutableSemaphore::ReleaseMultiple(unsigned long nCount) {
+void CMutableSemaphore::ReleaseMultiple(uint32_t nCount) {
 
 	if( !m_bInited ) throw EInvalidState("EInvalidState => CMutableSemaphore::ReleaseMultiple - This semaphore is not properly initiated.");
 	if( nCount == 0 ) throw EInvalidParameter("EInvalidParameter => CMutableSemaphore::ReleaseMultiple - nCount cannot be zero.");
 
 	bool bChanged = false;
-	unsigned long prevOwner = 0;
+	uint32_t prevOwner = 0;
 	try
 	{
 		CLockPtr lockPtr(&m_lock);
@@ -271,7 +271,7 @@ void CMutableSemaphore::ReleaseMultiple(unsigned long nCount) {
 	}
 }
 
-void CMutableSemaphore::SetMaxLimit(unsigned long nMaxLimit) {
+void CMutableSemaphore::SetMaxLimit(uint32_t nMaxLimit) {
 
 	if(nMaxLimit == 0) throw EInvalidParameter("EInvalidParameter => CMutableSemaphore::SetMaxLimit - nMaxLimit cannot be zero.");
 
@@ -282,7 +282,7 @@ void CMutableSemaphore::SetMaxLimit(unsigned long nMaxLimit) {
 
 		if( nMaxLimit > m_nMaxLimit )
 		{
-			unsigned long prevMax = m_nMaxLimit;
+			uint32_t prevMax = m_nMaxLimit;
 			m_nMaxLimit = nMaxLimit;
 
 			if( m_nValue < m_nMaxLimit )
@@ -313,17 +313,17 @@ void CMutableSemaphore::SetMaxLimit(unsigned long nMaxLimit) {
 	}
 }
 
-unsigned long CMutableSemaphore::GetMaxLimit() const {
+uint32_t CMutableSemaphore::GetMaxLimit() const {
 
 	return m_nMaxLimit;
 }
 
-unsigned long CMutableSemaphore::GetCurrentValue() const {
+uint32_t CMutableSemaphore::GetCurrentValue() const {
 
 	return m_nValue;
 }
 
-unsigned long CMutableSemaphore::GetCurrentOwner() const {
+uint32_t CMutableSemaphore::GetCurrentOwner() const {
 
 	return m_nOwner;
 }

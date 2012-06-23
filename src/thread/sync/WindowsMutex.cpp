@@ -85,7 +85,7 @@ SYNC_RESULT CWindowsMutex::TryLock()
 	else return res;
 }
 
-SYNC_RESULT CWindowsMutex::AcquireTimedLock(unsigned long nMilliSeconds) 
+SYNC_RESULT CWindowsMutex::AcquireTimedLock(uint32_t nMilliSeconds) 
 {
 	if( m_bInited ) {
 		__try {

@@ -40,11 +40,11 @@ namespace pipey {
 				virtual IJobQueue<T, INFO> *GetJobQueue() const = 0;
 
 			public:
-				virtual void Init(unsigned long nMinThread = 0, unsigned long nMaxThread = 0, unsigned long nActiveThread = 0) = 0;
+				virtual void Init(uint32_t nMinThread = 0, uint32_t nMaxThread = 0, uint32_t nActiveThread = 0) = 0;
 
 				virtual bool IsInited() const = 0;
 
-				//virtual bool AdjustThreadParam(unsigned long nMinThread = 0, unsigned long nMaxThread = 0, unsigned long nActiveThread = 0) = 0;
+				//virtual bool AdjustThreadParam(uint32_t nMinThread = 0, uint32_t nMaxThread = 0, uint32_t nActiveThread = 0) = 0;
 
 				virtual void PushJob(const T &rJob, IJobCallback<T> *pCallback, ::pipey::memory::CObjectHandle<INFO> *pHandle = NULL) = 0;
 				virtual bool PopAndProcess() = 0;
@@ -86,9 +86,9 @@ namespace pipey {
 				virtual IJobQueue<T> *GetJobQueue() const = 0;
 
 			public:
-				virtual void Init(unsigned long nMinThread = 0, unsigned long nMaxThread = 0, unsigned long nActiveThread = 0) = 0;
+				virtual void Init(uint32_t nMinThread = 0, uint32_t nMaxThread = 0, uint32_t nActiveThread = 0) = 0;
 
-				//virtual bool AdjustThreadParam(unsigned long nMinThread = 0, unsigned long nMaxThread = 0, unsigned long nActiveThread = 0) = 0;
+				//virtual bool AdjustThreadParam(uint32_t nMinThread = 0, uint32_t nMaxThread = 0, uint32_t nActiveThread = 0) = 0;
 
 				virtual void PushJob(const T &rJob, IJobCallback<T> *pCallback, pipey::memory::CObjectHandle<JOB_NODE<T>> *pHandle = NULL) = 0;
 				virtual bool PopAndProcess() = 0;

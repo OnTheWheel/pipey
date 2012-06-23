@@ -28,7 +28,7 @@ namespace pipey {
 
 				T job;
 
-				unsigned long nHandle;
+				uint32_t nHandle;
 
 				JOB_STATE eState;
 
@@ -68,8 +68,8 @@ namespace pipey {
 				{ }
 
 				CSimpleJobQueue< T, CONTEXT_JOB_INFO<T> > queue;
-				unsigned long nHandle;
-				unsigned long nPickerReference;
+				uint32_t nHandle;
+				uint32_t nPickerReference;
 				CONTEXT_JOB_INFO<T> *pRunningJob;
 				typename ::std::list< CONTEXT_INFO<T>* >::iterator iter;
 				bool bValid;

@@ -10,11 +10,11 @@ namespace pipey {
 
 			virtual ~ITimer() { };
 
-			virtual bool Start(unsigned long * pCurrentMilliseconds = NULL) = 0;
+			virtual bool Start(uint32_t * pCurrentMilliseconds = NULL) = 0;
 
-			virtual bool Check(unsigned long * pElapsedMilliseconds = NULL) = 0;
+			virtual bool Check(uint32_t * pElapsedMilliseconds = NULL) = 0;
 
-			virtual bool CheckTotal(unsigned long * pTotalElapsedMilliseconds) = 0;
+			virtual bool CheckTotal(uint32_t * pTotalElapsedMilliseconds) = 0;
 
 		};
 

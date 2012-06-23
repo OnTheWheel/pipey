@@ -6,7 +6,7 @@ using namespace pipey::memory::buffer;
 using namespace pipey::memory::pool;
 using namespace pipey::util;
 
-CFixedBuffer::CFixedBuffer(const unsigned long &nLength, const BYTE_ENDIAN &endian, IMemoryPool *pMemoryPool)
+CFixedBuffer::CFixedBuffer(const uint32_t &nLength, const BYTE_ENDIAN &endian, IMemoryPool *pMemoryPool)
 	: m_nCapacity(nLength),
 	m_endian(endian),
 	m_pMemoryPool(pMemoryPool),
@@ -19,7 +19,7 @@ CFixedBuffer::CFixedBuffer(const unsigned long &nLength, const BYTE_ENDIAN &endi
 	m_pBuffer = m_pMemoryPool->GetBuffer(m_hMemory);
 }
 
-CFixedBuffer::CFixedBuffer(const unsigned long &nLength, IMemoryPool *pMemoryPool)
+CFixedBuffer::CFixedBuffer(const uint32_t &nLength, IMemoryPool *pMemoryPool)
 	: m_nCapacity(nLength),
 	m_endian(GetSystemByteOrder()),
 	m_pMemoryPool(pMemoryPool),
@@ -32,7 +32,7 @@ CFixedBuffer::CFixedBuffer(const unsigned long &nLength, IMemoryPool *pMemoryPoo
 	m_pBuffer = m_pMemoryPool->GetBuffer(m_hMemory);
 }
 
-CFixedBuffer::CFixedBuffer(const pipey::memory::buffer::IBuffer *pParentBuffer, const unsigned long &nIndex, const unsigned long &nLength)
+CFixedBuffer::CFixedBuffer(const pipey::memory::buffer::IBuffer *pParentBuffer, const uint32_t &nIndex, const uint32_t &nLength)
 	: m_nCapacity(nLength),
 	m_nReadIndex(0),
 	m_nWriteIndex(0),
@@ -56,22 +56,22 @@ CFixedBuffer::~CFixedBuffer()
 {
 }
 
-unsigned long CFixedBuffer::GetCapacity() const
+uint32_t CFixedBuffer::GetCapacity() const
 {
 	return m_nCapacity;
 }
 
-unsigned long CFixedBuffer::GetReadIndex() const
+uint32_t CFixedBuffer::GetReadIndex() const
 {
 	return m_nReadIndex;
 }
 
-unsigned long CFixedBuffer::GetWriteIndex() const
+uint32_t CFixedBuffer::GetWriteIndex() const
 {
 	return m_nWriteIndex;
 }
 
-unsigned long CFixedBuffer::GetReadableLength() const
+uint32_t CFixedBuffer::GetReadableLength() const
 {
 	return m_nWriteIndex - m_nReadIndex;
 }
@@ -86,17 +86,17 @@ IMemoryPool *CFixedBuffer::GetMemoryPool() const
 	return m_pMemoryPool;
 }
 
-unsigned long CFixedBuffer::SetReadIndex(const unsigned long &nIndex)
+uint32_t CFixedBuffer::SetReadIndex(const uint32_t &nIndex)
 {
 	if( nIndex > m_nWriteIndex )
 		throw EInvalidParameter("EInvalidParameter => CFixedBuffer::SetReadIndex - nIndex cannot be greater than write index.");
 
-	unsigned long prev = m_nReadIndex;
+	uint32_t prev = m_nReadIndex;
 	m_nReadIndex = nIndex;
 	return prev;
 }
 
-unsigned long CFixedBuffer::SetWriteIndex(const unsigned long &nIndex)
+uint32_t CFixedBuffer::SetWriteIndex(const uint32_t &nIndex)
 {
 	if( nIndex < m_nReadIndex )
 		throw EInvalidParameter("EInvalidParameter => CFixedBuffer::SetWriteIndex - nIndex cannot be less than read index.");
@@ -104,7 +104,7 @@ unsigned long CFixedBuffer::SetWriteIndex(const unsigned long &nIndex)
 	if( nIndex > m_nCapacity )
 		throw EInvalidParameter("EInvalidParameter => CFixedBuffer::SetWriteIndex - nIndex cannot be greater than capacity.");
 
-	unsigned long prev = m_nWriteIndex;
+	uint32_t prev = m_nWriteIndex;
 	m_nWriteIndex = nIndex;
 	return prev;
 }
@@ -124,20 +124,20 @@ BYTE_ENDIAN CFixedBuffer::GetEndian() const
 	return m_endian;
 }
 
-bool CFixedBuffer::EnsureWritable(const unsigned long &nLength)
+bool CFixedBuffer::EnsureWritable(const uint32_t &nLength)
 {
 	return m_nWriteIndex + nLength <= m_nCapacity;
 }
 
-unsigned long CFixedBuffer::Find(const char &value) const
+uint32_t CFixedBuffer::Find(const char &value) const
 {
-	unsigned long result = Find(m_nReadIndex, m_nWriteIndex - m_nReadIndex, value);
+	uint32_t result = Find(m_nReadIndex, m_nWriteIndex - m_nReadIndex, value);
 	if( result ==  pipey::common::INVALID )
 		return  pipey::common::INVALID;
 	else return result - m_nReadIndex;
 }
 
-unsigned long CFixedBuffer::Find(const unsigned long &nStartIndex, const unsigned long &nLength, const char &value) const
+uint32_t CFixedBuffer::Find(const uint32_t &nStartIndex, const uint32_t &nLength, const char &value) const
 {
 	if( nStartIndex >= m_nCapacity )
 		throw EInvalidParameter("EInvalidParameter => CFixedBuffer::Find - nStartIndex cannot be geq than capacity.");
@@ -145,7 +145,7 @@ unsigned long CFixedBuffer::Find(const unsigned long &nStartIndex, const unsigne
 	if( m_nCapacity - nStartIndex < nLength )
 		throw EInvalidParameter("EInvalidParameter => CFixedBuffer::Find - nStartIndex + nLength cannot be greater than capacity.");
 
-	for(unsigned long i = 0; i < nLength; i++)
+	for(uint32_t i = 0; i < nLength; i++)
 	{
 		if( m_pBuffer[nStartIndex + i] == value )
 			return nStartIndex + i;
@@ -186,17 +186,17 @@ unsigned short CFixedBuffer::ReadUnsignedShort()
 	return value;
 }
 
-int CFixedBuffer::ReadInt()
+int32_t CFixedBuffer::ReadInt()
 {
 	return ReadUnsignedInt();
 }
 
-unsigned int CFixedBuffer::ReadUnsignedInt()
+uint32_t CFixedBuffer::ReadUnsignedInt()
 {
-	if( sizeof(unsigned int) > GetReadableLength() )
+	if( sizeof(uint32_t) > GetReadableLength() )
 		throw EOutOfBound("EOutOfBound => CFixedBuffer::ReadUnsignedInt - out of index.");
 	
-	unsigned int value = *((unsigned int *)(m_pBuffer + m_nReadIndex));
+	uint32_t value = *((uint32_t *)(m_pBuffer + m_nReadIndex));
 	if( GetSystemByteOrder() != GetEndian() )
 		value = REVERSE_ORDER32(value);
 
@@ -205,17 +205,17 @@ unsigned int CFixedBuffer::ReadUnsignedInt()
 	return value;
 }
 
-long CFixedBuffer::ReadLong()
+int32_t CFixedBuffer::ReadLong()
 {
 	return ReadUnsignedLong();
 }
 
-unsigned long CFixedBuffer::ReadUnsignedLong()
+uint32_t CFixedBuffer::ReadUnsignedLong()
 {
-	if( sizeof(unsigned long) > GetReadableLength() )
+	if( sizeof(uint32_t) > GetReadableLength() )
 		throw EOutOfBound("EOutOfBound => CFixedBuffer::ReadUnsignedLong - out of index.");
 	
-	unsigned long value = *((unsigned long *)(m_pBuffer + m_nReadIndex));
+	uint32_t value = *((uint32_t *)(m_pBuffer + m_nReadIndex));
 	if( GetSystemByteOrder() != GetEndian() )
 		value = REVERSE_ORDER32(value);
 
@@ -224,17 +224,17 @@ unsigned long CFixedBuffer::ReadUnsignedLong()
 	return value;
 }
 
-_integer64 CFixedBuffer::ReadInteger64()
+int64_t CFixedBuffer::ReadInteger64()
 {
 	return ReadUnsignedInteger64();
 }
 
-_uinteger64 CFixedBuffer::ReadUnsignedInteger64()
+uint64_t CFixedBuffer::ReadUnsignedInteger64()
 {
-	if( sizeof(_uinteger64) > GetReadableLength() )
+	if( sizeof(uint64_t) > GetReadableLength() )
 		throw EOutOfBound("EOutOfBound => CFixedBuffer::ReadUnsignedInteger64 - out of index.");
 	
-	_uinteger64 value = *((_uinteger64 *)(m_pBuffer + m_nReadIndex));
+	uint64_t value = *((uint64_t *)(m_pBuffer + m_nReadIndex));
 	if( GetSystemByteOrder() != GetEndian() )
 		value = REVERSE_ORDER64(value);
 
@@ -248,7 +248,7 @@ float CFixedBuffer::ReadFloat()
 	if( sizeof(float) > GetReadableLength() )
 		throw EOutOfBound("EOutOfBound => CFixedBuffer::ReadFloat - out of index.");
 	
-	unsigned long value = *((unsigned long *)(m_pBuffer + m_nReadIndex));
+	uint32_t value = *((uint32_t *)(m_pBuffer + m_nReadIndex));
 	if( GetSystemByteOrder() != GetEndian() )
 		value = REVERSE_ORDER32(value);
 
@@ -262,7 +262,7 @@ double CFixedBuffer::ReadDouble()
 	if( sizeof(double) > GetReadableLength() )
 		throw EOutOfBound("EOutOfBound => CFixedBuffer::ReadDouble - out of index.");
 	
-	_uinteger64 value = *((_uinteger64 *)(m_pBuffer + m_nReadIndex));
+	uint64_t value = *((uint64_t *)(m_pBuffer + m_nReadIndex));
 	if( GetSystemByteOrder() != GetEndian() )
 		value = REVERSE_ORDER64(value);
 
@@ -271,7 +271,7 @@ double CFixedBuffer::ReadDouble()
 	return *( (double *)&value );
 }
 
-void CFixedBuffer::ReadBytes(char *pBuffer, const unsigned long &nLength)
+void CFixedBuffer::ReadBytes(char *pBuffer, const uint32_t &nLength)
 {
 	if( nLength > GetReadableLength() )
 		throw EOutOfBound("EOutOfBound => CFixedBuffer::ReadBytes - out of index.");
@@ -280,7 +280,7 @@ void CFixedBuffer::ReadBytes(char *pBuffer, const unsigned long &nLength)
 	m_nReadIndex += nLength;
 }
 
-void CFixedBuffer::ReadBytes(IBuffer *pBuffer, const unsigned long &nLength)
+void CFixedBuffer::ReadBytes(IBuffer *pBuffer, const uint32_t &nLength)
 {
 	if( nLength > GetReadableLength() )
 		throw EOutOfBound("EOutOfBound => CFixedBuffer::ReadBytes - out of index.");
@@ -289,9 +289,9 @@ void CFixedBuffer::ReadBytes(IBuffer *pBuffer, const unsigned long &nLength)
 	m_nReadIndex += nLength;
 }
 
-void CFixedBuffer::ReadString(char *pBuffer, const unsigned long &nSize)
+void CFixedBuffer::ReadString(char *pBuffer, const uint32_t &nSize)
 {
-	unsigned long end = Find(NULL);
+	uint32_t end = Find(NULL);
 	
 	if( end == pipey::common::INVALID )
 		throw EOutOfBound("EOutOfBound => CFixedBuffer::ReadString - cannot find end of the string.");
@@ -304,7 +304,7 @@ void CFixedBuffer::ReadString(char *pBuffer, const unsigned long &nSize)
 
 void CFixedBuffer::ReadString(IBuffer *pBuffer)
 {
-	unsigned long end = Find(NULL);
+	uint32_t end = Find(NULL);
 	
 	if( end == pipey::common::INVALID )
 		throw EOutOfBound("EOutOfBound => CFixedBuffer::ReadString - cannot find end of the string.");
@@ -313,7 +313,7 @@ void CFixedBuffer::ReadString(IBuffer *pBuffer)
 	m_nReadIndex += (end + 1);
 }
 
-char CFixedBuffer::GetChar(const unsigned long &nIndex) const
+char CFixedBuffer::GetChar(const uint32_t &nIndex) const
 {
 	if( m_nCapacity <= nIndex || sizeof(char) > m_nCapacity - nIndex )
 		throw EOutOfBound("EOutOfBound => CFixedBuffer::GetChar - out of index.");
@@ -321,17 +321,17 @@ char CFixedBuffer::GetChar(const unsigned long &nIndex) const
 	return m_pBuffer[nIndex];
 }
 
-unsigned char CFixedBuffer::GetUnsignedChar(const unsigned long &nIndex) const
+unsigned char CFixedBuffer::GetUnsignedChar(const uint32_t &nIndex) const
 {
 	return (unsigned char)GetChar(nIndex);
 }
 
-short CFixedBuffer::GetShort(const unsigned long &nIndex) const
+short CFixedBuffer::GetShort(const uint32_t &nIndex) const
 {
 	return GetUnsignedShort(nIndex);
 }
 
-unsigned short CFixedBuffer::GetUnsignedShort(const unsigned long &nIndex) const
+unsigned short CFixedBuffer::GetUnsignedShort(const uint32_t &nIndex) const
 {
 	if( m_nCapacity <= nIndex || sizeof(unsigned short) > m_nCapacity - nIndex )
 		throw EOutOfBound("EOutOfBound => CFixedBuffer::GetUnsignedShort - out of index.");
@@ -343,12 +343,12 @@ unsigned short CFixedBuffer::GetUnsignedShort(const unsigned long &nIndex) const
 	return value;
 }
 
-unsigned int CFixedBuffer::GetUnsignedInt(const unsigned long &nIndex) const
+uint32_t CFixedBuffer::GetUnsignedInt(const uint32_t &nIndex) const
 {
-	if( m_nCapacity <= nIndex || sizeof(unsigned int) > m_nCapacity - nIndex )
+	if( m_nCapacity <= nIndex || sizeof(uint32_t) > m_nCapacity - nIndex )
 		throw EOutOfBound("EOutOfBound => CFixedBuffer::GetUnsignedInt - out of index.");
 
-	unsigned int value = *((unsigned int *)(m_pBuffer + nIndex));
+	uint32_t value = *((uint32_t *)(m_pBuffer + nIndex));
 	if( GetSystemByteOrder() != GetEndian() )
 		value = REVERSE_ORDER32(value);
 
@@ -356,17 +356,17 @@ unsigned int CFixedBuffer::GetUnsignedInt(const unsigned long &nIndex) const
 
 }
 
-int CFixedBuffer::GetInt(const unsigned long &nIndex) const
+int32_t CFixedBuffer::GetInt(const uint32_t &nIndex) const
 {
 	return GetUnsignedInt(nIndex);
 }
 
-unsigned long CFixedBuffer::GetUnsignedLong(const unsigned long &nIndex) const
+uint32_t CFixedBuffer::GetUnsignedLong(const uint32_t &nIndex) const
 {
-	if( m_nCapacity <= nIndex || sizeof(unsigned long) > m_nCapacity - nIndex )
+	if( m_nCapacity <= nIndex || sizeof(uint32_t) > m_nCapacity - nIndex )
 		throw EOutOfBound("EOutOfBound => CFixedBuffer::GetUnsignedLong - out of index.");
 
-	unsigned long value = *((unsigned long *)(m_pBuffer + nIndex));
+	uint32_t value = *((uint32_t *)(m_pBuffer + nIndex));
 	if( GetSystemByteOrder() != GetEndian() )
 		value = REVERSE_ORDER32(value);
 
@@ -374,46 +374,46 @@ unsigned long CFixedBuffer::GetUnsignedLong(const unsigned long &nIndex) const
 
 }
 
-long CFixedBuffer::GetLong(const unsigned long &nIndex) const
+int32_t CFixedBuffer::GetLong(const uint32_t &nIndex) const
 {
 	return GetUnsignedLong(nIndex);
 }
 
-_uinteger64 CFixedBuffer::GetUnsignedInteger64(const unsigned long &nIndex) const
+uint64_t CFixedBuffer::GetUnsignedInteger64(const uint32_t &nIndex) const
 {
-	if( m_nCapacity <= nIndex || sizeof(_uinteger64) > m_nCapacity - nIndex )
+	if( m_nCapacity <= nIndex || sizeof(uint64_t) > m_nCapacity - nIndex )
 		throw EOutOfBound("EOutOfBound => CFixedBuffer::GetUnsignedInteger64 - out of index.");
 
-	_uinteger64 value = *((_uinteger64 *)(m_pBuffer + nIndex));
+	uint64_t value = *((uint64_t *)(m_pBuffer + nIndex));
 	if( GetSystemByteOrder() != GetEndian() )
 		value = REVERSE_ORDER64(value);
 
 	return value;
 }
 
-_integer64 CFixedBuffer::GetInteger64(const unsigned long &nIndex) const
+int64_t CFixedBuffer::GetInteger64(const uint32_t &nIndex) const
 {
 	return GetInteger64(nIndex);
 }
 
-float CFixedBuffer::GetFloat(const unsigned long &nIndex) const
+float CFixedBuffer::GetFloat(const uint32_t &nIndex) const
 {
 	if( m_nCapacity <= nIndex || sizeof(float) > m_nCapacity - nIndex )
 		throw EOutOfBound("EOutOfBound => CFixedBuffer::GetFloat - out of index.");
 
-	unsigned long value = *((unsigned long *)(m_pBuffer + nIndex));
+	uint32_t value = *((uint32_t *)(m_pBuffer + nIndex));
 	if( GetSystemByteOrder() != GetEndian() )
 		value = REVERSE_ORDER32(value);
 
 	return *( (float *)&value );
 }
 
-double CFixedBuffer::GetDouble(const unsigned long &nIndex) const
+double CFixedBuffer::GetDouble(const uint32_t &nIndex) const
 {
 	if( m_nCapacity <= nIndex || sizeof(double) > m_nCapacity - nIndex )
 		throw EOutOfBound("EOutOfBound => CFixedBuffer::GetDouble - out of index.");
 
-	_uinteger64 value = *((_uinteger64 *)(m_pBuffer + nIndex));
+	uint64_t value = *((uint64_t *)(m_pBuffer + nIndex));
 	if( GetSystemByteOrder() != GetEndian() )
 		value = REVERSE_ORDER64(value);
 
@@ -421,7 +421,7 @@ double CFixedBuffer::GetDouble(const unsigned long &nIndex) const
 }
 
 
-void CFixedBuffer::GetBytes(const unsigned long &nIndex, char *pBuffer, const unsigned long &nLength) const
+void CFixedBuffer::GetBytes(const uint32_t &nIndex, char *pBuffer, const uint32_t &nLength) const
 {
 	if( m_nCapacity <= nIndex || nLength > m_nCapacity - nIndex )
 		throw EOutOfBound("EOutOfBound => CFixedBuffer::GetBytes - out of index.");
@@ -429,7 +429,7 @@ void CFixedBuffer::GetBytes(const unsigned long &nIndex, char *pBuffer, const un
 	memcpy(pBuffer, m_pBuffer + nIndex, nLength);
 }
 
-void CFixedBuffer::GetBytes(const unsigned long &nIndex, IBuffer *pBuffer, const unsigned long &nLength) const
+void CFixedBuffer::GetBytes(const uint32_t &nIndex, IBuffer *pBuffer, const uint32_t &nLength) const
 {
 	if( m_nCapacity <= nIndex || nLength > m_nCapacity - nIndex )
 		throw EOutOfBound("EOutOfBound => CFixedBuffer::GetBytes - out of index.");
@@ -437,12 +437,12 @@ void CFixedBuffer::GetBytes(const unsigned long &nIndex, IBuffer *pBuffer, const
 	pBuffer->WriteBytes(m_pBuffer + nIndex, nLength);
 }
 
-void CFixedBuffer::GetString(const unsigned long &nIndex, char *pBuffer, const unsigned long &nSize) const
+void CFixedBuffer::GetString(const uint32_t &nIndex, char *pBuffer, const uint32_t &nSize) const
 {
 	if( m_nCapacity <= nIndex )
 		throw EOutOfBound("EOutOfBound => CFixedBuffer::GetString - out of index.");
 
-	unsigned long end = Find(nIndex, m_nCapacity - nIndex, NULL);
+	uint32_t end = Find(nIndex, m_nCapacity - nIndex, NULL);
 	
 	if( end == pipey::common::INVALID )
 		throw EOutOfBound("EOutOfBound => CFixedBuffer::GetString - cannot find end of the string.");
@@ -452,12 +452,12 @@ void CFixedBuffer::GetString(const unsigned long &nIndex, char *pBuffer, const u
 	memcpy(pBuffer, m_pBuffer + nIndex, end - nIndex + 1);
 }
 
-void CFixedBuffer::GetString(const unsigned long &nIndex, IBuffer *pBuffer) const
+void CFixedBuffer::GetString(const uint32_t &nIndex, IBuffer *pBuffer) const
 {
 	if( m_nCapacity <= nIndex )
 		throw EOutOfBound("EOutOfBound => CFixedBuffer::GetString - out of index.");
 
-	unsigned long end = Find(nIndex, m_nCapacity - nIndex, NULL);
+	uint32_t end = Find(nIndex, m_nCapacity - nIndex, NULL);
 	
 	if( end == pipey::common::INVALID )
 		throw EOutOfBound("EOutOfBound => CFixedBuffer::ReadString - cannot find end of the string.");
@@ -495,15 +495,15 @@ void CFixedBuffer::WriteUnsignedShort(const unsigned short &value)
 	} else throw EOutOfBound("EOutOfBound => CFixedBuffer::WriteUnsignedShort - out of index.");
 }
 
-void CFixedBuffer::WriteInt(const int &value)
+void CFixedBuffer::WriteInt(const int32_t &value)
 {
 	WriteUnsignedInt(value);
 }
 
-void CFixedBuffer::WriteUnsignedInt(const unsigned int &value)
+void CFixedBuffer::WriteUnsignedInt(const uint32_t &value)
 {
 	if( EnsureWritable(sizeof(value)) ) {
-		unsigned int *pBuffer = (unsigned int *)( m_pBuffer + m_nWriteIndex );
+		uint32_t *pBuffer = (uint32_t *)( m_pBuffer + m_nWriteIndex );
 
 		if( GetSystemByteOrder() == GetEndian() )
 			*pBuffer = value;
@@ -513,15 +513,15 @@ void CFixedBuffer::WriteUnsignedInt(const unsigned int &value)
 	} else throw EOutOfBound("EOutOfBound => CFixedBuffer::WriteUnsignedInt - out of index.");
 }
 
-void CFixedBuffer::WriteLong(const long &value)
+void CFixedBuffer::WriteLong(const int32_t &value)
 {
 	WriteUnsignedLong(value);
 }
 
-void CFixedBuffer::WriteUnsignedLong(const unsigned long &value)
+void CFixedBuffer::WriteUnsignedLong(const uint32_t &value)
 {
 	if( EnsureWritable(sizeof(value)) ) {
-		unsigned long *pBuffer = (unsigned long *)( m_pBuffer + m_nWriteIndex );
+		uint32_t *pBuffer = (uint32_t *)( m_pBuffer + m_nWriteIndex );
 
 		if( GetSystemByteOrder() == GetEndian() )
 			*pBuffer = value;
@@ -531,15 +531,15 @@ void CFixedBuffer::WriteUnsignedLong(const unsigned long &value)
 	} else throw EOutOfBound("EOutOfBound => CFixedBuffer::WriteUnsignedLong - out of index.");
 }
 
-void CFixedBuffer::WriteInteger64(const _integer64 &value)
+void CFixedBuffer::WriteInteger64(const int64_t &value)
 {
 	WriteUnsignedInteger64(value);	
 }
 
-void CFixedBuffer::WriteUnsignedInteger64(const _uinteger64 &value)
+void CFixedBuffer::WriteUnsignedInteger64(const uint64_t &value)
 {
 	if( EnsureWritable(sizeof(value)) ) {
-		_uinteger64 *pBuffer = (_uinteger64 *)( m_pBuffer + m_nWriteIndex );
+		uint64_t *pBuffer = (uint64_t *)( m_pBuffer + m_nWriteIndex );
 
 		if( GetSystemByteOrder() == GetEndian() )
 			*pBuffer = value;
@@ -552,8 +552,8 @@ void CFixedBuffer::WriteUnsignedInteger64(const _uinteger64 &value)
 void CFixedBuffer::WriteFloat(const float &value)
 {
 	if( EnsureWritable(sizeof(value)) ) {
-		unsigned long *pValue = (unsigned long *)&value;
-		unsigned long *pBuffer = (unsigned long *)( m_pBuffer + m_nWriteIndex );
+		uint32_t *pValue = (uint32_t *)&value;
+		uint32_t *pBuffer = (uint32_t *)( m_pBuffer + m_nWriteIndex );
 
 		if( GetSystemByteOrder() == GetEndian() )
 			*pBuffer = *pValue;
@@ -566,8 +566,8 @@ void CFixedBuffer::WriteFloat(const float &value)
 void CFixedBuffer::WriteDouble(const double &value)
 {
 	if( EnsureWritable(sizeof(value)) ) {
-		_uinteger64 *pValue = (_uinteger64 *)&value;
-		_uinteger64 *pBuffer = (_uinteger64 *)( m_pBuffer + m_nWriteIndex );
+		uint64_t *pValue = (uint64_t *)&value;
+		uint64_t *pBuffer = (uint64_t *)( m_pBuffer + m_nWriteIndex );
 
 		if( GetSystemByteOrder() == GetEndian() )
 			*pBuffer = *pValue;
@@ -577,7 +577,7 @@ void CFixedBuffer::WriteDouble(const double &value)
 	} else throw EOutOfBound("EOutOfBound => CFixedBuffer::WriteDouble - out of index.");
 }
 
-void CFixedBuffer::WriteBytes(const char *pBuffer, const unsigned long &nLength)
+void CFixedBuffer::WriteBytes(const char *pBuffer, const uint32_t &nLength)
 {
 	if( EnsureWritable(nLength) ) {
 		memcpy(m_pBuffer + m_nWriteIndex, pBuffer, nLength);
@@ -585,7 +585,7 @@ void CFixedBuffer::WriteBytes(const char *pBuffer, const unsigned long &nLength)
 	} else throw EOutOfBound("EOutOfBound => CFixedBuffer::WriteDouble - out of index.");
 }
 
-void CFixedBuffer::WriteBytes(IBuffer *pBuffer, const unsigned long &nLength)
+void CFixedBuffer::WriteBytes(IBuffer *pBuffer, const uint32_t &nLength)
 {
 	if( EnsureWritable(nLength) ) {
 		pBuffer->ReadBytes(m_pBuffer, nLength);
@@ -595,7 +595,7 @@ void CFixedBuffer::WriteBytes(IBuffer *pBuffer, const unsigned long &nLength)
 
 void CFixedBuffer::WriteString(const char *pBuffer)
 {
-	unsigned long nLength = strlen(pBuffer) + 1;
+	uint32_t nLength = strlen(pBuffer) + 1;
 	if( EnsureWritable(nLength) ) {
 		memcpy(m_pBuffer + m_nWriteIndex, pBuffer, nLength);
 		m_nWriteIndex += nLength;
@@ -607,7 +607,7 @@ void CFixedBuffer::WriteString(IBuffer *pBuffer)
 	pBuffer->ReadString(this);
 }
 
-void CFixedBuffer::WriteZero(const unsigned long &nLength)
+void CFixedBuffer::WriteZero(const uint32_t &nLength)
 {
 	if( EnsureWritable(nLength) ) {
 		memset(m_pBuffer + m_nWriteIndex, 0, nLength);
@@ -615,19 +615,19 @@ void CFixedBuffer::WriteZero(const unsigned long &nLength)
 	} else throw EOutOfBound("EOutOfBound => CFixedBuffer::WriteDouble - out of index.");
 }
 
-void CFixedBuffer::SetChar(const unsigned long &nIndex, const char &value)
+void CFixedBuffer::SetChar(const uint32_t &nIndex, const char &value)
 {
 	if( m_nCapacity > nIndex && sizeof(value) <= m_nCapacity - nIndex )
 		m_pBuffer[nIndex] = value;
 	else throw EOutOfBound("EOutOfBound => CFixedBuffer::SetChar - out of index.");
 }
 
-void CFixedBuffer::SetUnsignedChar(const unsigned long &nIndex, const unsigned char &value)
+void CFixedBuffer::SetUnsignedChar(const uint32_t &nIndex, const unsigned char &value)
 {
 	SetChar(nIndex, value);
 }
 
-void CFixedBuffer::SetUnsignedShort(const unsigned long &nIndex, const unsigned short &value)
+void CFixedBuffer::SetUnsignedShort(const uint32_t &nIndex, const unsigned short &value)
 {
 	if( m_nCapacity > nIndex && sizeof(value) <= m_nCapacity - nIndex ) {
 		unsigned short *pBuffer = (unsigned short *)( m_pBuffer + nIndex );
@@ -638,15 +638,15 @@ void CFixedBuffer::SetUnsignedShort(const unsigned long &nIndex, const unsigned 
 	} else throw EOutOfBound("EOutOfBound => CFixedBuffer::SetUnsignedShort - out of index.");
 }
 
-void CFixedBuffer::SetShort(const unsigned long &nIndex, const short &value)
+void CFixedBuffer::SetShort(const uint32_t &nIndex, const short &value)
 {
 	SetUnsignedShort(nIndex, value);
 }
 
-void CFixedBuffer::SetUnsignedInt(const unsigned long &nIndex, const unsigned int &value)
+void CFixedBuffer::SetUnsignedInt(const uint32_t &nIndex, const uint32_t &value)
 {
 	if( m_nCapacity > nIndex && sizeof(value) <= m_nCapacity - nIndex ) {
-		unsigned int *pBuffer = (unsigned int *)( m_pBuffer + nIndex );
+		uint32_t *pBuffer = (uint32_t *)( m_pBuffer + nIndex );
 
 		if( GetSystemByteOrder() == GetEndian() )
 			*pBuffer = value;
@@ -654,15 +654,15 @@ void CFixedBuffer::SetUnsignedInt(const unsigned long &nIndex, const unsigned in
 	} else throw EOutOfBound("EOutOfBound => CFixedBuffer::SetUnsignedInt - out of index.");
 }
 
-void CFixedBuffer::SetInt(const unsigned long &nIndex, const int &value)
+void CFixedBuffer::SetInt(const uint32_t &nIndex, const int32_t &value)
 {
 	SetUnsignedInt(nIndex, value);
 }
 
-void CFixedBuffer::SetUnsignedLong(const unsigned long &nIndex, const unsigned long &value)
+void CFixedBuffer::SetUnsignedLong(const uint32_t &nIndex, const uint32_t &value)
 {
 	if( m_nCapacity > nIndex && sizeof(value) <= m_nCapacity - nIndex ) {
-		unsigned long *pBuffer = (unsigned long *)( m_pBuffer + nIndex );
+		uint32_t *pBuffer = (uint32_t *)( m_pBuffer + nIndex );
 
 		if( GetSystemByteOrder() == GetEndian() )
 			*pBuffer = value;
@@ -670,15 +670,15 @@ void CFixedBuffer::SetUnsignedLong(const unsigned long &nIndex, const unsigned l
 	} else throw EOutOfBound("EOutOfBound => CFixedBuffer::SetUnsignedLong - out of index.");
 }
 
-void CFixedBuffer::SetLong(const unsigned long &nIndex, const long &value)
+void CFixedBuffer::SetLong(const uint32_t &nIndex, const int32_t &value)
 {
 	SetUnsignedLong(nIndex, value);
 }
 
-void CFixedBuffer::SetUnsignedInteger64(const unsigned long &nIndex, const _uinteger64 &value)
+void CFixedBuffer::SetUnsignedInteger64(const uint32_t &nIndex, const uint64_t &value)
 {
 	if( m_nCapacity > nIndex && sizeof(value) <= m_nCapacity - nIndex ) {
-		_uinteger64 *pBuffer = (_uinteger64 *)( m_pBuffer + nIndex );
+		uint64_t *pBuffer = (uint64_t *)( m_pBuffer + nIndex );
 
 		if( GetSystemByteOrder() == GetEndian() )
 			*pBuffer = value;
@@ -686,16 +686,16 @@ void CFixedBuffer::SetUnsignedInteger64(const unsigned long &nIndex, const _uint
 	} else throw EOutOfBound("EOutOfBound => CFixedBuffer::SetUnsignedInteger64 - out of index.");
 }
 
-void CFixedBuffer::SetInteger64(const unsigned long &nIndex, const _integer64 &value)
+void CFixedBuffer::SetInteger64(const uint32_t &nIndex, const int64_t &value)
 {
 	SetUnsignedInteger64(nIndex, value);
 }
 
-void CFixedBuffer::SetFloat(const unsigned long &nIndex, const float &value)
+void CFixedBuffer::SetFloat(const uint32_t &nIndex, const float &value)
 {
 	if( m_nCapacity > nIndex && sizeof(value) <= m_nCapacity - nIndex ) {
-		unsigned long *pValue = (unsigned long *)&value;
-		unsigned long *pBuffer = (unsigned long *)( m_pBuffer + nIndex );
+		uint32_t *pValue = (uint32_t *)&value;
+		uint32_t *pBuffer = (uint32_t *)( m_pBuffer + nIndex );
 
 		if( GetSystemByteOrder() == GetEndian() )
 			*pBuffer = *pValue;
@@ -703,11 +703,11 @@ void CFixedBuffer::SetFloat(const unsigned long &nIndex, const float &value)
 	} else throw EOutOfBound("EOutOfBound => CFixedBuffer::SetFloat - out of index.");
 }
 
-void CFixedBuffer::SetDouble(const unsigned long &nIndex, const double &value)
+void CFixedBuffer::SetDouble(const uint32_t &nIndex, const double &value)
 {
 	if( m_nCapacity > nIndex && sizeof(value) <= m_nCapacity - nIndex ) {
-		_uinteger64 *pValue = (_uinteger64 *)&value;
-		_uinteger64 *pBuffer = (_uinteger64 *)( m_pBuffer + nIndex );
+		uint64_t *pValue = (uint64_t *)&value;
+		uint64_t *pBuffer = (uint64_t *)( m_pBuffer + nIndex );
 
 		if( GetSystemByteOrder() == GetEndian() )
 			*pBuffer = *pValue;
@@ -715,37 +715,37 @@ void CFixedBuffer::SetDouble(const unsigned long &nIndex, const double &value)
 	} else throw EOutOfBound("EOutOfBound => CFixedBuffer::SetDouble - out of index.");
 }
 
-void CFixedBuffer::SetBytes(const unsigned long &nIndex, const char *pBuffer, const unsigned long &nLength)
+void CFixedBuffer::SetBytes(const uint32_t &nIndex, const char *pBuffer, const uint32_t &nLength)
 {
 	if( m_nCapacity > nIndex && nLength <= m_nCapacity - nIndex )
 		memcpy( m_pBuffer + nIndex, pBuffer, nLength);
 	else throw EOutOfBound("EOutOfBound => CFixedBuffer::SetBytes - out of index.");
 }
 
-void CFixedBuffer::SetBytes(const unsigned long &nIndex, IBuffer *pBuffer, const unsigned long &nLength)
+void CFixedBuffer::SetBytes(const uint32_t &nIndex, IBuffer *pBuffer, const uint32_t &nLength)
 {
 	if( m_nCapacity > nIndex && nLength <= m_nCapacity - nIndex )
 		pBuffer->ReadBytes(m_pBuffer, nLength);
 	else throw EOutOfBound("EOutOfBound => CFixedBuffer::SetBytes - out of index.");
 }
 
-void CFixedBuffer::SetString(const unsigned long &nIndex, const char *pBuffer)
+void CFixedBuffer::SetString(const uint32_t &nIndex, const char *pBuffer)
 {
-	unsigned long nLength = strlen(pBuffer) + 1;
+	uint32_t nLength = strlen(pBuffer) + 1;
 	if( m_nCapacity > nIndex && nLength <= m_nCapacity - nIndex )
 		memcpy(m_pBuffer + nIndex, pBuffer, nLength);
 	else throw EOutOfBound("EOutOfBound => CFixedBuffer::SetString - out of index.");
 }
 
-void CFixedBuffer::SetString(const unsigned long &nIndex, IBuffer *pBuffer)
+void CFixedBuffer::SetString(const uint32_t &nIndex, IBuffer *pBuffer)
 {
-	unsigned long nLength = pBuffer->Find(NULL);
+	uint32_t nLength = pBuffer->Find(NULL);
 	if( nLength != ::pipey::common::INVALID && m_nCapacity > nIndex && nLength + 1 <= m_nCapacity - nIndex )
 		pBuffer->ReadString(m_pBuffer + nIndex, nLength + 1);
 	else throw EOutOfBound("EOutOfBound => CFixedBuffer::SetString - out of index.");
 }
 
-void CFixedBuffer::SetZero(const unsigned long &nIndex, const unsigned long &nLength)
+void CFixedBuffer::SetZero(const uint32_t &nIndex, const uint32_t &nLength)
 {
 	if( m_nCapacity > nIndex && nLength <= m_nCapacity - nIndex )
 		memset(m_pBuffer + nIndex, 0, nLength);
@@ -757,7 +757,7 @@ void CFixedBuffer::SetZero()
 	SetZero(0, m_nCapacity);
 }
 
-unsigned long CFixedBuffer::Skip(const unsigned long &nLength)
+uint32_t CFixedBuffer::Skip(const uint32_t &nLength)
 {
 	if( nLength > GetReadableLength() )
 		throw EOutOfBound("EOutOfBound => CFixedBuffer::Skip - out of index.");
@@ -765,15 +765,15 @@ unsigned long CFixedBuffer::Skip(const unsigned long &nLength)
 	return (m_nReadIndex += nLength);
 }
 
-unsigned long CFixedBuffer::SkipTo(const char &target)
+uint32_t CFixedBuffer::SkipTo(const char &target)
 {
-	unsigned long position = Find(target);
+	uint32_t position = Find(target);
 	if(position == ::pipey::common::INVALID) 
 		return ::pipey::common::INVALID;
 	else return (m_nReadIndex += position);
 }
 
-unsigned long CFixedBuffer::SkipAll()
+uint32_t CFixedBuffer::SkipAll()
 {
 	return Skip( GetReadableLength() );
 }

@@ -17,14 +17,14 @@ namespace pipey {
 					  nInitialValue(0)
 				  { };
 
-				  MUT_SEM_INIT(unsigned long max, unsigned long initial) :
+				  MUT_SEM_INIT(uint32_t max, uint32_t initial) :
 				  nMaxLimit(max),
 					  nInitialValue(initial)
 				  { };
 
-				  unsigned long nMaxLimit;
+				  uint32_t nMaxLimit;
 
-				  unsigned long nInitialValue;
+				  uint32_t nInitialValue;
 
 			};
 
@@ -36,11 +36,11 @@ namespace pipey {
 
 
 			protected:
-				unsigned long m_nMaxLimit;
+				uint32_t m_nMaxLimit;
 
-				unsigned long m_nValue;
+				uint32_t m_nValue;
 
-				unsigned long m_nOwner;
+				uint32_t m_nOwner;
 
 				bool m_bInited;
 
@@ -60,17 +60,17 @@ namespace pipey {
 
 				virtual pipey::common::SYNC_RESULT TryLock();
 
-				virtual pipey::common::SYNC_RESULT AcquireTimedLock(unsigned long nMilliSeconds = pipey::common::TIME_INFINITE);
+				virtual pipey::common::SYNC_RESULT AcquireTimedLock(uint32_t nMilliSeconds = pipey::common::TIME_INFINITE);
 
-				virtual void ReleaseMultiple(unsigned long nCount);
+				virtual void ReleaseMultiple(uint32_t nCount);
 
-				virtual void SetMaxLimit(unsigned long nMaxLimit);
+				virtual void SetMaxLimit(uint32_t nMaxLimit);
 
-				virtual unsigned long GetMaxLimit() const;
+				virtual uint32_t GetMaxLimit() const;
 
-				virtual unsigned long GetCurrentValue() const;
+				virtual uint32_t GetCurrentValue() const;
 
-				virtual unsigned long GetCurrentOwner() const;
+				virtual uint32_t GetCurrentOwner() const;
 
 			};
 

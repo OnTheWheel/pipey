@@ -65,7 +65,7 @@ void CWindowsThread::Detach()
 	else throw EInvalidState("EInvalidState => CWindowsThread::Detach - This thread is already detached or not properly initiated.");
 }
 
-SYNC_RESULT CWindowsThread::Wait(unsigned long nMilliSeconds) 
+SYNC_RESULT CWindowsThread::Wait(uint32_t nMilliSeconds) 
 {
 
 	if( m_bInited && !m_bDetached) {

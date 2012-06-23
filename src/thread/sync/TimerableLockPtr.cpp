@@ -16,7 +16,7 @@ CTimerableLockPtr::~CTimerableLockPtr()
 
 }
 
-SYNC_RESULT CTimerableLockPtr::AcquireTimedLock(unsigned long nMilliSeconds) 
+SYNC_RESULT CTimerableLockPtr::AcquireTimedLock(uint32_t nMilliSeconds) 
 {
 	if( IsValid() ) {
 		if( !IsLocked() ) {

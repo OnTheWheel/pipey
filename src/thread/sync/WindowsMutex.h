@@ -48,7 +48,7 @@ namespace pipey {
 
 				virtual pipey::common::SYNC_RESULT TryLock();
 
-				virtual pipey::common::SYNC_RESULT AcquireTimedLock(unsigned long nMilliSeconds = pipey::common::TIME_INFINITE);
+				virtual pipey::common::SYNC_RESULT AcquireTimedLock(uint32_t nMilliSeconds = pipey::common::TIME_INFINITE);
 
 			};
 

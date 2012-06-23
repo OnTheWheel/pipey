@@ -23,7 +23,7 @@ namespace pipey {
 
 			public:
 
-				virtual void Init(unsigned long nMinThread = 0, unsigned long nMaxThread = 0, unsigned long nActiveThread = 0);
+				virtual void Init(uint32_t nMinThread = 0, uint32_t nMaxThread = 0, uint32_t nActiveThread = 0);
 				virtual void Close();
 
 				virtual void PushJob(const T &rJob, IJobCallback<T> *pCallback, ::pipey::memory::CObjectHandle< CONTEXT_JOB_INFO<T> > * pHandle = NULL);
@@ -55,7 +55,7 @@ namespace pipey {
 			}
 
 			template <typename T>
-			void CContextAwareThreadPool<T>::Init(unsigned long nMinThread, unsigned long nMaxThread, unsigned long nActiveThread)
+			void CContextAwareThreadPool<T>::Init(uint32_t nMinThread, uint32_t nMaxThread, uint32_t nActiveThread)
 			{
 				IBaseThreadPool<T, CONTEXT_JOB_INFO<T> >::Init(nMinThread, nMaxThread, nActiveThread);
 

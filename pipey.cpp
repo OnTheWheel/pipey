@@ -40,7 +40,7 @@ bool completed[10];
 /*
 class CTestCallback : public IJobCallback<int>
 {
-	virtual void ProcessJob(int & job)
+	virtual void ProcessJob(int32_& job)
 	{
 		cout<<job<<endl;
 		completed[job] = true;
@@ -52,25 +52,25 @@ class CTestCallback : public IJobCallback<int>
 #endif
 	}
 
-	virtual void OnCancel(int & job, bool bTimeout = false) 
+	virtual void OnCancel(int32_& job, bool bTimeout = false) 
 	{
 		cout<<job<<" canceled"<<endl;
 	}
 
-	virtual void OnException(int & job, const std::exception & e) {}
+	virtual void OnException(int32_& job, const std::exception & e) {}
 }callback;
 */
 struct CTX_JOB
 {
-	int ctx;
-	int job;
+	int32_t ctx;
+	int32_t job;
 };
 class CTestCallback : public IJobCallback<CTX_JOB>
 {
 	virtual void ProcessJob(CTX_JOB & job)
 	{
 		string ws;
-		for(int i=0;i<job.ctx;i++)
+		for(int32_t i=0;i<job.ctx;i++)
 			ws+="   ";
 		cout<<ws.c_str()<<job.ctx<<"{"<<job.job<<endl;
 
@@ -90,14 +90,14 @@ class CTestCallback : public IJobCallback<CTX_JOB>
 	virtual void OnException(CTX_JOB & job, const std::exception & e) {}
 }callback;
 
-int main(int argc, char* argv[])
+int32_t main(int32_t argc, char* argv[])
 {
 	char c='c';
 	short sh = -12;
-	int a = 1234;
-	long ul=3456;
+	int32_t a = 1234;
+	uint32_t ul=3456;
 	char *str = "buffer test";
-	_uinteger64 i64 = 11233546;
+	uint64_t i64 = 11233546;
 	float f = -1242.15f;
 	double d = -45624.453532;
 	CBasicMemoryPool pool;
@@ -129,15 +129,18 @@ int main(int argc, char* argv[])
 	} catch(EPipeyException e) {
 		cout << e.what();
 	}
+	uint64_t aasf;
+
+	
 
 	return 0;
 	/*
-	int b = 0x11223344;
-	int a = REVERSE_ORDER32(b);
+	int32_b = 0x11223344;
+	int32_a = REVERSE_ORDER32(b);
 	printf("%x %x\n", a, b);
 	
-	long long c = 0x1122334455667788;
-	long long d = REVERSE_ORDER64(c);
+	int32_t int32_t c = 0x1122334455667788;
+	int32_t int32_t d = REVERSE_ORDER64(c);
 
 	if(GetSystemByteOrder() == BYTE_LITTLE_ENDIAN)
 		puts("little");
@@ -152,7 +155,7 @@ int main(int argc, char* argv[])
 	CContextAwareThreadPool<CTX_JOB>::CContextHandle contexts[10];
 	CContextAwareThreadPool<CTX_JOB>::CJobHandle jobs[100];
 
-	int i;
+	int32_i;
 	for(i=0;i<10;i++)
 		cap.CreateContext(contexts[i]);
 
@@ -195,17 +198,17 @@ int main(int argc, char* argv[])
 	/*
 	pipey::util::CRandomPicker<int> picker(20);
 
-	unsigned long ref[400];
+	uint32_t ref[400];
 
-	int i;
+	int32_i;
 	for(i=0; i<400;i++)
 		picker.Put(i, ref+i);
 
 
-	int total =0;
+	int32_total =0;
 	for(i=0; i<400;i++)
 	{
-		int val = picker.Pick();
+		int32_val = picker.Pick();
 		cout<<val<<endl;
 		picker.Delete(ref[val]);
 		total += val;
@@ -219,7 +222,7 @@ int main(int argc, char* argv[])
 	CObjectHandle< JOB_INFO<int> > handle[10];
 	pool.Init(3,15,4);
 
-	int i;
+	int32_i;
 	for(i=0;i<10;i++)
 	{
 		pool.PushJob(i, &callback, handle+i);
@@ -253,7 +256,7 @@ int main(int argc, char* argv[])
 /*
 struct THREAD_TEST
 {
-	unsigned int id;
+	uint32_id;
 	pipey::thread::sync::CMutableSemaphore *pLock;
 };
 
@@ -262,7 +265,7 @@ class CThreadTest : public pipey::thread::IExecutable
 	void Execute(void *pParam)
 	{
 		THREAD_TEST *pId = (THREAD_TEST*) pParam;
-		for(int i=0; i<5;) {
+		for(int32_i=0; i<5;) {
 			pipey::thread::sync::CLockPtr ptr(pId->pLock);
 			pipey::util::CDefaultTimer timer;
 			timer.Start();
@@ -275,7 +278,7 @@ class CThreadTest : public pipey::thread::IExecutable
 			//sleep(1);
 #endif
 
-				unsigned long elapsed;
+				uint32_t elapsed;
 				timer.CheckTotal(&elapsed);
 				printf("timed out : %u\n", elapsed);
 				continue;
@@ -292,7 +295,7 @@ class CThreadTest : public pipey::thread::IExecutable
 	}
 };
 
-int main(int argc, char* argv[])
+int32_main(int32_argc, char* argv[])
 {
 	pipey::thread::sync::CMutableSemaphore lock;
 	lock.Init(&pipey::thread::sync::MUT_SEM_INIT(4,1));
@@ -302,7 +305,7 @@ int main(int argc, char* argv[])
 	CThreadTest routine;
 
 
-	for(unsigned int i=0; i<5; i++)
+	for(uint32_i=0; i<5; i++)
 	{
 		ids[i].id = i+1;
 		ids[i].pLock = &lock;
@@ -320,7 +323,7 @@ int main(int argc, char* argv[])
 		sleep(20);
 #endif
 
-	for(int i=4; i>=0; i--)
+	for(int32_i=4; i>=0; i--)
 	{
 		thread[i].Wait();
 	}
@@ -331,7 +334,7 @@ int main(int argc, char* argv[])
 /*
 struct THREAD_TEST
 {
-	unsigned int id;
+	uint32_id;
 	pipey::thread::sync::CDefaultLock *pLock;
 };
 
@@ -340,7 +343,7 @@ class CThreadTest : public pipey::thread::IExecutable
 	void Execute(void *pParam)
 	{
 		THREAD_TEST *pId = (THREAD_TEST*) pParam;
-		for(int i=0; i<5;) {
+		for(int32_i=0; i<5;) {
 			pipey::thread::sync::CTriableTimerableLockPtr ptr(pId->pLock);
 			SYNC_RESULT res = ptr.TryLock();
 			if( res == pipey::common::SYNC_BUSY ) 
@@ -365,7 +368,7 @@ class CThreadTest : public pipey::thread::IExecutable
 	}
 };
 
-int main(int argc, char* argv[])
+int32_main(int32_argc, char* argv[])
 {
 	pipey::thread::sync::CDefaultLock lock;
 	lock.Init();
@@ -374,7 +377,7 @@ int main(int argc, char* argv[])
 	pipey::thread::CDefaultThread thread[5];
 	CThreadTest routine;
 
-	for(unsigned int i=0; i<5; i++)
+	for(uint32_i=0; i<5; i++)
 	{
 			ids[i].id = i+1;
 		ids[i].pLock = &lock;
@@ -392,7 +395,7 @@ int main(int argc, char* argv[])
 		sleep(20);
 #endif
 
-	for(int i=4; i>=0; i--)
+	for(int32_i=4; i>=0; i--)
 	{
 		thread[i].Wait();
 	}
@@ -403,7 +406,7 @@ int main(int argc, char* argv[])
 /*
 struct THREAD_TEST
 {
-	unsigned int id;
+	uint32_id;
 	pipey::thread::sync::CDefaultCondition *pCondition;
 };
 
@@ -412,7 +415,7 @@ class CThreadTest : public pipey::thread::IExecutable
 	void Execute(void *pParam)
 	{
 		THREAD_TEST *pId = (THREAD_TEST*) pParam;
-		for( int i=0; i<5; ){
+		for( int32_i=0; i<5; ){
 		SYNC_RESULT res = pId->pCondition->Wait(2500);
 		//SYNC_RESULT res = pId->pLock->AcquireTimedLock(2345);
 		if( res == pipey::common::SYNC_TIMEOUT ) 
@@ -432,7 +435,7 @@ class CThreadTest : public pipey::thread::IExecutable
 	}
 };
 
-int main()
+int32_main()
 {
 	pipey::thread::sync::CDefaultLock lock;
 	lock.Init();
@@ -444,7 +447,7 @@ int main()
 	pipey::thread::CDefaultThread thread[5];
 	CThreadTest routine;
 
-	for(unsigned int i=0; i<5; i++)
+	for(uint32_i=0; i<5; i++)
 	{
 		ids[i].id = i+1;
 		ids[i].pCondition = &condition;
@@ -456,7 +459,7 @@ int main()
 		thread[i].Init(init);
 	}
 
-	int i;
+	int32_i;
 	for(i=24; i>=0; i--)
 	{
 #if defined(WIN32) || defined(WIN64)
@@ -483,7 +486,7 @@ int main()
 /*
 struct THREAD_TEST
 {
-	unsigned int id;
+	uint32_id;
 	pipey::thread::sync::CDefaultLock *pLock;
 };
 
@@ -492,7 +495,7 @@ class CThreadTest : public pipey::thread::IExecutable
 	void Execute(void *pParam)
 	{
 		THREAD_TEST *pId = (THREAD_TEST*) pParam;
-		for(int i=0; i<5;) {
+		for(int32_i=0; i<5;) {
 			SYNC_RESULT res = pId->pLock->AcquireTimedLock(2345);
 			if( res == pipey::common::SYNC_TIMEOUT ) 
 			{
@@ -511,7 +514,7 @@ class CThreadTest : public pipey::thread::IExecutable
 	}
 };
 
-int main(int argc, char* argv[])
+int32_main(int32_argc, char* argv[])
 {
 	pipey::thread::sync::CDefaultLock lock;
 	lock.Init();
@@ -520,7 +523,7 @@ int main(int argc, char* argv[])
 	pipey::thread::CDefaultThread thread[5];
 	CThreadTest routine;
 
-	for(unsigned int i=0; i<5; i++)
+	for(uint32_i=0; i<5; i++)
 	{
 		ids[i].id = i+1;
 		ids[i].pLock = &lock;
@@ -538,7 +541,7 @@ int main(int argc, char* argv[])
 		sleep(20);
 #endif
 
-	for(int i=4; i>=0; i--)
+	for(int32_i=4; i>=0; i--)
 	{
 		thread[i].Wait();
 	}

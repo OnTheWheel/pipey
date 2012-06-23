@@ -20,7 +20,7 @@ CThreadVector::~CThreadVector(void )
 	SAFE_TRY( Close() );
 }
 
-void CThreadVector::AddThread(unsigned long nCount, IExecutable & rExecutable, void *pParam)
+void CThreadVector::AddThread(uint32_t nCount, IExecutable & rExecutable, void *pParam)
 {
 	if( nCount == 0 ) throw EInvalidParameter("EInvalidParameter => CThreadVector::AddThread - nCount cannot be zero.");
 
@@ -29,7 +29,7 @@ void CThreadVector::AddThread(unsigned long nCount, IExecutable & rExecutable, v
 	SAFE_TRY( m_lock.Close() );
 	m_nNewThread = 0;
 #endif
-	unsigned long nPrev = size();
+	uint32_t nPrev = size();
 
 	try	{
 		m_threadReady.Init();
@@ -43,7 +43,7 @@ void CThreadVector::AddThread(unsigned long nCount, IExecutable & rExecutable, v
 		if( size() + nCount > capacity() )
 			reserve( size() + nCount - capacity());
 
-		unsigned long i;
+		uint32_t i;
 		for( i=0; i<nCount; i++) {
 			CDefaultThread *pThr = NULL;
 			pThr = new CDefaultThread();
@@ -72,7 +72,7 @@ void CThreadVector::AddThread(unsigned long nCount, IExecutable & rExecutable, v
 	} catch(...) {
 		m_bThreadReady = false;
 		SAFE_TRY( m_threadReady.Awake() );
-		unsigned long i;
+		uint32_t i;
 		for(i = size() ; i > nPrev ; i--) {
 			SAFE_TRY( at(i-1)->Wait() );
 			SAFE_TRY( delete at(i-1) );
@@ -97,7 +97,7 @@ bool CThreadVector::IsThreadReady()
 
 void CThreadVector::Close() 
 {
-	for(unsigned long i=0; i<size(); i++) {
+	for(uint32_t i=0; i<size(); i++) {
 		SAFE_TRY( at(i)->Wait() );
 		delete at(i);
 	}

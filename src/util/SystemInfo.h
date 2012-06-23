@@ -6,7 +6,7 @@
 namespace pipey {
 	namespace util {
 
-		unsigned long GetNumberOfProcessors();
+		uint32_t GetNumberOfProcessors();
 
 	}
 }

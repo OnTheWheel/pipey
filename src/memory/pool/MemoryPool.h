@@ -16,7 +16,7 @@ namespace pipey {
 				virtual ~IMemoryPool(void) { };
 
 			public:
-				virtual void Allocate(unsigned long nSize, CMemoryHandle &rHandle) = 0;
+				virtual void Allocate(uint32_t nSize, CMemoryHandle &rHandle) = 0;
 				virtual void CloseHandle(CMemoryHandle & rHandle) = 0;
 				virtual void DuplicateHandle(const CMemoryHandle & rSource, CMemoryHandle & rTarget) = 0;
 

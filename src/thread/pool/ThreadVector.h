@@ -25,11 +25,11 @@ namespace pipey {
 
 #if defined(__linux__) || defined(__unix__) 
 				pipey::thread::sync::CDefaultLock m_lock;
-				unsigned long m_nNewThread;
+				uint32_t m_nNewThread;
 #endif		
 
 			public:
-				void AddThread(unsigned long nCount, pipey::thread::IExecutable & rExecutable, void * pParam);
+				void AddThread(uint32_t nCount, pipey::thread::IExecutable & rExecutable, void * pParam);
 
 				bool IsThreadReady();
 

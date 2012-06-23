@@ -17,7 +17,7 @@ namespace pipey {
 				virtual ~ITriableTimerableLock() { };
 
 				/// acquire a lock, and returns SYNC_TIMEOUT if specified time limit is expired.
-				virtual pipey::common::SYNC_RESULT AcquireTimedLock(unsigned long nMilliSeconds = pipey::common::TIME_INFINITE) = 0;
+				virtual pipey::common::SYNC_RESULT AcquireTimedLock(uint32_t nMilliSeconds = pipey::common::TIME_INFINITE) = 0;
 
 				/// try to acquire a lock, and returns SYNC_BUSY immediately if the lock is currently dominated by another thread at that moment.
 				virtual pipey::common::SYNC_RESULT TryLock() = 0;

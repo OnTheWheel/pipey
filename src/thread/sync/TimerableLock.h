@@ -17,7 +17,7 @@ namespace pipey {
 
 
 				/// acquire a lock, and returns SYNC_TIMEOUT if specified time limit is expired.
-				virtual pipey::common::SYNC_RESULT AcquireTimedLock(unsigned long nMilliSeconds = pipey::common::TIME_INFINITE) = 0;
+				virtual pipey::common::SYNC_RESULT AcquireTimedLock(uint32_t nMilliSeconds = pipey::common::TIME_INFINITE) = 0;
 
 			};
 

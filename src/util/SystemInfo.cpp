@@ -9,7 +9,7 @@ namespace pipey {
 
 #if defined(WIN32) || defined(WIN64)
 
-		unsigned long GetNumberOfProcessors()
+		uint32_t GetNumberOfProcessors()
 		{
 			SYSTEM_INFO tSysInfo;
 			GetSystemInfo(&tSysInfo);
@@ -18,9 +18,9 @@ namespace pipey {
 		}
 #elif defined(__linux__) || defined(__unix__)
 
-		unsigned long GetNumberOfProcessors()
+		uint32_t GetNumberOfProcessors()
 		{
-			return (unsigned long)sysconf(_SC_NPROCESSORS_ONLN);
+			return (uint32_t)sysconf(_SC_NPROCESSORS_ONLN);
 		}
 #endif
 

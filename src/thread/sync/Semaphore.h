@@ -16,7 +16,7 @@ namespace pipey {
 				virtual ~ISemaphore() { };
 
 				/// release multiple locks at once.
-				virtual void ReleaseMultiple(unsigned long nCount) = 0;
+				virtual void ReleaseMultiple(uint32_t nCount) = 0;
 
 			};
 

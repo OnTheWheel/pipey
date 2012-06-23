@@ -39,7 +39,7 @@ namespace pipey {
 				/// @return 
 				///			- SYNC_SUCCESS	: the condition variable is signaled-state and return successfully.\n
 				///			- SYNC_TIMEOUT	: operation failed due to time-out.
-				virtual pipey::common::SYNC_RESULT Wait(unsigned long nMilliSeconds = pipey::common::TIME_INFINITE) = 0;
+				virtual pipey::common::SYNC_RESULT Wait(uint32_t nMilliSeconds = pipey::common::TIME_INFINITE) = 0;
 
 				/// try to wait for a condition variable, and returns SYNC_BUSY immediately if the condition variable is not signaled at that moment.
 				/// @return 

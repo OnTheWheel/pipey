@@ -21,9 +21,9 @@ namespace pipey {
 
 			LARGE_INTEGER m_liStart;
 
-			unsigned long m_nPrev;
+			uint32_t m_nPrev;
 
-			unsigned long m_nStart;
+			uint32_t m_nStart;
 
 			bool m_bStarted;
 
@@ -31,9 +31,9 @@ namespace pipey {
 
 
 		public:
-			virtual bool Start(unsigned long * pCurrentMilliseconds = NULL);
+			virtual bool Start(uint32_t * pCurrentMilliseconds = NULL);
 
-			virtual bool Check(unsigned long * pElapsedMilliseconds = NULL);
+			virtual bool Check(uint32_t * pElapsedMilliseconds = NULL);
 
 			virtual bool StartHighFrequency(LARGE_INTEGER * pCurrent = NULL);
 
@@ -41,7 +41,7 @@ namespace pipey {
 
 			virtual bool CheckTotalHighFrequency(LARGE_INTEGER * pTotal);
 
-			virtual bool CheckTotal(unsigned long * pTotalElapsedMilliseconds);
+			virtual bool CheckTotal(uint32_t * pTotalElapsedMilliseconds);
 
 			virtual bool IsHighFrequency() const { return m_bSupportHighFreq; };
 

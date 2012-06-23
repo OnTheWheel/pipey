@@ -31,11 +31,11 @@ namespace pipey {
 
 
 		public:
-			virtual bool Start(uint32_t * pCurrentMilliseconds = NULL);
+			virtual bool Start();
 
 			virtual bool Check(uint32_t * pElapsedMilliseconds = NULL);
 
-			virtual bool StartHighFrequency(LARGE_INTEGER * pCurrent = NULL);
+			virtual bool StartHighFrequency();
 
 			virtual bool CheckHighFrequency(LARGE_INTEGER * pElapsed = NULL);
 

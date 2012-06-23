@@ -14,22 +14,12 @@ CWindowsTimer::~CWindowsTimer()
 
 }
 
-bool CWindowsTimer::Start(uint32_t * pCurrentMilliseconds) 
+bool CWindowsTimer::Start() 
 {
-	if( m_bSupportHighFreq ) {
-		if( pCurrentMilliseconds ) {
-			LARGE_INTEGER current;
-			if( StartHighFrequency(&current) ) {
-				*pCurrentMilliseconds = (uint32_t) ( ( (double)current.QuadPart / (double)m_liFreq.QuadPart ) * 1000 );
-				return ( m_bStarted = true );
-			}
-			else return false;
-		}
-		else return StartHighFrequency();
-	}
+	if( m_bSupportHighFreq )
+		return StartHighFrequency();
 	else if( ! m_bStarted ) {
 		m_nStart = m_nPrev = GetTickCount();
-		if( pCurrentMilliseconds ) *pCurrentMilliseconds = m_nPrev;
 
 		return ( m_bStarted = true );
 	}
@@ -64,12 +54,11 @@ bool CWindowsTimer::Check(uint32_t * pElapsedMilliseconds)
 	return false;
 }
 
-bool CWindowsTimer::StartHighFrequency(LARGE_INTEGER * pCurrent) 
+bool CWindowsTimer::StartHighFrequency() 
 {
 	if( !m_bSupportHighFreq || m_bStarted ) return false;
 
 	QueryPerformanceCounter(&m_liStart);
-	if( pCurrent ) *pCurrent = m_liPrev;
 	m_liPrev = m_liStart;
 
 	return ( m_bStarted = true );

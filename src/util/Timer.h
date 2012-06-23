@@ -10,7 +10,7 @@ namespace pipey {
 
 			virtual ~ITimer() { };
 
-			virtual bool Start(uint32_t * pCurrentMilliseconds = NULL) = 0;
+			virtual bool Start() = 0;
 
 			virtual bool Check(uint32_t * pElapsedMilliseconds = NULL) = 0;
 

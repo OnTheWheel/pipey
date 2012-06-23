@@ -53,7 +53,7 @@ namespace pipey {
 				throw ::pipey::common::exception::EMemoryAllocation("::pipey::common::exception::EMemoryAllocation => CRandomPicker<T>::CRandomPicker - cannot allocate memory space for reference array.");
 			}
 
-			srand( (uint)time(NULL) );
+			srand( (int32_t)time(NULL) );
 		}
 
 		template <typename T>
@@ -82,7 +82,7 @@ namespace pipey {
 			if( m_nSize == 0) 
 				throw ::pipey::common::exception::EOutOfBound("::pipey::common::exception::EOutOfBound => CRandomPicker<T>::Pick() - the picker is empty.");
 
-			int32_r = rand();
+			int32_t r = rand();
 
 			if( RAND_MAX >= m_nSize )
 				return m_pValues[r % m_nSize];

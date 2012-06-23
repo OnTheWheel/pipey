@@ -92,6 +92,7 @@ class CTestCallback : public IJobCallback<CTX_JOB>
 
 int32_t main(int32_t argc, char* argv[])
 {
+	/*
 	char c='c';
 	short sh = -12;
 	int32_t a = 1234;
@@ -134,7 +135,7 @@ int32_t main(int32_t argc, char* argv[])
 	
 
 	return 0;
-	/*
+	
 	int32_b = 0x11223344;
 	int32_a = REVERSE_ORDER32(b);
 	printf("%x %x\n", a, b);
@@ -148,14 +149,14 @@ int32_t main(int32_t argc, char* argv[])
 		puts("big");
 		*/
 
-	/*
+	
 	CContextAwareThreadPool<CTX_JOB> cap;
 	cap.Init();
 
 	CContextAwareThreadPool<CTX_JOB>::CContextHandle contexts[10];
 	CContextAwareThreadPool<CTX_JOB>::CJobHandle jobs[100];
 
-	int32_i;
+	int32_t i;
 	for(i=0;i<10;i++)
 		cap.CreateContext(contexts[i]);
 
@@ -191,8 +192,7 @@ int32_t main(int32_t argc, char* argv[])
 
 	cap.Close();
 
-	*/
-	
+	return 0;
 
 
 	/*

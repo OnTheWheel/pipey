@@ -27,7 +27,7 @@ void CPosixMutex::Init(const LOCK_INIT * pParam)
 		const POSIX_MUTEX_INIT *pInit = dynamic_cast<const POSIX_MUTEX_INIT *>(pParam);
 		if( pInit ) {
 #ifdef _POSIX_THREAD_PROCESS_SHARED
-			int shared = pInit->bProcessShared ? PTHREAD_PROCESS_SHARED : PTHREAD_PROCESS_PRIVATE;
+			int32_t shared = pInit->bProcessShared ? PTHREAD_PROCESS_SHARED : PTHREAD_PROCESS_PRIVATE;
 			pthread_mutexattr_setpshared(&attr, shared);
 #endif
 			pthread_mutexattr_settype(&attr, pInit->nType);
@@ -39,7 +39,7 @@ void CPosixMutex::Init(const LOCK_INIT * pParam)
 		pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
 	}
 
-	int err = pthread_mutex_init(&m_hMutex, &attr);
+	int32_t err = pthread_mutex_init(&m_hMutex, &attr);
 	pthread_mutexattr_destroy(&attr);
 
 	if( err == 0 )
@@ -50,7 +50,7 @@ void CPosixMutex::Init(const LOCK_INIT * pParam)
 SYNC_RESULT CPosixMutex::AcquireLock() 
 {
 	if( m_bInited )	{
-		int err =  pthread_mutex_lock(&m_hMutex);
+		int32_t err =  pthread_mutex_lock(&m_hMutex);
 
 		if( err == 0 )
 			return SYNC_SUCCESS;
@@ -67,7 +67,7 @@ SYNC_RESULT CPosixMutex::AcquireLock()
 void CPosixMutex::ReleaseLock() 
 {
 	if( m_bInited )	{
-		int err = pthread_mutex_unlock(&m_hMutex);
+		int32_t err = pthread_mutex_unlock(&m_hMutex);
 
 		if( err == 0 ) return;
 		else if( err == EINVAL )
@@ -83,7 +83,7 @@ void CPosixMutex::Close() {
 
 	if( m_bInited )	{
 
-		int err = pthread_mutex_destroy(&m_hMutex);
+		int32_t err = pthread_mutex_destroy(&m_hMutex);
 		if( err == 0 ) 
 			m_bInited = false;
 		else if( err == EBUSY ) throw ESync("ESync => CPosixMutex::Close - The mutex is currently locked.");
@@ -95,7 +95,7 @@ void CPosixMutex::Close() {
 SYNC_RESULT CPosixMutex::TryLock() 
 {
 	if( m_bInited )	{
-		int err = pthread_mutex_trylock(&m_hMutex);
+		int32_t err = pthread_mutex_trylock(&m_hMutex);
 		if( err == 0 ) 
 			 return SYNC_SUCCESS;
 		else if( err == EBUSY )
@@ -107,7 +107,7 @@ SYNC_RESULT CPosixMutex::TryLock()
 
 #include "../../util/PosixTimeHelper.h"
 
-SYNC_RESULT CPosixMutex::AcquireTimedLock(unsigned long nMilliSeconds) 
+SYNC_RESULT CPosixMutex::AcquireTimedLock(uint32_t g nMilliSeconds) 
 {
 	if( m_bInited ) {
 
@@ -116,7 +116,7 @@ SYNC_RESULT CPosixMutex::AcquireTimedLock(unsigned long nMilliSeconds)
 
 		timespec term;
 		pipey::util::RelativeToAbsolute(nMilliSeconds, term);
-		int err = pthread_mutex_timedlock(&m_hMutex, &term);
+		int32_t err = pthread_mutex_timedlock(&m_hMutex, &term);
 
 		if( err == 0 )
 			return SYNC_SUCCESS;

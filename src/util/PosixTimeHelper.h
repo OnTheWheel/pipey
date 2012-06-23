@@ -9,12 +9,12 @@ namespace pipey {
 
 		struct timeval_ext : public timeval
 		{
-			unsigned long to_milli_seconds();
+			uint64_t to_milli_seconds();
 		};
 
-		void RelativeToAbsolute(unsigned long nMilliseconds, timespec &rAbsolute);
+		void RelativeToAbsolute(uint32_t nMilliseconds, timespec &rAbsolute);
 
-		unsigned long GetTimeMilliSeconds();
+		uint64_t GetTimeMilliSeconds();
 	}
 }
 

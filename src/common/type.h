@@ -12,10 +12,7 @@
 	typedef unsigned __int32 uint32_t;
 	typedef unsigned __int64 uint64_t;
 #elif defined(__linux__) || defined(__unix__)
-	typedef unsigned int8_t uint8_t;	
-	typedef unsigned int16_t uint16_t;
-	typedef unsigned int32_t uint32_t;
-	typedef unsigned int64_t uint64_t;
+#include <stdint.h>
 #endif
 
 #endif

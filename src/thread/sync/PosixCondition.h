@@ -64,7 +64,7 @@ namespace pipey {
 				/// @param pParam a pointer to POSIX_COND_INIT. Default is NULL.
 				virtual void Init(const CONDITION_INIT * pParam = NULL);
 
-				virtual pipey::common::SYNC_RESULT Wait(unsigned long nMilliSeconds = pipey::common::TIME_INFINITE);
+				virtual pipey::common::SYNC_RESULT Wait(uint32_t nMilliSeconds = pipey::common::TIME_INFINITE);
 
 				virtual pipey::common::SYNC_RESULT Test();
 

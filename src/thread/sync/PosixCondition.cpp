@@ -70,7 +70,7 @@ void CPosixCondition::Init(const CONDITION_INIT * pParam)
 
 #include "../../util/PosixTimeHelper.h"
 
-SYNC_RESULT CPosixCondition::Wait(unsigned long nMilliSeconds) 
+SYNC_RESULT CPosixCondition::Wait(uint32_t32_t nMilliSeconds) 
 {
 	if( m_bInited )	{
 		if( m_bOwnMutex ) {
@@ -78,7 +78,7 @@ SYNC_RESULT CPosixCondition::Wait(unsigned long nMilliSeconds)
 				throw ESync("ESync => CPosixCondition::Wait - Cannot acquire the lock to protect the condition variable.");
 		}
 		
-		int err;
+		int32_t err;
 
 		if ( nMilliSeconds == TIME_INFINITE )
 			err = pthread_cond_wait(&m_hCondition, m_pMutex->GetHandle());
@@ -129,7 +129,7 @@ void CPosixCondition::Close()
 {
 	if( m_bInited ) {
 
-		int err = pthread_cond_destroy(&m_hCondition);
+		int32_t err = pthread_cond_destroy(&m_hCondition);
 		if( err == 0 ) {
 			m_bInited = false;
 			if( m_bOwnMutex ) {

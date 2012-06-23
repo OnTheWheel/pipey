@@ -30,7 +30,7 @@ void CPosixThread::Init(const THREAD_INIT & rInit)
 
 	if( rInit.pExec ) {
 		m_param = rInit;
-		int err = pthread_create(&m_hThread, NULL, PosixThreadFunc, &m_param);
+		int32_t err = pthread_create(&m_hThread, NULL, PosixThreadFunc, &m_param);
 		if( err == 0 ) {
 		    m_bInited = true;
 		    return;
@@ -52,16 +52,15 @@ void CPosixThread::Detach()
     else throw EInvalidState("EInvalidState => CPosixThread::Detach - This thread is not properly initiated.");
 }
 
-SYNC_RESULT CPosixThread::Wait(unsigned long nMilliSeconds) 
+SYNC_RESULT CPosixThread::Wait(uint32_t nMilliSeconds) 
 {
 	if( m_bInited && !m_bDetached)	{
-		int err = pthread_join(m_hThread, NULL);
+		int32_t err = pthread_join(m_hThread, NULL);
 
 		if( err == 0 ) {
 		    m_bDetached = true;
 		    return SYNC_SUCCESS;
 		}
-		//else if( res == WAIT_TIMEOUT ) return SYNC_TIMEOUT;
 		else throw ESync("ESync => CPosixThread::Wait - unknown exception");
 	}
 	else throw EInvalidState("EInvalidState => CPosixThread::Wait - This thread is not properly initiated.");

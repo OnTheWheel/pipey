@@ -70,7 +70,7 @@ void CPosixCondition::Init(const CONDITION_INIT * pParam)
 
 #include "../../util/PosixTimeHelper.h"
 
-SYNC_RESULT CPosixCondition::Wait(uint32_t32_t nMilliSeconds) 
+SYNC_RESULT CPosixCondition::Wait(uint32_t nMilliSeconds) 
 {
 	if( m_bInited )	{
 		if( m_bOwnMutex ) {

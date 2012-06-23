@@ -107,7 +107,7 @@ SYNC_RESULT CPosixMutex::TryLock()
 
 #include "../../util/PosixTimeHelper.h"
 
-SYNC_RESULT CPosixMutex::AcquireTimedLock(uint32_t g nMilliSeconds) 
+SYNC_RESULT CPosixMutex::AcquireTimedLock(uint32_t nMilliSeconds) 
 {
 	if( m_bInited ) {
 

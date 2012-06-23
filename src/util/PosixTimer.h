@@ -17,19 +17,19 @@ namespace pipey {
 
 		private:
 
-			unsigned long m_nPrev;
+			uint64_t m_nPrev;
 
-			unsigned long m_nStart;
+			uint64_t m_nStart;
 
 			bool m_bStarted;
 
 
 		public:
-			virtual bool Start(unsigned long * pCurrentMilliseconds = NULL);
+			virtual bool Start();
 
-			virtual bool Check(unsigned long * pElapsedMilliseconds = NULL);
+			virtual bool Check(uint32_t * pElapsedMilliseconds = NULL);
 
-			virtual bool CheckTotal(unsigned long * pTotalElapsedMilliseconds);
+			virtual bool CheckTotal(uint32_t * pTotalElapsedMilliseconds);
 
 		};
 

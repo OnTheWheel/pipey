@@ -3,6 +3,10 @@
 
 using namespace pipey::util;
 
+#ifndef UINT64_MAX
+#define UINT64_MAX 0xFFFFFFFFFFFFFFFFLL
+#endif
+
 CPosixTimer::CPosixTimer() :
 m_bStarted(false),
 m_nPrev(0),
@@ -16,11 +20,10 @@ CPosixTimer::~CPosixTimer()
 
 }
 
-bool CPosixTimer::Start(unsigned long * pCurrentMilliseconds) 
+bool CPosixTimer::Start() 
 {
 	if( ! m_bStarted ) {
 		m_nStart = m_nPrev = GetTimeMilliSeconds();
-		if( pCurrentMilliseconds ) *pCurrentMilliseconds = m_nPrev;
 
 		return ( m_bStarted = true );
 	}
@@ -28,13 +31,13 @@ bool CPosixTimer::Start(unsigned long * pCurrentMilliseconds)
 	return false;
 }
 
-bool CPosixTimer::Check(unsigned long * pElapsedMilliseconds) 
+bool CPosixTimer::Check(uint32_t * pElapsedMilliseconds) 
 {
 	if( m_bStarted ) {
-		unsigned long current = GetTimeMilliSeconds();;
+		uint64_t current = GetTimeMilliSeconds();;
 		if( pElapsedMilliseconds ) {
 			if( current < m_nPrev )
-				*pElapsedMilliseconds = 0xFFFFFFFF - m_nPrev + current;
+				*pElapsedMilliseconds = UINT64_MAX - m_nPrev + current;
 			else *pElapsedMilliseconds = current - m_nPrev;
 		}
 		m_nPrev = current;
@@ -44,15 +47,15 @@ bool CPosixTimer::Check(unsigned long * pElapsedMilliseconds)
 	return false;
 }
 
-bool CPosixTimer::CheckTotal(unsigned long * pTotalElapsedMilliseconds) 
+bool CPosixTimer::CheckTotal(uint32_t* pTotalElapsedMilliseconds) 
 {
 	if( ! pTotalElapsedMilliseconds ) return false;
 	
 	if( m_bStarted ) {
-		unsigned long current = GetTimeMilliSeconds();
+		uint64_t current = GetTimeMilliSeconds();
 		
 		if( current < m_nStart )
-			*pTotalElapsedMilliseconds = 0xFFFFFFFF - m_nStart + current;
+			*pTotalElapsedMilliseconds = UINT64_MAX - m_nStart + current;
 		else *pTotalElapsedMilliseconds = current - m_nStart;
 		
 		return true;

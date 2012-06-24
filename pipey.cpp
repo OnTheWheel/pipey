@@ -179,9 +179,9 @@ int32_t main(int32_t argc, char* argv[])
 	}
 
 #if defined(WIN32) || defined(WIN64)
-	::Sleep(20000);
+	::Sleep(30000);
 #elif defined(__linux__) || defined(__unix__)
-	sleep(20);
+	sleep(30);
 #endif
 
 	for(i=0;i<10;i++)

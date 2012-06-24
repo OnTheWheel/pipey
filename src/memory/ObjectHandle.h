@@ -57,9 +57,13 @@ namespace pipey {
 			const CObjectHandle<T> & operator =(const CObjectHandle<T> & rhs)
 			{
 
-				if( rhs )
-					m_pManipulator->DuplicateHandle(rhs, *this);
-				return *this;
+				if( rhs ) {
+					if( IsValid() )
+						CloseHandle();
+					rhs.m_pManipulator->DuplicateHandle(rhs, *this);
+					
+					return *this;
+				}
 			}
 
 			bool CloseHandle()

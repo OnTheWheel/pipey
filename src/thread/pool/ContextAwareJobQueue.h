@@ -158,7 +158,7 @@ namespace pipey {
 				while( iter != m_contexts.end() ) {
 				
 					CleanupContext(*iter);
-					iter++;
+					iter = m_contexts.begin();
 				}
 				m_contexts.clear();
 			}

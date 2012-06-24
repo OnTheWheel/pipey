@@ -156,15 +156,22 @@ int32_t main(int32_t argc, char* argv[])
 	CContextAwareThreadPool<CTX_JOB>::CContextHandle contexts[10];
 	CContextAwareThreadPool<CTX_JOB>::CJobHandle jobs[100];
 
+	CContextAwareThreadPool<CTX_JOB>::CContextHandle dup_contexts[10];
+	CContextAwareThreadPool<CTX_JOB>::CJobHandle dup_jobs[100];
+
 	int32_t i;
 	for(i=0;i<10;i++)
+	{
 		cap.CreateContext(contexts[i]);
+		dup_contexts[i] = contexts[i];
+	}
 
 	for(i=0;i<100;i++){
 		CTX_JOB job;
 		job.ctx = i%10;
 		job.job = i/10;
 		cap.PushJob(contexts[i%10], job, &callback, jobs+i);
+		cap.DuplicateHandle(jobs[i], dup_jobs[i]);
 	}
 
 #if defined(WIN32) || defined(WIN64)
@@ -178,17 +185,17 @@ int32_t main(int32_t argc, char* argv[])
 			cap.CancelJob(jobs[i]);
 	}
 
-#if defined(WIN32) || defined(WIN64)
-	::Sleep(30000);
-#elif defined(__linux__) || defined(__unix__)
-	sleep(30);
-#endif
-
 	for(i=0;i<10;i++)
 		cap.CloseHandle(contexts[i]);
 
 	for(i=0;i<100;i++)
 		cap.CloseHandle(jobs[i]);
+
+#if defined(WIN32) || defined(WIN64)
+	::Sleep(60000);
+#elif defined(__linux__) || defined(__unix__)
+	sleep(60);
+#endif
 
 	cap.Close();
 

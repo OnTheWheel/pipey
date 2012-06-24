@@ -55,14 +55,11 @@ namespace pipey {
 				virtual char ReadChar();
 				virtual unsigned char ReadUnsignedChar();
 
-				virtual short ReadShort();
-				virtual unsigned short ReadUnsignedShort();
+				virtual int16_t ReadInteger16();
+				virtual uint16_t ReadUnsignedInteger16();
 
-				virtual int32_t ReadInt();
-				virtual uint32_t ReadUnsignedInt();
-
-				virtual int32_t ReadLong();
-				virtual uint32_t ReadUnsignedLong();
+				virtual int32_t ReadInteger32();
+				virtual uint32_t ReadUnsignedInteger32();
 
 				virtual int64_t ReadInteger64();
 				virtual uint64_t ReadUnsignedInteger64();
@@ -80,14 +77,11 @@ namespace pipey {
 				virtual char GetChar(const uint32_t &nIndex) const;
 				virtual unsigned char GetUnsignedChar(const uint32_t &nIndex) const;
 
-				virtual short GetShort(const uint32_t &nIndex) const;
-				virtual unsigned short GetUnsignedShort(const uint32_t &nIndex) const;
+				virtual int16_t GetInteger16(const uint32_t &nIndex) const;
+				virtual uint16_t GetUnsignedInteger16(const uint32_t &nIndex) const;
 
-				virtual int32_t GetInt(const uint32_t &nIndex) const;
-				virtual uint32_t GetUnsignedInt(const uint32_t &nIndex) const;
-
-				virtual int32_t GetLong(const uint32_t &nIndex) const;
-				virtual uint32_t GetUnsignedLong(const uint32_t &nIndex) const;
+				virtual int32_t GetInteger32(const uint32_t &nIndex) const;
+				virtual uint32_t GetUnsignedInteger32(const uint32_t &nIndex) const;
 
 				virtual int64_t GetInteger64(const uint32_t &nIndex) const;
 				virtual uint64_t GetUnsignedInteger64(const uint32_t &nIndex) const;
@@ -105,14 +99,11 @@ namespace pipey {
 				virtual void WriteChar(const char &value);
 				virtual void WriteUnsignedChar(const unsigned char &value);
 
-				virtual void WriteShort(const short &value);
-				virtual void WriteUnsignedShort(const unsigned short &value);
+				virtual void WriteInteger16(const int16_t &value);
+				virtual void WriteUnsignedInteger16(const uint16_t &value);
 
-				virtual void WriteInt(const int32_t &value);
-				virtual void WriteUnsignedInt(const uint32_t &value);
-
-				virtual void WriteLong(const int32_t &value);
-				virtual void WriteUnsignedLong(const uint32_t &value);
+				virtual void WriteInteger32(const int32_t &value);
+				virtual void WriteUnsignedInteger32(const uint32_t &value);
 
 				virtual void WriteInteger64(const int64_t &value);
 				virtual void WriteUnsignedInteger64(const uint64_t &value);
@@ -132,14 +123,11 @@ namespace pipey {
 				virtual void SetChar(const uint32_t &nIndex, const char &value);
 				virtual void SetUnsignedChar(const uint32_t &nIndex, const unsigned char &value);
 
-				virtual void SetShort(const uint32_t &nIndex, const short &value);
-				virtual void SetUnsignedShort(const uint32_t &nIndex, const unsigned short &value);
+				virtual void SetInteger16(const uint32_t &nIndex, const int16_t &value);
+				virtual void SetUnsignedInteger16(const uint32_t &nIndex, const uint16_t &value);
 
-				virtual void SetInt(const uint32_t &nIndex, const int32_t &value);
-				virtual void SetUnsignedInt(const uint32_t &nIndex, const uint32_t &value);
-
-				virtual void SetLong(const uint32_t &nIndex, const int32_t &value);
-				virtual void SetUnsignedLong(const uint32_t &nIndex, const uint32_t &value);
+				virtual void SetInteger32(const uint32_t &nIndex, const int32_t &value);
+				virtual void SetUnsignedInteger32(const uint32_t &nIndex, const uint32_t &value);
 
 				virtual void SetInteger64(const uint32_t &nIndex, const int64_t &value);
 				virtual void SetUnsignedInteger64(const uint32_t &nIndex, const uint64_t &value);

@@ -92,9 +92,9 @@ class CTestCallback : public IJobCallback<CTX_JOB>
 
 int32_t main(int32_t argc, char* argv[])
 {
-	/*
+	
 	char c='c';
-	short sh = -12;
+	int16_t sh = -12;
 	int32_t a = 1234;
 	uint32_t ul=3456;
 	char *str = "buffer test";
@@ -102,23 +102,23 @@ int32_t main(int32_t argc, char* argv[])
 	float f = -1242.15f;
 	double d = -45624.453532;
 	CBasicMemoryPool pool;
-	CFixedBuffer buf(400, BYTE_BIG_ENDIAN, &pool);
+	CFixedBuffer buf(400, BYTE_LITTLE_ENDIAN, &pool);
 
 	cout<< sizeof(ul) <<endl;
 	try {
 		buf.WriteChar(c);
-		buf.WriteShort(sh);
-		buf.WriteInt(a);
-		buf.WriteUnsignedLong(ul);
+		buf.WriteInteger16(sh);
+		buf.WriteInteger32(a);
+		buf.WriteUnsignedInteger32(ul);
 		buf.WriteString(str);
 		buf.WriteUnsignedInteger64(i64);
 		buf.WriteFloat(f);
 		buf.WriteDouble(d);
 
 		cout << buf.ReadChar() <<endl;
-		cout << buf.ReadShort() <<endl;
-		cout << buf.ReadInt() <<endl;
-		cout << buf.ReadUnsignedLong() <<endl;
+		cout << buf.ReadInteger16() <<endl;
+		cout << buf.ReadInteger32() <<endl;
+		cout << buf.ReadUnsignedInteger32() <<endl;
 
 		char strbuf[100];
 		buf.ReadString(strbuf, 100);
@@ -133,9 +133,8 @@ int32_t main(int32_t argc, char* argv[])
 	uint64_t aasf;
 
 	
-
 	return 0;
-	
+/*	
 	int32_b = 0x11223344;
 	int32_a = REVERSE_ORDER32(b);
 	printf("%x %x\n", a, b);
@@ -147,9 +146,10 @@ int32_t main(int32_t argc, char* argv[])
 		puts("little");
 	else if(GetSystemByteOrder() == BYTE_BIG_ENDIAN)
 		puts("big");
-		*/
 
-	
+*/
+
+/*	
 	CContextAwareThreadPool<CTX_JOB> cap;
 	cap.Init();
 
@@ -216,7 +216,7 @@ int32_t main(int32_t argc, char* argv[])
 
 	return 0;
 
-
+*/
 	/*
 	pipey::util::CRandomPicker<int> picker(20);
 

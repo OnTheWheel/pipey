@@ -159,7 +159,7 @@ namespace pipey {
 				while( iter != m_contexts.end() ) {
 				
 					if( (*iter)->nHandle == 0 ){
-						::std::list< CONTEXT_INFO<T>* >::iterator toDelete = iter;
+						typename ::std::list< CONTEXT_INFO<T>* >::iterator toDelete = iter;
 						iter++;
 						CleanupContext(*toDelete);
 					} else iter++;

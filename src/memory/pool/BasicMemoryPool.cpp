@@ -27,6 +27,7 @@ void CBasicMemoryPool::Release(CMemoryHandle &rHandle)
 			BASIC_BUF_INFO *pBuffer = (BASIC_BUF_INFO *)GetHandleTarget(rHandle);
 			if( pBuffer->bValid ){
 				free(pBuffer->pBuffer);
+				m_buffers.erase(pBuffer->iter);
 				pBuffer->bValid = false;
 			} else throw EInvalidState("EInvalidState => CBasicMemoryPool::Release - memory area is already released.");
 		} else throw EInvalidParameter("EInvalidParameter => CBasicMemoryPool::Release - Specified memory handle is owned by another memory pool.");
@@ -40,9 +41,10 @@ void CBasicMemoryPool::CloseHandle(CMemoryHandle &rHandle)
 			BASIC_BUF_INFO *pBuffer = (BASIC_BUF_INFO *)GetHandleTarget(rHandle);
 			pBuffer->nHandle--;
 			if( pBuffer->nHandle == 0 ){
-				if( pBuffer->bValid )
+				if( pBuffer->bValid ) {
 					free(pBuffer->pBuffer);
-				m_buffers.erase(pBuffer->iter);
+					m_buffers.erase(pBuffer->iter);
+				}
 				delete pBuffer;
 			}
 			NullifyHandle(rHandle);

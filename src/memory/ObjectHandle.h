@@ -63,7 +63,7 @@ namespace pipey {
 					rhs.m_pManipulator->DuplicateHandle(rhs, *this);
 					
 					return *this;
-				}
+				} else throw ::pipey::common::exception::EInvalidParameter("EInvalidParameter => CObjectHandle::operator= - Specified handle(rhs) is not valid.");
 			}
 
 			bool CloseHandle()

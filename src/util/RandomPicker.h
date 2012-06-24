@@ -41,16 +41,16 @@ namespace pipey {
 		m_nInitialCapacity(nCapacity), m_nCapacity(nCapacity), m_nSize(0), m_pValues(NULL), m_pReferences(NULL)
 		{
 			if( nCapacity == 0 )
-				throw ::pipey::common::exception::EInvalidParameter("::pipey::common::exception::EInvalidParameter => CRandomPicker<T>::CRandomPicker - capacity cannot be zero.");
+				throw ::pipey::common::exception::EInvalidParameter("EInvalidParameter => CRandomPicker<T>::CRandomPicker - capacity cannot be zero.");
 
 			m_pValues = (T *)malloc(sizeof(T)*m_nCapacity);
 			if( m_pValues == NULL )
-				throw ::pipey::common::exception::EMemoryAllocation("::pipey::common::exception::EMemoryAllocation => CRandomPicker<T>::CRandomPicker - cannot allocate memory space for value array.");
+				throw ::pipey::common::exception::EMemoryAllocation("EMemoryAllocation => CRandomPicker<T>::CRandomPicker - cannot allocate memory space for value array.");
 
 			m_pReferences = (uint32_t * *)malloc(sizeof(uint32_t *)*m_nCapacity);
 			if( m_pReferences == NULL ) {
 				free( m_pValues );
-				throw ::pipey::common::exception::EMemoryAllocation("::pipey::common::exception::EMemoryAllocation => CRandomPicker<T>::CRandomPicker - cannot allocate memory space for reference array.");
+				throw ::pipey::common::exception::EMemoryAllocation("EMemoryAllocation => CRandomPicker<T>::CRandomPicker - cannot allocate memory space for reference array.");
 			}
 
 			srand( (int32_t)time(NULL) );
@@ -80,7 +80,7 @@ namespace pipey {
 		T& CRandomPicker<T>::Pick()
 		{
 			if( m_nSize == 0) 
-				throw ::pipey::common::exception::EOutOfBound("::pipey::common::exception::EOutOfBound => CRandomPicker<T>::Pick() - the picker is empty.");
+				throw ::pipey::common::exception::EOutOfBound("EOutOfBound => CRandomPicker<T>::Pick() - the picker is empty.");
 
 			int32_t r = rand();
 
@@ -97,7 +97,7 @@ namespace pipey {
 		void CRandomPicker<T>::Delete(uint32_t reference)
 		{
 			if( reference >= m_nSize ) 
-				throw ::pipey::common::exception::EInvalidParameter("::pipey::common::exception::EInvalidParameter => CRandomPicker<T>::Delete() - reference is invalid.");
+				throw ::pipey::common::exception::EInvalidParameter("EInvalidParameter => CRandomPicker<T>::Delete() - reference is invalid.");
 
 			if( m_pReferences[m_nSize-1] )
 				*m_pReferences[m_nSize-1] = reference;
@@ -132,16 +132,16 @@ namespace pipey {
 		void CRandomPicker<T>::GrowCapacity(uint32_t nGrow)
 		{
 			if( nGrow == 0 )
-				throw ::pipey::common::exception::EInvalidParameter("::pipey::common::exception::EInvalidParameter => CRandomPicker<T>::GrowCapacity() - nGrow cannot be zero.");
+				throw ::pipey::common::exception::EInvalidParameter("EInvalidParameter => CRandomPicker<T>::GrowCapacity() - nGrow cannot be zero.");
 
 			T *pValues = (T *)malloc( sizeof(T)*(m_nCapacity+nGrow) );
 			if( pValues == NULL )
-				throw ::pipey::common::exception::EMemoryAllocation("::pipey::common::exception::EMemoryAllocation => CRandomPicker<T>::GrowCapacity() - cannot allocate memory space for value array.");
+				throw ::pipey::common::exception::EMemoryAllocation("EMemoryAllocation => CRandomPicker<T>::GrowCapacity() - cannot allocate memory space for value array.");
 
 			uint32_t **pReferences = (uint32_t * *)malloc( sizeof(uint32_t *)*(m_nCapacity+nGrow) );
 			if( pReferences == NULL ) {
 				free( pValues );
-				throw ::pipey::common::exception::EMemoryAllocation("::pipey::common::exception::EMemoryAllocation => CRandomPicker<T>::GrowCapacity() - cannot allocate memory space for reference array.");
+				throw ::pipey::common::exception::EMemoryAllocation("EMemoryAllocation => CRandomPicker<T>::GrowCapacity() - cannot allocate memory space for reference array.");
 			}
 
 			for(uint32_t i=0; i<m_nSize; i++) {

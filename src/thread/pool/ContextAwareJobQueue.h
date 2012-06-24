@@ -29,6 +29,7 @@ namespace pipey {
 				CONTEXT_INFO<T>* CreateContext();
 				
 				void CleanupContext(CONTEXT_INFO<T> *pContext);
+				void CleanupZombieContexts();
 
 				virtual void CleanupAll();
 
@@ -81,7 +82,7 @@ namespace pipey {
 						m_runnableContexts.Put(pContext, &pContext->nPickerReference);
 
 					return pResult;
-				} else throw ::pipey::common::exception::EInvalidParameter("pipey::common::exception::EInvalidParameter => CContextAwareJobQueue<T>::Push() - context cannot be NULL.");
+				} else throw ::pipey::common::exception::EInvalidParameter("EInvalidParameter => CContextAwareJobQueue<T>::Push() - context cannot be NULL.");
 			}
 
 			template <typename T>
@@ -93,7 +94,7 @@ namespace pipey {
 					pContext->pRunningJob = pContext->queue.Pop();
 					
 					return pContext->pRunningJob;
-				} else throw ::pipey::common::exception::EOutOfBound("pipey::common::exception::EOutOfBound => CContextAwareJobQueue<T, INFO>::Pop() - The queue is not popable.");
+				} else throw ::pipey::common::exception::EOutOfBound("EOutOfBound => CContextAwareJobQueue<T, INFO>::Pop() - The queue is not popable.");
 			}
 
 			template <typename T>
@@ -148,7 +149,21 @@ namespace pipey {
 					if( pContext->nHandle == 0 )
 						delete pContext;
 
-				} else throw ::pipey::common::exception::EInvalidParameter("pipey::common::exception::EInvalidParameter => CContextAwareJobQueue<T>::CleanupContext() - context cannot be NULL.");
+				} else throw ::pipey::common::exception::EInvalidParameter("EInvalidParameter => CContextAwareJobQueue<T>::CleanupContext() - context cannot be NULL.");
+			}
+
+			template <typename T>
+			void CContextAwareJobQueue<T>::CleanupZombieContexts()
+			{
+				typename ::std::list< CONTEXT_INFO<T>* >::iterator iter = m_contexts.begin();
+				while( iter != m_contexts.end() ) {
+				
+					if( (*iter)->nHandle == 0 ){
+						::std::list< CONTEXT_INFO<T>* >::iterator toDelete = iter;
+						iter++;
+						CleanupContext(*toDelete);
+					} else iter++;
+				}
 			}
 
 			template <typename T>

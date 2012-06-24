@@ -186,10 +186,25 @@ int32_t main(int32_t argc, char* argv[])
 	}
 
 	for(i=0;i<10;i++)
+	{
 		cap.CloseHandle(contexts[i]);
+		if(i==7)
+			cap.CloseHandle(dup_contexts[i]);
+	}
 
 	for(i=0;i<100;i++)
+	{
 		cap.CloseHandle(jobs[i]);
+		if(i/10 ==8)
+			cap.CloseHandle(dup_jobs[i]);
+	}
+
+#if defined(WIN32) || defined(WIN64)
+	::Sleep(4000);
+#elif defined(__linux__) || defined(__unix__)
+	sleep(4);
+#endif
+	cap.CloseZombieContexts();
 
 #if defined(WIN32) || defined(WIN64)
 	::Sleep(60000);

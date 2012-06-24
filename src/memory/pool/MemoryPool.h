@@ -7,9 +7,20 @@ namespace pipey {
 	namespace memory {
 		namespace pool {
 
-			typedef ::pipey::memory::CObjectHandle<char> CMemoryHandle;
+			struct BUF_INFO
+			{
+				BUF_INFO(char *pBuffer)
+					:bValid(true), nHandle(1), pBuffer(pBuffer)
+				{ }
 
-			class IMemoryPool : public ::pipey::memory::IHandleManipulator<char>
+				bool bValid;
+				uint32_t nHandle;
+				char *pBuffer;
+			};
+
+			typedef ::pipey::memory::CObjectHandle<BUF_INFO> CMemoryHandle;
+
+			class IMemoryPool : public ::pipey::memory::IHandleManipulator<BUF_INFO>
 			{
 			public:
 				IMemoryPool(void) { };
@@ -17,6 +28,8 @@ namespace pipey {
 
 			public:
 				virtual void Allocate(uint32_t nSize, CMemoryHandle &rHandle) = 0;
+				virtual void Release(CMemoryHandle &rHandle) = 0;
+
 				virtual void CloseHandle(CMemoryHandle & rHandle) = 0;
 				virtual void DuplicateHandle(const CMemoryHandle & rSource, CMemoryHandle & rTarget) = 0;
 

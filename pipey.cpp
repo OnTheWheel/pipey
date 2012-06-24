@@ -104,7 +104,7 @@ int32_t main(int32_t argc, char* argv[])
 	CBasicMemoryPool pool;
 	CFixedBuffer buf(400, BYTE_LITTLE_ENDIAN, &pool);
 
-	cout<< sizeof(ul) <<endl;
+	cout<< sizeof(size_t) <<endl;
 	try {
 		buf.WriteChar(c);
 		buf.WriteInteger16(sh);

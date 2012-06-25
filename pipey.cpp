@@ -17,6 +17,7 @@
 //#include "src/thread/sync/WindowsCritricalSection.h"
 #include "src/util/DefaultTimer.h"
 #include "src/util/ByteOrder.h"
+#include "src/util/TimeHelper.h"
 #include "src/memory/pool/BasicMemoryPool.h"
 #include "src/memory/buffer/FixedBuffer.h"
 //#include "src/util/RandomPicker.h"
@@ -74,11 +75,8 @@ class CTestCallback : public IJobCallback<CTX_JOB>
 			ws+="   ";
 		cout<<ws.c_str()<<job.ctx<<"{"<<job.job<<endl;
 
-#if defined(WIN32) || defined(WIN64)
-		::Sleep(1000);
-#elif defined(__linux__) || defined(__unix__)
-		sleep(1);
-#endif
+		SleepSeconds(1);
+
 		cout<<ws.c_str()<<job.ctx<<"}"<<job.job<<endl;
 	}
 
@@ -92,7 +90,7 @@ class CTestCallback : public IJobCallback<CTX_JOB>
 
 int32_t main(int32_t argc, char* argv[])
 {
-	
+	/*
 	char c='c';
 	int16_t sh = -12;
 	int32_t a = 1234;
@@ -133,7 +131,7 @@ int32_t main(int32_t argc, char* argv[])
 	uint64_t aasf;
 
 	
-	return 0;
+	return 0;*/
 /*	
 	int32_b = 0x11223344;
 	int32_a = REVERSE_ORDER32(b);
@@ -149,7 +147,7 @@ int32_t main(int32_t argc, char* argv[])
 
 */
 
-/*	
+
 	CContextAwareThreadPool<CTX_JOB> cap;
 	cap.Init();
 
@@ -174,11 +172,7 @@ int32_t main(int32_t argc, char* argv[])
 		cap.DuplicateHandle(jobs[i], dup_jobs[i]);
 	}
 
-#if defined(WIN32) || defined(WIN64)
-	::Sleep(1000);
-#elif defined(__linux__) || defined(__unix__)
-	sleep(1);
-#endif
+	SleepSeconds(1);
 
 	for(i=0;i<100;i++){
 		if(i/10 == 5)
@@ -199,24 +193,15 @@ int32_t main(int32_t argc, char* argv[])
 			cap.CloseHandle(dup_jobs[i]);
 	}
 
-#if defined(WIN32) || defined(WIN64)
-	::Sleep(4000);
-#elif defined(__linux__) || defined(__unix__)
-	sleep(4);
-#endif
-	cap.CloseZombieContexts();
+	//cap.CloseZombieContexts();
 
-#if defined(WIN32) || defined(WIN64)
-	::Sleep(60000);
-#elif defined(__linux__) || defined(__unix__)
-	sleep(60);
-#endif
+	SleepSeconds(60);
 
 	cap.Close();
 
 	return 0;
 
-*/
+
 	/*
 	pipey::util::CRandomPicker<int> picker(20);
 

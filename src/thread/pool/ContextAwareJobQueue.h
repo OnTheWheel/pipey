@@ -29,7 +29,7 @@ namespace pipey {
 				CONTEXT_INFO<T>* CreateContext();
 				
 				void CleanupContext(CONTEXT_INFO<T> *pContext);
-				void CleanupZombieContexts();
+				//void CleanupZombieContexts();
 
 				virtual void CleanupAll();
 
@@ -152,7 +152,7 @@ namespace pipey {
 				} else throw ::pipey::common::exception::EInvalidParameter("EInvalidParameter => CContextAwareJobQueue<T>::CleanupContext() - context cannot be NULL.");
 			}
 
-			template <typename T>
+			/*template <typename T>
 			void CContextAwareJobQueue<T>::CleanupZombieContexts()
 			{
 				typename ::std::list< CONTEXT_INFO<T>* >::iterator iter = m_contexts.begin();
@@ -164,7 +164,7 @@ namespace pipey {
 						CleanupContext(*toDelete);
 					} else iter++;
 				}
-			}
+			}*/
 
 			template <typename T>
 			void CContextAwareJobQueue<T>::CleanupAll()

@@ -31,7 +31,7 @@ namespace pipey {
 
 				void CreateContext(::pipey::memory::CObjectHandle< CONTEXT_INFO<T> > & rHandle);
 				void CloseContext(::pipey::memory::CObjectHandle< CONTEXT_INFO<T> > & rHandle);
-				void CloseZombieContexts();
+				//void CloseZombieContexts();
 
 				virtual void CloseHandle(::pipey::memory::CObjectHandle< CONTEXT_INFO<T> > & rHandle);
 				virtual void DuplicateHandle(const ::pipey::memory::CObjectHandle< CONTEXT_INFO<T> > & rSource, ::pipey::memory::CObjectHandle< CONTEXT_INFO<T> > & rTarget);
@@ -137,7 +137,7 @@ namespace pipey {
 				} else throw ::pipey::common::exception::EInvalidState("EInvalidState => CContextAwareThreadPool::CloseContext - This thread pool is not properly initiated.");
 			}
 
-			template <typename T>
+			/*template <typename T>
 			void CContextAwareThreadPool<T>::CloseZombieContexts()
 			{
 				if( IBaseThreadPool<T, CONTEXT_JOB_INFO<T> >::IsInited() ) {
@@ -148,7 +148,7 @@ namespace pipey {
 					pQueue->CleanupZombieContexts();
 					
 				} else throw ::pipey::common::exception::EInvalidState("EInvalidState => CContextAwareThreadPool::CloseZombieContexts - This thread pool is not properly initiated.");
-			}
+			}*/
 
 			template <typename T>
 			void CContextAwareThreadPool<T>::CloseHandle(::pipey::memory::CObjectHandle< CONTEXT_INFO<T> > &rHandle)
@@ -161,9 +161,12 @@ namespace pipey {
 						if( pipey::memory::IHandleManipulator< CONTEXT_INFO<T> >::IsMine(rHandle) ) {
 							CONTEXT_INFO<T> *pContext = pipey::memory::IHandleManipulator< CONTEXT_INFO<T> >::GetHandleTarget(rHandle);
 							pContext->nHandle--;
-							
 							pipey::memory::IHandleManipulator< CONTEXT_INFO<T> >::NullifyHandle(rHandle);
-
+							
+							if( pContext->nHandle == 0 ) {
+								CContextAwareJobQueue<T> *pQueue = (CContextAwareJobQueue<T> *)IBaseThreadPool<T, CONTEXT_JOB_INFO<T> >::GetJobQueue();
+								pQueue->CleanupContext(pContext);
+							}
 						} else throw ::pipey::common::exception::EInvalidParameter("EInvalidParameter => CContextAwareThreadPool::CloseHandle - Specified context handle is owned by another thread pool.");
 					} else throw ::pipey::common::exception::EInvalidParameter("EInvalidParameter => CContextAwareThreadPool::CloseHandle - Specified context handle is not properly initiated.");
 				} else throw ::pipey::common::exception::EInvalidState("EInvalidState => CContextAwareThreadPool::CloseHandle - This thread pool is not properly initiated.");

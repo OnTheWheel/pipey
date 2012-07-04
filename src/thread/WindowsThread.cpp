@@ -65,12 +65,12 @@ void CWindowsThread::Detach()
 	else throw EInvalidState("EInvalidState => CWindowsThread::Detach - This thread is already detached or not properly initiated.");
 }
 
-SYNC_RESULT CWindowsThread::Wait(uint32_t nMilliSeconds) 
+SYNC_RESULT CWindowsThread::Wait() 
 {
 
 	if( m_bInited && !m_bDetached) {
 		__try {
-			DWORD res = ::WaitForSingleObject(m_hThread, nMilliSeconds);
+			DWORD res = ::WaitForSingleObject(m_hThread, ::pipey::common::TIME_INFINITE);
 
 			if( res == WAIT_OBJECT_0) return SYNC_SUCCESS;
 			else if( res == WAIT_TIMEOUT ) return SYNC_TIMEOUT;

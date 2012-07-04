@@ -23,7 +23,7 @@ namespace pipey {
 
 			virtual void Detach() = 0;
 
-			virtual pipey::common::SYNC_RESULT Wait(uint32_t nTimeout = pipey::common::TIME_INFINITE) = 0;
+			virtual pipey::common::SYNC_RESULT Wait() = 0;
 		};
 	}
 }

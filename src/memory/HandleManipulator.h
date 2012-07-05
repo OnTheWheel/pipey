@@ -11,7 +11,7 @@ namespace pipey {
 		public:
 			IHandleManipulator(void ) { }
 
-			~IHandleManipulator(void ) { }
+			virtual ~IHandleManipulator(void ) { }
 
 			virtual void CloseHandle(CObjectHandle<T> & rHandle) = 0;
 

@@ -80,8 +80,8 @@ uint32_t CFixedBuffer::GetReadableLength() const
 
 IO_BUFFER *CFixedBuffer::GetIOBuffer()
 {
-	m_scatteredBuffer.buf = m_pBuffer + m_nReadIndex;
-	m_scatteredBuffer.len = m_nWriteIndex - m_nReadIndex;
+	m_scatteredBuffer.SetBuffer( m_pBuffer + m_nReadIndex );
+	m_scatteredBuffer.SetSize( m_nWriteIndex - m_nReadIndex );
 	return &m_ioBuffer;
 }
 

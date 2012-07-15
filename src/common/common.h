@@ -8,18 +8,22 @@
 #ifndef PIPEY_COMMON_H
 #define PIPEY_COMMON_H
 
-#include "type.h"
-#include "./exception/exceptions.h"
-#include "constant.h"
-#include "macro.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #if defined(WIN32) || defined(WIN64)
-#include <windows.h>
+#include <Winsock2.h>
+#elif defined(__linux__) || defined(__unix__)
+#include <sys/uio.h>
 #endif
+
+#include "type.h"
+#include "./exception/exceptions.h"
+#include "constant.h"
+#include "macro.h"
+
+
 
 #endif
  

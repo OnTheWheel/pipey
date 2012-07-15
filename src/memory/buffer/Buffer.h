@@ -4,6 +4,7 @@
 #include "../../common/common.h"
 #include "../../util/ByteOrder.h"
 #include "../pool/MemoryPool.h"
+#include "scattered_buffer.h"
 
 namespace pipey {
 	namespace memory {

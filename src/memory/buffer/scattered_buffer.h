@@ -27,7 +27,7 @@ namespace pipey {
 			};
 
 #elif defined(__linux__) || defined(__unix__)
-			struct SCATTERED_BUFFER : public iovector {
+			struct SCATTERED_BUFFER : public iovec {
 
 				size_t GetSize() {
 					return iov_len;

@@ -7,6 +7,7 @@ namespace pipey {
 	namespace util {
 
 		void SleepSeconds(uint32_t nSeconds);
+		void SleepMilliseconds(uint32_t nMilliseconds);
 
 	}
 }

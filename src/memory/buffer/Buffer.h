@@ -9,6 +9,11 @@ namespace pipey {
 	namespace memory {
 		namespace buffer {
 
+			struct IO_BUFFER {
+				SCATTERED_BUFFER *pBuffer;
+				uint32_t nBuffer;
+			};
+
 			class IBuffer
 			{
 			public:
@@ -21,6 +26,8 @@ namespace pipey {
 				virtual uint32_t GetReadIndex() const = 0;
 				virtual uint32_t GetWriteIndex() const = 0;
 				virtual uint32_t GetReadableLength() const = 0;
+
+				virtual IO_BUFFER *GetIOBuffer() = 0;
 
 				virtual const ::pipey::memory::pool::CMemoryHandle &GetMemoryHandle() const = 0;
 				virtual ::pipey::memory::pool::IMemoryPool *GetMemoryPool() const = 0;

@@ -124,7 +124,7 @@ namespace pipey {
 			void IBaseThreadPool<T,INFO>::Init(uint32_t nMinThread, uint32_t nMaxThread, uint32_t nActiveThread)
 			{
 				if( m_data.m_bInited ) 
-					throw ::pipey::common::exception::EInvalidState("EInvalidState => IBaseThreadPool<T,INFO>::Init - This thread pool is not already initiated.");
+					throw ::pipey::common::exception::EInvalidState("EInvalidState => IBaseThreadPool<T,INFO>::Init - This thread pool is already initiated.");
 
 				if( nMinThread == 0 || nMaxThread == 0 || nActiveThread == 0 ) {
 					nActiveThread = nMinThread = ::pipey::util::GetNumberOfProcessors();

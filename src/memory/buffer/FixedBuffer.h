@@ -27,6 +27,8 @@ namespace pipey {
 				uint32_t m_nWriteIndex;
 				uint32_t m_nMarkedReadIndex;
 				uint32_t m_nMarkedWriteIndex;
+				SCATTERED_BUFFER m_scatteredBuffer;
+				IO_BUFFER m_ioBuffer;
 
 			public:
 
@@ -34,6 +36,8 @@ namespace pipey {
 				virtual uint32_t GetReadIndex() const;
 				virtual uint32_t GetWriteIndex() const;
 				virtual uint32_t GetReadableLength() const;
+
+				virtual IO_BUFFER *GetIOBuffer();
 
 				virtual const ::pipey::memory::pool::CMemoryHandle &GetMemoryHandle() const;
 				virtual ::pipey::memory::pool::IMemoryPool *GetMemoryPool() const;

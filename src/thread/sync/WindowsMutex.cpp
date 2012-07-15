@@ -54,8 +54,7 @@ void CWindowsMutex::ReleaseLock()
 		__try {
 			if( ! ::ReleaseMutex(m_hMutex) )
 				throw ESync("ESync => CWindowsMutex::ReleaseLock - unknown exception");
-		}
-		__except(EXCEPTION_EXECUTE_HANDLER ) {
+		} __except(EXCEPTION_EXECUTE_HANDLER ) {
 			throw ESync("ESync => CWindowsMutex::ReleaseLock - unknown exception");
 		}
 	}

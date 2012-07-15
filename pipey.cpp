@@ -172,7 +172,7 @@ int32_t main(int32_t argc, char* argv[])
 		cap.DuplicateHandle(jobs[i], dup_jobs[i]);
 	}
 
-	SleepSeconds(1);
+	SleepMilliseconds(1000);
 
 	for(i=0;i<100;i++){
 		if(i/10 == 5)
@@ -195,7 +195,7 @@ int32_t main(int32_t argc, char* argv[])
 
 	//cap.CloseZombieContexts();
 
-	SleepSeconds(60);
+	SleepMilliseconds(60000);
 
 	cap.Close();
 

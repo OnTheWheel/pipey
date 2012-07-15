@@ -30,6 +30,8 @@ CFixedBuffer::CFixedBuffer(const uint32_t &nLength, IMemoryPool *pMemoryPool)
 {
 	m_pMemoryPool->Allocate(m_nCapacity, m_hMemory);
 	m_pBuffer = m_pMemoryPool->GetBuffer(m_hMemory);
+	m_ioBuffer.pBuffer = &m_scatteredBuffer;
+	m_ioBuffer.nBuffer = 1;
 }
 
 CFixedBuffer::CFixedBuffer(const pipey::memory::buffer::IBuffer *pParentBuffer, const uint32_t &nIndex, const uint32_t &nLength)
@@ -74,6 +76,13 @@ uint32_t CFixedBuffer::GetWriteIndex() const
 uint32_t CFixedBuffer::GetReadableLength() const
 {
 	return m_nWriteIndex - m_nReadIndex;
+}
+
+IO_BUFFER *CFixedBuffer::GetIOBuffer()
+{
+	m_scatteredBuffer.buf = m_pBuffer + m_nReadIndex;
+	m_scatteredBuffer.len = m_nWriteIndex - m_nReadIndex;
+	return &m_ioBuffer;
 }
 
 const CMemoryHandle &CFixedBuffer::GetMemoryHandle() const

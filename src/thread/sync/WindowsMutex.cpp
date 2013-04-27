@@ -30,8 +30,7 @@ void CWindowsMutex::Init(const LOCK_INIT * pParam)
 			if( pInit )	{
 				lpName = pInit->lpName;
 				bInitialOwner = pInit->bInitialOwner;
-			}
-			else throw EInvalidParameter("EInvalidParameter => CWindowsMutex::Init - pParam should be type of (WIN_MUTEX_INIT *).");
+			} else throw EInvalidParameter("EInvalidParameter => CWindowsMutex::Init - pParam should be type of (WIN_MUTEX_INIT *).");
 		}
 	
 		if( m_hMutex = ::CreateMutex(NULL, bInitialOwner, lpName) )

@@ -93,4 +93,6 @@ void IIOBaseOperation::Process(uint32_t nBytes)
 {
 	SetTransferredBytes(nBytes);
 	m_pOperator->Process(this);
+	if(IsDone() && m_pListener)
+		m_pListener->OperationDone(this);
 }

@@ -14,7 +14,7 @@ namespace pipey {
 			virtual ~IIOListener() { };
 
 		public:
-			virtual void OnCompleted(IIOOperation *pOperation) = 0;
+			virtual void OperationDone(IIOOperation *pOperation) = 0;
 		};
 
 	}

@@ -15,15 +15,12 @@ void CWindowsAsyncSocketReader::Process(IIOMutableOperation *pOperation)
 
 			if( HasMoreToDo(pOperation) ) {
 				IO_BUFFER *pIoBuffer = pBuffer->GetIOBuffer(true);
-
-				OVERLAPPED_EX *pOverlapped = pAsync->FillOverlapped();
-
 				DWORD nFlag = 0;
 				int32_t result = WSARecv((SOCKET)pAsync->GetTarget()->GetDescriptor(), 
 					pIoBuffer->pBuffer, 
 					pIoBuffer->nBuffer, 
 					NULL, &nFlag, 
-					pOverlapped, pOverlapped->pRoutine);
+					pAsync->FillOverlapped(), pAsync->GetCompletionRoutine());
 
 				int err;
 				if( result == SOCKET_ERROR && (err = WSAGetLastError()) != WSA_IO_PENDING ) {
@@ -57,14 +54,11 @@ void CWindowsAsyncSocketWriter::Process(IIOMutableOperation *pOperation)
 
 			if( HasMoreToDo(pOperation) ) {
 				IO_BUFFER *pIoBuffer = pBuffer->GetIOBuffer(false);
-
-				OVERLAPPED_EX *pOverlapped = pAsync->FillOverlapped();
-
 				int32_t result = WSASend((SOCKET)pAsync->GetTarget()->GetDescriptor(), 
 					pIoBuffer->pBuffer, 
 					pIoBuffer->nBuffer, 
 					NULL, 0, 
-					pOverlapped, pOverlapped->pRoutine);
+					pAsync->FillOverlapped(), pAsync->GetCompletionRoutine());
 
 				int err;
 				if( result == SOCKET_ERROR && (err = WSAGetLastError()) != WSA_IO_PENDING ) {

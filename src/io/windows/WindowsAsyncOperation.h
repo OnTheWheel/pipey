@@ -11,7 +11,6 @@ namespace pipey {
 		struct OVERLAPPED_EX : public OVERLAPPED
 		{
 			CWindowsAsyncOperation *pOperation;
-			LPWSAOVERLAPPED_COMPLETION_ROUTINE pRoutine;
 		};
 	
 		class CWindowsAsyncOperation : public IIOBaseOperation {
@@ -27,8 +26,8 @@ namespace pipey {
 			LPWSAOVERLAPPED_COMPLETION_ROUTINE m_pRoutine;
 		
 		public:
-			virtual OVERLAPPED_EX *GetOverlapped();
 			virtual OVERLAPPED_EX *FillOverlapped();
+			virtual LPWSAOVERLAPPED_COMPLETION_ROUTINE GetCompletionRoutine() const;
 		
 		};
 	}

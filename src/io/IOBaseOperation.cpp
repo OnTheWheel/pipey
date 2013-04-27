@@ -57,11 +57,11 @@ const IIOListener *IIOBaseOperation::GetListener() const
 {
 	return m_pListener;
 }
-
+/*
 bool IIOBaseOperation::HasMoreToDo() const
 {
 	return m_pOperator->HasMoreToDo(this);
-}
+}*/
 
 void IIOBaseOperation::SetDone(bool bDone)
 {
@@ -89,7 +89,8 @@ IBuffer *IIOBaseOperation::GetBuffer()
 	return m_pBuffer;
 }
 
-void IIOBaseOperation::DoMore()
+void IIOBaseOperation::Process(uint32_t nBytes)
 {
-	m_pOperator->DoMore(this);
+	SetTransferredBytes(nBytes);
+	m_pOperator->Process(this);
 }

@@ -35,7 +35,7 @@ namespace pipey {
 			virtual uint32_t GetTotalTransferredBytes() const;
 			virtual uint32_t GetRequestedBytes() const;
 			virtual const IIOListener *GetListener() const;
-			virtual bool HasMoreToDo() const;
+			//virtual bool HasMoreToDo() const;
 
 			virtual void SetDone(bool bDone);
 			virtual void SetSuccess(bool bSuccess);
@@ -47,7 +47,7 @@ namespace pipey {
 			//virtual void SetListener(IIOListener pListener);
 			virtual pipey::memory::buffer::IBuffer *GetBuffer();
 			
-			virtual void DoMore();
+			virtual void Process(uint32_t nBytes) = 0;
 		
 		};
 	}

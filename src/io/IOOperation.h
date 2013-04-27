@@ -22,7 +22,7 @@ namespace pipey {
 			virtual uint32_t GetTotalTransferredBytes() const = 0;
 			virtual uint32_t GetRequestedBytes() const = 0;
 			virtual const IIOListener *GetListener() const = 0;
-			virtual bool HasMoreToDo() const = 0;
+			//virtual bool HasMoreToDo() const = 0;
 		};
 
 		class IIOMutableOperation : public IIOOperation {
@@ -41,7 +41,7 @@ namespace pipey {
 			//virtual void SetListener(IIOListener pListener) = 0;
 			virtual pipey::memory::buffer::IBuffer *GetBuffer() = 0;
 			
-			virtual void DoMore() = 0;
+			virtual void Process(uint32_t nBytes) = 0;
 		};
 	}
 }

@@ -1,6 +1,5 @@
 #include "WindowsIOCPWorkerRoutine.h"
-#include "../IOTarget.h"
-#include "../IOOperator.h"
+#include "WindowsAsyncOperation.h"
 using namespace pipey::io;
 
 void CWindowsIOCPWorkerRoutine::Execute(void * pParam)
@@ -9,17 +8,19 @@ void CWindowsIOCPWorkerRoutine::Execute(void * pParam)
 
 	while(1) {
 		DWORD numberOfBytes;
-		OVERLAPPED *pOverlapped;
+		OVERLAPPED_EX *pOverlapped;
 		ULONG completionKey;
-		BOOL bResult = ::GetQueuedCompletionStatus(hIOCP, &numberOfBytes, &completionKey, &pOverlapped, INFINITE);
+		BOOL bResult = ::GetQueuedCompletionStatus(hIOCP, &numberOfBytes, &completionKey, &((LPOVERLAPPED)pOverlapped), INFINITE);
 		
 		if(pOverlapped && completionKey) {
 			IIOMutableOperation *pOperation = (IIOMutableOperation *)completionKey;
 			if( bResult && numberOfBytes ) {
-				pOperation->SetTransferredBytes(numberOfBytes);
-				if( pOperation->HasMoreToDo() )
-					pOperation->DoMore();
+				//pOperation->SetTransferredBytes(numberOfBytes);
+				/*if( pOperation->HasMoreToDo() )
+					pOperation->DoMore();*/
+				pOperation->Process(numberOfBytes);
 			}
+
 
 		} else break;
 	}

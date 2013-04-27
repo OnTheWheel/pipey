@@ -10,9 +10,43 @@ CWindowsAsyncOperation::CWindowsAsyncOperation(IIOTarget *pTarget, IIOOperator *
 	:IIOBaseOperation(pTarget, pOperator, pListener, pBuffer, nRequestedBytes)
 {
 	memset(&m_overlapped, 0, sizeof(m_overlapped));
+	m_hEvent = NULL;
+	m_pRoutine = NULL;
+}
+
+CWindowsAsyncOperation::CWindowsAsyncOperation(IIOTarget *pTarget, IIOOperator *pOperator, 
+											   IIOListener *pListener, IBuffer *pBuffer, 
+											   uint32_t nRequestedBytes,
+											   HANDLE hHandle)
+	:IIOBaseOperation(pTarget, pOperator, pListener, pBuffer, nRequestedBytes)
+{
+	memset(&m_overlapped, 0, sizeof(m_overlapped));
+	m_hEvent = hHandle;
+	m_pRoutine = NULL;
+}
+
+CWindowsAsyncOperation::CWindowsAsyncOperation(IIOTarget *pTarget, IIOOperator *pOperator, 
+											   IIOListener *pListener, IBuffer *pBuffer, 
+											   uint32_t nRequestedBytes,
+											   LPWSAOVERLAPPED_COMPLETION_ROUTINE pRoutine)
+	:IIOBaseOperation(pTarget, pOperator, pListener, pBuffer, nRequestedBytes)
+{
+	memset(&m_overlapped, 0, sizeof(m_overlapped));
+	m_hEvent = NULL;
+	m_pRoutine = pRoutine;
 }
 
 OVERLAPPED_EX *CWindowsAsyncOperation::GetOverlapped()
 {
+	return &m_overlapped;
+}
+
+OVERLAPPED_EX *CWindowsAsyncOperation::FillOverlapped()
+{
+	memset(&m_overlapped, 0, sizeof(m_overlapped));
+	m_overlapped.pOperation = this;
+	m_overlapped.hEvent = m_hEvent;
+	m_overlapped.pRoutine = m_pRoutine;
+	
 	return &m_overlapped;
 }

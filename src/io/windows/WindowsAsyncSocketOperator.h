@@ -12,7 +12,11 @@ namespace pipey {
 			virtual ~CWindowsAsyncSocketReader() { };
 
 		public:
-			virtual void DoMore(IIOMutableOperation *pOperation);
+			/*virtual void DoMore(IIOMutableOperation *pOperation);
+			virtual bool HasMoreToDo(const IIOOperation *pOperation) const;*/
+			virtual void Process(IIOMutableOperation *pOperation);
+
+		private:
 			virtual bool HasMoreToDo(const IIOOperation *pOperation) const;
 		};
 
@@ -22,7 +26,11 @@ namespace pipey {
 			virtual ~CWindowsAsyncSocketWriter() { };
 
 		public:
-			virtual void DoMore(IIOMutableOperation *pOperation);
+			/*virtual void DoMore(IIOMutableOperation *pOperation);
+			virtual bool HasMoreToDo(const IIOOperation *pOperation) const;*/
+			virtual void Process(IIOMutableOperation *pOperation);
+
+		private:
 			virtual bool HasMoreToDo(const IIOOperation *pOperation) const;
 		};
 	}

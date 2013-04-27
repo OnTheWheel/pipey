@@ -2,10 +2,17 @@
 #define PIPEY_WINDOWSASYNCOPERATION_H
 
 #include "../IOBaseOperation.h"
-#include "overlapped_ex.h"
 
 namespace pipey {
 	namespace io {
+
+		class CWindowsAsyncOperation;
+
+		struct OVERLAPPED_EX : public OVERLAPPED
+		{
+			CWindowsAsyncOperation *pOperation;
+			LPWSAOVERLAPPED_COMPLETION_ROUTINE pRoutine;
+		};
 	
 		class CWindowsAsyncOperation : public IIOBaseOperation {
 		public:

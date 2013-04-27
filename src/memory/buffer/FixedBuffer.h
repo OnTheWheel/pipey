@@ -37,7 +37,7 @@ namespace pipey {
 				virtual uint32_t GetWriteIndex() const;
 				virtual uint32_t GetReadableLength() const;
 
-				virtual IO_BUFFER *GetIOBuffer();
+				virtual IO_BUFFER *GetIOBuffer(bool bWriteToBuffer);
 
 				virtual const ::pipey::memory::pool::CMemoryHandle &GetMemoryHandle() const;
 				virtual ::pipey::memory::pool::IMemoryPool *GetMemoryPool() const;

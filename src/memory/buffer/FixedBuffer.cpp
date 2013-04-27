@@ -78,10 +78,16 @@ uint32_t CFixedBuffer::GetReadableLength() const
 	return m_nWriteIndex - m_nReadIndex;
 }
 
-IO_BUFFER *CFixedBuffer::GetIOBuffer()
+IO_BUFFER *CFixedBuffer::GetIOBuffer(bool bWriteToBuffer)
 {
-	m_scatteredBuffer.SetBuffer( m_pBuffer + m_nReadIndex );
-	m_scatteredBuffer.SetSize( m_nWriteIndex - m_nReadIndex );
+	if(bWriteToBuffer) {
+		m_scatteredBuffer.SetBuffer( m_pBuffer + m_nWriteIndex );
+		m_scatteredBuffer.SetSize( m_nCapacity - m_nWriteIndex);
+	} else {
+		m_scatteredBuffer.SetBuffer( m_pBuffer + m_nReadIndex );
+		m_scatteredBuffer.SetSize( m_nWriteIndex - m_nReadIndex );
+	}
+
 	return &m_ioBuffer;
 }
 

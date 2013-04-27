@@ -10,17 +10,16 @@ void CWindowsIOCPWorkerRoutine::Execute(void * pParam)
 		DWORD numberOfBytes;
 		OVERLAPPED_EX *pOverlapped;
 		ULONG completionKey;
-		BOOL bResult = ::GetQueuedCompletionStatus(hIOCP, &numberOfBytes, &completionKey, &((LPOVERLAPPED)pOverlapped), INFINITE);
+		BOOL bResult = ::GetQueuedCompletionStatus(hIOCP, &numberOfBytes, &completionKey, (LPOVERLAPPED *)&pOverlapped, INFINITE);
 		
-		if(pOverlapped && completionKey) {
-			IIOMutableOperation *pOperation = (IIOMutableOperation *)completionKey;
+		if(pOverlapped) {
+			CWindowsAsyncOperation *pOperation = pOverlapped->pOperation;
 			if( bResult && numberOfBytes ) {
 				//pOperation->SetTransferredBytes(numberOfBytes);
 				/*if( pOperation->HasMoreToDo() )
 					pOperation->DoMore();*/
 				pOperation->Process(numberOfBytes);
 			}
-
 
 		} else break;
 	}

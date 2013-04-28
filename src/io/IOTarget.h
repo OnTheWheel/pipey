@@ -28,11 +28,11 @@ namespace pipey {
 
 			virtual bool IsValid() const = 0;
 
-			virtual operator bool() const {
-				return IsValid();
-			}
+			virtual operator bool() const = 0;
 
 			virtual IIOTarget *GetParent() const = 0;
+
+			virtual void NullifyParent() = 0;
 
 			virtual descriptor_t GetDescriptor() const = 0;
 		};

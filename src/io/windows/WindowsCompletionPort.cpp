@@ -36,7 +36,7 @@ void CWindowsCompletionPort::Init(const IOCP_INIT & param)
 		if(m_hHandle) {
 			uint32_t nThreads = param.nWorkerThreads == 0 ? GetNumberOfProcessors() : param.nWorkerThreads;
 			m_workerThreads.AddThread(nThreads, m_workerRoutine, (void *)m_hHandle);
-		}
+		} else throw ERuntime("ERuntime => CWindowsCompletionPort::Init - unknown exception");
 	} __except(EXCEPTION_EXECUTE_HANDLER ) {
 		if(m_hHandle) ::CloseHandle(m_hHandle);
 		m_hHandle = NULL;
@@ -80,6 +80,7 @@ void CWindowsCompletionPort::Attach(IIOTarget *pTarget)
 				HANDLE hResult = ::CreateIoCompletionPort(pTarget->GetDescriptor(), m_hHandle, (ULONG_PTR)pTarget, 0);
 				if( hResult == 0 )
 					throw ERuntime("ERuntime => CWindowsCompletionPort::Attach - unknown exception");
+				else throw ERuntime("ERuntime => CWindowsCompletionPort::Attach - unknown exception");
 			} __except(EXCEPTION_EXECUTE_HANDLER ) {
 				throw ERuntime("ERuntime => CWindowsCompletionPort::Attach - unknown exception");
 			}
